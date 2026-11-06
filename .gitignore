@@ -1,0 +1,20 @@
+# Rust's output directory
+target
+
+# Local settings
+.soroban
+.stellar
+
+# Homeward
+target/
+node_modules/
+.env
+.env.*
+!.env.example
+*.sqlite
+.DS_Store
+.next/
+uploads/
+
+# Local-only Claude Code guide
+CLAUDE.md
