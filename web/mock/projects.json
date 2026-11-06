@@ -1,0 +1,259 @@
+[
+  {
+    "id": "thrissur",
+    "name": "Amma's house extension",
+    "place": "Near Thrissur, Kerala",
+    "budget": 1500000,
+    "rupeesPerCad": 67,
+    "sponsors": [
+      {
+        "name": "Anil",
+        "city": "Toronto",
+        "paidIn": 600000
+      },
+      {
+        "name": "Meera",
+        "city": "Dubai",
+        "paidIn": 300000
+      }
+    ],
+    "parent": "Amma",
+    "engineer": {
+      "name": "R. Menon",
+      "licence": "Simulated licence KL-2041",
+      "secondName": "P. Thomas"
+    },
+    "stages": [
+      {
+        "slug": "materials",
+        "name": "Materials",
+        "amount": 225000,
+        "status": "paid",
+        "paidOn": "2026-10-12",
+        "photos": [
+          {
+            "src": "/samples/materials.svg",
+            "caption": "Cement delivered and matched to the order"
+          }
+        ],
+        "checklist": [
+          {
+            "item": "Cement grade matches the order",
+            "result": "Pass"
+          },
+          {
+            "item": "Supplier invoice received",
+            "result": "Pass"
+          }
+        ],
+        "payouts": [
+          {
+            "to": "Supplier",
+            "amount": 225000
+          }
+        ]
+      },
+      {
+        "slug": "foundation",
+        "name": "Foundation and plinth",
+        "amount": 300000,
+        "status": "paid",
+        "paidOn": "2026-10-28",
+        "code": "4827",
+        "photos": [
+          {
+            "src": "/samples/steel.svg",
+            "caption": "Steel checked before concrete was poured"
+          },
+          {
+            "src": "/samples/foundation.svg",
+            "caption": "Concrete cover checked against the drawing"
+          }
+        ],
+        "checklist": [
+          {
+            "item": "Steel size is 12 mm",
+            "result": "Pass"
+          },
+          {
+            "item": "Spacing is 150 mm",
+            "result": "Pass"
+          },
+          {
+            "item": "Concrete cover is 40 mm",
+            "result": "Pass"
+          },
+          {
+            "item": "Formwork is secure",
+            "result": "Pass"
+          }
+        ],
+        "payouts": [
+          {
+            "to": "Builder",
+            "amount": 220000
+          },
+          {
+            "to": "Labour",
+            "amount": 80000
+          }
+        ]
+      },
+      {
+        "slug": "walls",
+        "name": "Walls up",
+        "amount": 300000,
+        "status": "waiting",
+        "code": "7193",
+        "finishBy": "2026-11-10",
+        "reviewBy": "2026-11-12",
+        "needsAmma": true,
+        "proofSent": false,
+        "engineerDecision": null,
+        "amma": null,
+        "photos": [
+          {
+            "src": "/samples/walls.svg",
+            "caption": "Wall courses checked for level"
+          }
+        ],
+        "checklist": [
+          {
+            "item": "Brick courses are level",
+            "result": null
+          },
+          {
+            "item": "Mortar joints are even",
+            "result": null
+          },
+          {
+            "item": "Openings match the plan",
+            "result": null
+          },
+          {
+            "item": "Curing has been done",
+            "result": null
+          }
+        ],
+        "payouts": [
+          {
+            "to": "Builder",
+            "amount": 215000
+          },
+          {
+            "to": "Labour",
+            "amount": 85000
+          }
+        ]
+      },
+      {
+        "slug": "roof",
+        "name": "Roof slab",
+        "amount": 375000,
+        "status": "locked",
+        "fundBy": "2026-11-20",
+        "steelBy": "2026-11-26",
+        "finishBy": "2026-12-03",
+        "photos": [],
+        "checklist": [],
+        "payouts": []
+      },
+      {
+        "slug": "finishing",
+        "name": "Finishing",
+        "amount": 150000,
+        "status": "locked",
+        "fundBy": "2026-12-15",
+        "finishBy": "2027-01-10",
+        "photos": [],
+        "checklist": [],
+        "payouts": []
+      },
+      {
+        "slug": "handover",
+        "name": "Handover",
+        "amount": 150000,
+        "status": "locked",
+        "fundBy": "2027-01-20",
+        "finishBy": "2027-02-10",
+        "photos": [],
+        "checklist": [],
+        "payouts": []
+      }
+    ]
+  },
+  {
+    "id": "jalandhar",
+    "name": "Dad's roof repairs",
+    "place": "Jalandhar, Punjab",
+    "budget": 500000,
+    "rupeesPerCad": 67,
+    "sponsors": [
+      {
+        "name": "Anil",
+        "city": "Toronto",
+        "paidIn": 250000
+      }
+    ],
+    "parent": "Dad",
+    "engineer": {
+      "name": "S. Gill",
+      "licence": "Simulated licence PB-1187",
+      "secondName": "H. Kaur"
+    },
+    "stages": [
+      {
+        "slug": "materials",
+        "name": "Materials",
+        "amount": 150000,
+        "status": "paid",
+        "paidOn": "2026-10-20",
+        "photos": [
+          {
+            "src": "/samples/materials.svg",
+            "caption": "Materials delivered and matched to the order"
+          }
+        ],
+        "checklist": [
+          {
+            "item": "Materials match the order",
+            "result": "Pass"
+          },
+          {
+            "item": "Supplier invoice received",
+            "result": "Pass"
+          }
+        ],
+        "payouts": [
+          {
+            "to": "Supplier",
+            "amount": 150000
+          }
+        ]
+      },
+      {
+        "slug": "repairs",
+        "name": "Roof repairs",
+        "amount": 250000,
+        "status": "locked",
+        "fundBy": "2026-11-16",
+        "steelBy": "2026-11-23",
+        "finishBy": "2026-12-05",
+        "photos": [],
+        "checklist": [],
+        "payouts": []
+      },
+      {
+        "slug": "handover",
+        "name": "Handover",
+        "amount": 100000,
+        "status": "locked",
+        "fundBy": "2026-12-20",
+        "finishBy": "2027-01-05",
+        "photos": [],
+        "checklist": [],
+        "payouts": []
+      }
+    ]
+  }
+]
