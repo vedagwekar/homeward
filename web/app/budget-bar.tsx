@@ -5,7 +5,7 @@ export default function BudgetBar({ project, legend = true }: { project: Project
   const parts = budgetParts(project);
   const bar = [
     { label: "Paid", amount: parts.paid, tone: "green" },
-    { label: "Being checked", amount: parts.waiting, tone: "orange" },
+    { label: "In progress", amount: parts.waiting, tone: "orange" },
     { label: "Locked", amount: parts.ready, tone: "blue" },
     { label: "Not funded", amount: parts.unfunded, tone: "empty" },
   ];

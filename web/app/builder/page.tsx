@@ -23,18 +23,19 @@ export default function Builder() {
       <section className="group pad center">
         <small>Show this code on camera</small>
         <p className="code">{stage.code}</p>
-        <small>You'll receive {rupees(stage.amount)} shared with labour after approval.</small>
+        <small>You and your labour receive {rupees(stage.amount - stage.materials)} after approval. The supplier was paid {rupees(stage.materials)} when this stage opened.</small>
       </section>
-      {stage.proofSent ? (
+      {stage.status === "rejected" && <p className="note">The engineer asked for fixes. Fix the work, then send new proof.</p>}
+      {stage.status === "submitted" ? (
         <p className="note">Proof sent. Waiting for the engineer.</p>
       ) : (
         <button
           className="button"
           type="button"
           disabled={busy}
-          onClick={() => act({ loading: "Sending proof", done: "Proof sent" }, () => updateStage(project.id, stage.slug, { proofSent: true, engineerDecision: null }))}
+          onClick={() => act({ loading: "Sending proof", done: "Proof sent" }, () => updateStage(project.id, stage.slug, { status: "submitted", engineerDecision: null, secondDecision: null, amma: null }))}
         >
-          Send sample proof
+          {stage.status === "rejected" ? "Send new proof" : "Send sample proof"}
         </button>
       )}
     </>
