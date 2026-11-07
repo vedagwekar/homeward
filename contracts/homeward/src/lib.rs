@@ -8,7 +8,7 @@ mod types;
 #[cfg(test)]
 mod test;
 
-use soroban_sdk::{contract, contractimpl, Address, Env};
+use soroban_sdk::{contract, contractimpl, symbol_short, token, Address, BytesN, Env, Vec};
 use storage::*;
 pub use types::*;
 
@@ -29,6 +29,76 @@ impl Homeward {
     }
 
     // ---------- write functions go here (see dev guide §5.4–5.7) ----------
+
+    /// Admin set up a build: who ever is involved and every stage's money + payees.
+    /// Payees are fixed FOREVER after this call.
+    pub fn create_project(
+        e: Env,
+        sponsors: Vec<Address>,
+        parent: Address,
+        builder: Address,
+        supplier: Address,
+        stages: Vec<StageInput>,
+    ) -> Result<u32, Error> {
+        admin(&e).require_auth();
+        if sponsors.is_empty() || stages.is_empty() {
+            return Err(Error::BadAmount);
+        }
+        for s in stages.iter() {
+            if s.materials < 0 || s.labour_amount < 0 {
+                return Err(Error::BadAmount);
+            }
+            if s.payees.is_empty() {
+                return Err(Error::BadAmount);
+            }
+            let mut sum: u32 = 0;
+            for p in s.payees.iter() {
+                sum += p.bps;
+            }
+            if sum != 10_000 {
+                return Err(Error::BadShares);
+            }
+        }
+
+        let id = next_id(&e);
+        let project = Project {
+            sponsors,
+            parent,
+            builder,
+            supplier,
+            stage_count: stages.len(),
+            funded: 0,
+            spent: 0,
+            frozen: false,
+        };
+        save_project(&e, id, &project);
+
+        let mut i: u32 = 0;
+        for s in stages.iter() {
+            let st = Stage {
+                materials: s.materials,
+                labour_amount: s.labour_amount,
+                payees: s.payees,
+                parent_must_approve: s.parent_must_approve,
+                pre_pour: s.pre_pour,
+                hold_secs: s.hold_secs,
+                status: StageStatus::Locked,
+                inspector: None,
+                inspector2: None,
+                approvals_needed: 1,
+                approvals: Vec::new(&e),
+                parent_ok: false,
+                code_hash: None,
+                video_hash: None,
+                approved_at: 0,
+            };
+            save_stage(&e, id, i, &st);
+            i += 1;
+        }
+        bump_instance(&e);
+        e.events().publish((symbol_short!("created"), id), project.stage_count);
+        Ok(id)
+    }
 
     // ---------- read-only views (free to call, no signature needed) ----------
     pub fn get_project(e: Env, id: u32) -> Result<Project, Error> {
