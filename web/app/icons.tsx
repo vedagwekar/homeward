@@ -34,7 +34,9 @@ export function Tile({ name, tone }: { name: GlyphName; tone: string }) {
 
 export const statusView = {
   paid: { icon: "check", tone: "green", label: "Paid" },
-  waiting: { icon: "clock", tone: "orange", label: "Waiting for checks" },
+  open: { icon: "hammer", tone: "blue", label: "Builder working" },
+  submitted: { icon: "clock", tone: "orange", label: "Waiting for checks" },
+  rejected: { icon: "cross", tone: "red", label: "Needs fixing" },
   locked: { icon: "lock", tone: "gray", label: "Not open yet" },
 } as const;
 

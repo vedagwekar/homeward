@@ -1,12 +1,12 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { budgetParts, canPay, dollars, homewardFee, nextStage, rupees, timeline, totalFunded, totalPaid } from "./project.mjs";
+import { budgetParts, canPay, dollars, homewardFee, nextStage, rupees, settle, timeline, totalFunded, totalPaid } from "./project.mjs";
 
 const stages = [
-  { name: "A", amount: 100, status: "paid" },
-  { name: "B", amount: 200, status: "waiting" },
-  { name: "C", amount: 300, status: "locked" },
-  { name: "D", amount: 400, status: "locked" },
+  { name: "A", amount: 100, materials: 20, status: "paid" },
+  { name: "B", amount: 200, materials: 50, status: "open" },
+  { name: "C", amount: 300, materials: 0, status: "locked" },
+  { name: "D", amount: 400, materials: 0, status: "locked" },
 ];
 const project = (paidIn) => ({ sponsors: [{ paidIn }], stages });
 
@@ -26,7 +26,7 @@ test("no next stage once nothing is locked", () => {
 
 test("totals and formats", () => {
   assert.equal(totalFunded({ sponsors: [{ paidIn: 1 }, { paidIn: 2 }] }), 3);
-  assert.equal(totalPaid(project(0)), 100);
+  assert.equal(totalPaid(project(0)), 150); // stage A plus B's materials
   assert.equal(rupees(1500000), "₹15,00,000");
   assert.equal(dollars(300000, 67), "$4,480");
 });
@@ -34,7 +34,7 @@ test("totals and formats", () => {
 test("budget parts always add up to the budget", () => {
   const p = { budget: 1000, ...project(350) };
   const parts = budgetParts(p);
-  assert.deepEqual(parts, { paid: 100, waiting: 200, ready: 50, unfunded: 650 });
+  assert.deepEqual(parts, { paid: 150, waiting: 150, ready: 50, unfunded: 650 });
   assert.equal(parts.paid + parts.waiting + parts.ready + parts.unfunded, 1000);
 });
 
@@ -45,13 +45,13 @@ test("fee is 1.5 percent, rounded to the rupee", () => {
 test("payment waits for every required approval", () => {
   assert.equal(canPay({ engineerDecision: null }), false);
   assert.equal(canPay({ engineerDecision: "rejected" }), false);
-  assert.equal(canPay({ engineerDecision: "approved", needsAmma: true }), false);
-  assert.equal(canPay({ engineerDecision: "approved", needsAmma: true, amma: "ok" }), true);
+  assert.equal(canPay({ engineerDecision: "approved", parentMustApprove: true }), false);
+  assert.equal(canPay({ engineerDecision: "approved", parentMustApprove: true, amma: "ok" }), true);
   assert.equal(canPay({ engineerDecision: "approved" }), true);
 });
 
 test("Amma's second check blocks payment until a second engineer approves", () => {
-  const stage = { engineerDecision: "approved", needsAmma: true, amma: "recheck" };
+  const stage = { engineerDecision: "approved", parentMustApprove: true, amma: "recheck" };
   assert.equal(canPay(stage), false);
   assert.equal(canPay({ ...stage, secondDecision: "rejected" }), false);
   assert.equal(canPay({ ...stage, secondDecision: "approved" }), true);
@@ -64,4 +64,21 @@ test("timeline merges homes and sorts by date", () => {
   ]);
   assert.deepEqual(items.map((i) => i.project), ["B", "A"]);
   assert.equal(items[0].amount, 10);
+});
+
+test("settle follows the contract: rejections go back to the builder, full approval pays", () => {
+  const s = { status: "submitted", engineerDecision: "approved", parentMustApprove: true };
+  assert.equal(settle(s).status, "submitted");
+  assert.equal(settle({ ...s, amma: "ok" }).status, "paid");
+  assert.equal(settle({ ...s, engineerDecision: "rejected" }).status, "rejected");
+  assert.equal(settle({ ...s, amma: "recheck", secondDecision: "rejected" }).status, "rejected");
+  assert.equal(settle({ status: "open", engineerDecision: "approved" }).status, "open");
+});
+
+test("demo data: every stage's payouts add up to the stage", async () => {
+  const { default: data } = await import("../mock/projects.json", { with: { type: "json" } });
+  for (const p of data) {
+    assert.equal(p.stages.reduce((t, s) => t + s.amount, 0), p.budget, p.id);
+    for (const s of p.stages) assert.equal(s.payouts.reduce((t, x) => t + x.amount, 0), s.amount, s.slug);
+  }
 });

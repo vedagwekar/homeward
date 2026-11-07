@@ -8,8 +8,13 @@ export const dollars = (rupeeAmount, rupeesPerCad) =>
 
 export const totalFunded = (project) => project.sponsors.reduce((sum, s) => sum + s.paidIn, 0);
 
+// Stage statuses match the contract: locked, open (supplier paid, builder working),
+// submitted (proof sent, waiting for approvals), rejected (builder must fix and resend), paid.
+export const isActive = (stage) => ["open", "submitted", "rejected"].includes(stage.status);
+
+// Like the contract's `spent`: whole paid stages, plus materials already paid for active stages.
 export const totalPaid = (project) =>
-  project.stages.filter((s) => s.status === "paid").reduce((sum, s) => sum + s.amount, 0);
+  project.stages.reduce((sum, s) => sum + (s.status === "paid" ? s.amount : isActive(s) ? s.materials : 0), 0);
 
 // Stages run in order, so a stage opens only once funding covers it and every stage before it.
 export function nextStage(project) {
@@ -26,9 +31,8 @@ export const homewardFee = (amount) => Math.round(amount * 0.015);
 
 // Budget split for the bar: each rupee sits in exactly one part.
 export function budgetParts(project) {
-  const sum = (status) => project.stages.filter((s) => s.status === status).reduce((t, s) => t + s.amount, 0);
-  const paid = sum("paid");
-  const waiting = sum("waiting");
+  const paid = totalPaid(project);
+  const waiting = project.stages.filter(isActive).reduce((t, s) => t + s.amount - s.materials, 0);
   const ready = Math.max(totalFunded(project) - paid - waiting, 0);
   return { paid, waiting, ready, unfunded: project.budget - paid - waiting - ready };
 }
@@ -37,7 +41,14 @@ export function budgetParts(project) {
 export function canPay(stage) {
   if (stage.engineerDecision !== "approved") return false;
   if (stage.amma === "recheck") return stage.secondDecision === "approved";
-  return !stage.needsAmma || stage.amma === "ok";
+  return !stage.parentMustApprove || stage.amma === "ok";
+}
+
+// What a stage becomes after a change, the way the contract would settle it.
+export function settle(stage) {
+  if (stage.status !== "submitted") return stage;
+  if (stage.engineerDecision === "rejected" || stage.secondDecision === "rejected") return { ...stage, status: "rejected" };
+  return canPay(stage) ? { ...stage, status: "paid" } : stage;
 }
 
 export const shortDate = (iso) =>
@@ -54,7 +65,7 @@ export function timeline(projects) {
       needed += stage.amount;
       const base = { project: project.name, projectId: project.id, slug: stage.slug };
       if (stage.status === "paid") continue;
-      if (stage.status === "waiting" && stage.reviewBy) items.push({ ...base, date: stage.reviewBy, track: "site", title: `${stage.name} review` });
+      if (isActive(stage) && stage.reviewBy) items.push({ ...base, date: stage.reviewBy, track: "site", title: `${stage.name} review` });
       if (stage.fundBy && needed > funded) items.push({ ...base, date: stage.fundBy, track: "pay", title: `Fund ${stage.name.toLowerCase()}`, amount: Math.min(stage.amount, needed - funded) });
       if (stage.steelBy) items.push({ ...base, date: stage.steelBy, track: "site", title: `Steel check before the ${stage.name.toLowerCase()} pour` });
       if (stage.finishBy && stage.status === "locked") items.push({ ...base, date: stage.finishBy, track: "site", title: `${stage.name} finishes` });

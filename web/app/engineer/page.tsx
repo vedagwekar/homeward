@@ -8,7 +8,7 @@ export default function Engineer() {
   const active = activeStage(useProjects());
   const [passed, setPassed] = useState<string[]>([]);
   const busy = useStatus().state === "loading";
-  if (!active || !active.stage.proofSent) {
+  if (!active || active.stage.status !== "submitted") {
     return (
       <>
         <h1>Engineer</h1>
@@ -30,7 +30,7 @@ export default function Engineer() {
   }
   const decide = (decision: "approved" | "rejected") => {
     act({ loading: decision === "approved" ? "Approving" : "Rejecting", done: decision === "approved" ? "Stage approved" : "Stage rejected. Money stays locked" }, () => {
-      updateStage(project.id, stage.slug, second ? { secondDecision: decision } : { engineerDecision: decision, proofSent: decision === "approved" });
+      updateStage(project.id, stage.slug, second ? { secondDecision: decision } : { engineerDecision: decision });
       setPassed([]);
     });
   };

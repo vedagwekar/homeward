@@ -25,42 +25,20 @@
     },
     "stages": [
       {
-        "slug": "materials",
-        "name": "Materials",
-        "amount": 225000,
+        "slug": "foundation",
+        "name": "Foundation and plinth",
+        "amount": 300000,
+        "materials": 45000,
         "status": "paid",
-        "paidOn": "2026-10-12",
+        "paidOn": "2026-10-28",
+        "prePour": true,
+        "parentMustApprove": true,
+        "code": "4827",
         "photos": [
           {
             "src": "/samples/materials.svg",
             "caption": "Cement delivered and matched to the order"
-          }
-        ],
-        "checklist": [
-          {
-            "item": "Cement grade matches the order",
-            "result": "Pass"
           },
-          {
-            "item": "Supplier invoice received",
-            "result": "Pass"
-          }
-        ],
-        "payouts": [
-          {
-            "to": "Supplier",
-            "amount": 225000
-          }
-        ]
-      },
-      {
-        "slug": "foundation",
-        "name": "Foundation and plinth",
-        "amount": 300000,
-        "status": "paid",
-        "paidOn": "2026-10-28",
-        "code": "4827",
-        "photos": [
           {
             "src": "/samples/steel.svg",
             "caption": "Steel checked before concrete was poured"
@@ -72,6 +50,10 @@
         ],
         "checklist": [
           {
+            "item": "Cement grade matches the order",
+            "result": "Pass"
+          },
+          {
             "item": "Steel size is 12 mm",
             "result": "Pass"
           },
@@ -82,35 +64,33 @@
           {
             "item": "Concrete cover is 40 mm",
             "result": "Pass"
-          },
-          {
-            "item": "Formwork is secure",
-            "result": "Pass"
           }
         ],
         "payouts": [
           {
+            "to": "Supplier",
+            "amount": 45000
+          },
+          {
             "to": "Builder",
-            "amount": 220000
+            "amount": 178500
           },
           {
             "to": "Labour",
-            "amount": 80000
+            "amount": 76500
           }
         ]
       },
       {
         "slug": "walls",
         "name": "Walls up",
-        "amount": 300000,
-        "status": "waiting",
+        "amount": 375000,
+        "materials": 150000,
+        "status": "open",
+        "parentMustApprove": true,
         "code": "7193",
         "finishBy": "2026-11-10",
         "reviewBy": "2026-11-12",
-        "needsAmma": true,
-        "proofSent": false,
-        "engineerDecision": null,
-        "amma": null,
         "photos": [
           {
             "src": "/samples/walls.svg",
@@ -137,48 +117,94 @@
         ],
         "payouts": [
           {
+            "to": "Supplier",
+            "amount": 150000
+          },
+          {
             "to": "Builder",
-            "amount": 215000
+            "amount": 157500
           },
           {
             "to": "Labour",
-            "amount": 85000
+            "amount": 67500
           }
         ]
       },
       {
         "slug": "roof",
         "name": "Roof slab",
-        "amount": 375000,
+        "amount": 450000,
+        "materials": 180000,
         "status": "locked",
+        "prePour": true,
+        "parentMustApprove": true,
         "fundBy": "2026-11-20",
         "steelBy": "2026-11-26",
         "finishBy": "2026-12-03",
         "photos": [],
         "checklist": [],
-        "payouts": []
+        "payouts": [
+          {
+            "to": "Supplier",
+            "amount": 180000
+          },
+          {
+            "to": "Builder",
+            "amount": 189000
+          },
+          {
+            "to": "Labour",
+            "amount": 81000
+          }
+        ]
       },
       {
         "slug": "finishing",
         "name": "Finishing",
-        "amount": 150000,
+        "amount": 225000,
+        "materials": 90000,
         "status": "locked",
+        "parentMustApprove": true,
         "fundBy": "2026-12-15",
         "finishBy": "2027-01-10",
         "photos": [],
         "checklist": [],
-        "payouts": []
+        "payouts": [
+          {
+            "to": "Supplier",
+            "amount": 90000
+          },
+          {
+            "to": "Builder",
+            "amount": 94500
+          },
+          {
+            "to": "Labour",
+            "amount": 40500
+          }
+        ]
       },
       {
         "slug": "handover",
         "name": "Handover",
         "amount": 150000,
+        "materials": 0,
         "status": "locked",
+        "parentMustApprove": true,
         "fundBy": "2027-01-20",
         "finishBy": "2027-02-10",
         "photos": [],
         "checklist": [],
-        "payouts": []
+        "payouts": [
+          {
+            "to": "Builder",
+            "amount": 105000
+          },
+          {
+            "to": "Labour",
+            "amount": 45000
+          }
+        ]
       }
     ]
   },
@@ -203,11 +229,13 @@
     },
     "stages": [
       {
-        "slug": "materials",
-        "name": "Materials",
-        "amount": 150000,
+        "slug": "prep",
+        "name": "Prep and scaffolding",
+        "amount": 100000,
+        "materials": 30000,
         "status": "paid",
         "paidOn": "2026-10-20",
+        "parentMustApprove": true,
         "photos": [
           {
             "src": "/samples/materials.svg",
@@ -220,39 +248,74 @@
             "result": "Pass"
           },
           {
-            "item": "Supplier invoice received",
+            "item": "Scaffolding is secure",
             "result": "Pass"
           }
         ],
         "payouts": [
           {
             "to": "Supplier",
-            "amount": 150000
+            "amount": 30000
+          },
+          {
+            "to": "Builder",
+            "amount": 49000
+          },
+          {
+            "to": "Labour",
+            "amount": 21000
           }
         ]
       },
       {
         "slug": "repairs",
-        "name": "Roof repairs",
-        "amount": 250000,
+        "name": "Roof slab repair",
+        "amount": 300000,
+        "materials": 140000,
         "status": "locked",
+        "prePour": true,
+        "parentMustApprove": true,
         "fundBy": "2026-11-16",
         "steelBy": "2026-11-23",
         "finishBy": "2026-12-05",
         "photos": [],
         "checklist": [],
-        "payouts": []
+        "payouts": [
+          {
+            "to": "Supplier",
+            "amount": 140000
+          },
+          {
+            "to": "Builder",
+            "amount": 112000
+          },
+          {
+            "to": "Labour",
+            "amount": 48000
+          }
+        ]
       },
       {
         "slug": "handover",
         "name": "Handover",
         "amount": 100000,
+        "materials": 0,
         "status": "locked",
+        "parentMustApprove": true,
         "fundBy": "2026-12-20",
         "finishBy": "2027-01-05",
         "photos": [],
         "checklist": [],
-        "payouts": []
+        "payouts": [
+          {
+            "to": "Builder",
+            "amount": 70000
+          },
+          {
+            "to": "Labour",
+            "amount": 30000
+          }
+        ]
       }
     ]
   }

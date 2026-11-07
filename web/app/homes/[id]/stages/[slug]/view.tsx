@@ -1,7 +1,7 @@
 "use client";
 
 import { notFound } from "next/navigation";
-import { homewardFee, rupees, shortDate } from "@/lib/project.mjs";
+import { homewardFee, isActive, rupees, shortDate } from "@/lib/project.mjs";
 import { useProjects } from "@/lib/store";
 import { Back, statusView, Tile } from "../../../../icons";
 
@@ -11,7 +11,7 @@ export default function View({ id, slug }: { id: string; slug: string }) {
   if (!project || !stage) notFound();
   const view = statusView[stage.status as keyof typeof statusView];
   const paid = stage.status === "paid";
-  const reviewed = stage.proofSent || paid;
+  const reviewed = paid || stage.status === "submitted" || stage.status === "rejected";
 
   return (
     <>
@@ -24,6 +24,17 @@ export default function View({ id, slug }: { id: string; slug: string }) {
           <div className="grow">{view.label}</div>
           <span className="muted">{rupees(stage.amount)}</span>
         </div>
+        {stage.prePour && (
+          <div className="row">
+            <div className="grow">Steel is checked before concrete is poured</div>
+          </div>
+        )}
+        {isActive(stage) && stage.materials > 0 && (
+          <div className="row">
+            <div className="grow">Supplier paid when the stage opened</div>
+            <span className="muted">{rupees(stage.materials)}</span>
+          </div>
+        )}
         {stage.paidOn && (
           <div className="row">
             <div className="grow">Paid on</div>
@@ -94,19 +105,18 @@ export default function View({ id, slug }: { id: string; slug: string }) {
         </>
       )}
 
-      {stage.status === "waiting" && (
+      {isActive(stage) && (
         <>
-          {!stage.proofSent && <p className="note">Waiting for the builder to send proof. The stage code is {stage.code}.</p>}
-          {stage.proofSent && stage.engineerDecision !== "approved" && stage.engineerDecision !== "rejected" && (
+          {stage.status === "open" && <p className="note">The builder is working. They film the stage code {stage.code} when they send proof.</p>}
+          {stage.status === "submitted" && !stage.engineerDecision && (
             <p className="note">Waiting for {project.engineer.name} to check the work.</p>
           )}
-          {stage.engineerDecision === "rejected" && <p className="note">The engineer rejected this proof. The money stays locked until it's fixed.</p>}
-          {stage.engineerDecision === "approved" && !stage.amma && <p className="note">The engineer approved this stage. Waiting for {project.parent}.</p>}
-          {stage.amma === "recheck" && !stage.secondDecision && (
+          {stage.status === "rejected" && <p className="note">The engineer rejected this proof. The money stays locked until the builder fixes it and sends new proof.</p>}
+          {stage.status === "submitted" && stage.engineerDecision === "approved" && !stage.amma && <p className="note">The engineer approved this stage. Waiting for {project.parent}.</p>}
+          {stage.status === "submitted" && stage.amma === "recheck" && !stage.secondDecision && (
             <p className="note">Second check requested. {project.engineer.secondName} must approve before any money moves.</p>
           )}
-          {stage.secondDecision === "rejected" && <p className="note">The second engineer rejected this stage. The money stays locked.</p>}
-        </>
+                  </>
       )}
 
       {stage.status === "locked" && <p className="note">Proof appears here after this stage opens.</p>}

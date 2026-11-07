@@ -2,14 +2,15 @@
 
 import { useSyncExternalStore } from "react";
 import rawSeed from "@/mock/projects.json";
-import { canPay } from "./project.mjs";
+import { isActive, settle } from "./project.mjs";
 
 // All app data goes through this file. Swap these functions for the backend API when it's ready.
 export type Stage = {
   slug: string;
   name: string;
-  amount: number;
-  status: string;
+  amount: number; // materials + labour
+  materials: number; // paid to the supplier when the stage opens
+  status: "locked" | "open" | "submitted" | "rejected" | "paid";
   photos: { src: string; caption: string }[];
   checklist: { item: string; result: string | null }[];
   payouts: { to: string; amount: number }[];
@@ -19,8 +20,8 @@ export type Stage = {
   steelBy?: string;
   finishBy?: string;
   reviewBy?: string;
-  needsAmma?: boolean;
-  proofSent?: boolean;
+  parentMustApprove?: boolean;
+  prePour?: boolean; // steel is checked before concrete is poured
   engineerDecision?: "approved" | "rejected" | null;
   amma?: "ok" | "recheck" | null;
   secondDecision?: "approved" | "rejected" | null;
@@ -77,15 +78,13 @@ export function useProjects() {
 }
 
 export function updateStage(projectId: string, slug: string, change: Partial<Stage>) {
-  const settle = (stage: Stage): Stage => {
-    const next = { ...stage, ...change };
-    return next.status === "waiting" && canPay(next)
-      ? { ...next, status: "paid", paidOn: new Date().toISOString().slice(0, 10) }
-      : next;
+  const apply = (stage: Stage): Stage => {
+    const next = settle({ ...stage, ...change }) as Stage;
+    return next.status === "paid" && stage.status !== "paid" ? { ...next, paidOn: new Date().toISOString().slice(0, 10) } : next;
   };
   write(
     read().map((p) =>
-      p.id === projectId ? { ...p, stages: p.stages.map((s) => (s.slug === slug ? settle(s) : s)) } : p,
+      p.id === projectId ? { ...p, stages: p.stages.map((s) => (s.slug === slug ? apply(s) : s)) } : p,
     ),
   );
 }
@@ -110,7 +109,7 @@ export function resetDemo() {
 // The one stage being worked on, for the Builder, Engineer and Amma views.
 export function activeStage(projects: Project[]) {
   for (const project of projects) {
-    const stage = project.stages.find((s) => s.status === "waiting");
+    const stage = project.stages.find(isActive);
     if (stage) return { project, stage };
   }
   return null;

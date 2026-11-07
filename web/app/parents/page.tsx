@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { rupees, shortDate, timeline, totalFunded } from "@/lib/project.mjs";
+import { isActive, rupees, shortDate, timeline, totalFunded } from "@/lib/project.mjs";
 import { act, type Project, type Stage, updateStage, useProjects, useStatus } from "@/lib/store";
 import { statusView, Tile } from "../icons";
 
@@ -18,8 +18,8 @@ function now(project: Project, stage: Stage) {
   const { name, secondName } = project.engineer;
   if (stage.amma === "recheck") return stage.secondDecision ? "The second check is done." : `${secondName} will check the work again. Nothing is paid until then.`;
   if (stage.engineerDecision === "approved") return `${name} checked the work. Is it done the way you want?`;
-  if (stage.engineerDecision === "rejected") return `${name} found a problem. The builder will fix it first.`;
-  if (stage.proofSent) return `${name} is checking the work.`;
+  if (stage.status === "rejected") return `${name} found a problem. The builder will fix it first.`;
+  if (stage.status === "submitted") return `${name} is checking the work.`;
   return "The builder is working on this now.";
 }
 
@@ -29,8 +29,8 @@ export default function Parents() {
   const [phone, setPhone] = useState<"smart" | "basic">("smart");
   const [language, setLanguage] = useState<Language>("English");
   const project = projects[who];
-  const stage = project.stages.find((s) => s.status === "waiting");
-  const ready = stage?.engineerDecision === "approved" && !stage.amma;
+  const stage = project.stages.find(isActive);
+  const ready = stage?.status === "submitted" && stage.engineerDecision === "approved" && !stage.amma;
   const busy = useStatus().state === "loading";
   const answer = (amma: "ok" | "recheck") =>
     stage &&
@@ -146,7 +146,7 @@ export default function Parents() {
                 <div className="row" key={s.slug}>
                   <Tile name={view.icon} tone={view.tone} />
                   <div className="grow">{s.name}</div>
-                  <span className="muted">{s.status === "paid" ? "Finished" : s.status === "waiting" ? "Now" : "Later"}</span>
+                  <span className="muted">{s.status === "paid" ? "Finished" : isActive(s) ? "Now" : "Later"}</span>
                 </div>
               );
             })}
