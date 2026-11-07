@@ -8,7 +8,7 @@ use super::*;
 use soroban_sdk::{
     testutils::Address as _,
     token::{StellarAssetClient, TokenClient},
-    Address, BytesN, Env,
+    vec, Address, BytesN, Env,
 };
 
 /// Everything a test needs. Field names match the roles in the dev guide.
@@ -72,9 +72,33 @@ pub fn h(e: &Env, b: u8) -> BytesN<32> {
     BytesN::from_array(e, &[b; 32])
 }
 
-// TODO (Ved): add `fn project(t: &T, parent_must: bool) -> u32` once
-// create_project exists. It creates 1 stage: materials 100, labour 1000,
-// payees labour 40% / builder 60%.
+/// Creates a 1-stage project: materials 100 (to supplier), labour 1000 split
+/// 40% to labour, 60% to builder. Returns the project ID.
+pub fn project(t: &T, parent_must: bool) -> u32 {
+    let payees = vec![
+        &t.e,
+        Payee { to: t.labour.clone(), bps: 4_000 },
+        Payee { to: t.builder.clone(), bps: 6_000 },
+    ];
+    let stages = vec![
+        &t.e,
+        StageInput {
+            materials: 100,
+            labour_amount: 1_000,
+            payees,
+            parent_must_approve: parent_must,
+            pre_pour: true,
+            hold_secs: 0,
+        },
+    ];
+    t.c.create_project(
+        &vec![&t.e, t.s1.clone(), t.s2.clone()],
+        &t.parent,
+        &t.builder,
+        &t.supplier,
+        &stages,
+    )
+}
 
 #[test]
 fn t0_setup_works() {
@@ -90,4 +114,36 @@ fn t0_setup_works() {
     assert_eq!(t.c.try_get_project(&0), Err(Ok(Error::NotFound)));
     assert_eq!(t.c.get_certificate(&0, &0), None);
     let _ = h(&t.e, 1);
+}
+
+#[test]
+fn t4_bad_shares_rejected() {
+    let t = setup();
+    let payees = vec![
+        &t.e,
+        Payee { to: t.labour.clone(), bps: 4_000 },
+        Payee { to: t.builder.clone(), bps: 5_000 }, // only 90% in total
+    ];
+    let stages = vec![
+        &t.e,
+        StageInput { materials: 100, labour_amount: 1_000, payees,
+                     parent_must_approve: false, pre_pour: false, hold_secs: 0 },
+    ];
+    let r = t.c.try_create_project(
+        &vec![&t.e, t.s1.clone()], &t.parent, &t.builder, &t.supplier, &stages);
+    assert_eq!(r, Err(Ok(Error::BadShares)));
+}
+
+#[test]
+fn create_project_stores_everything() {
+    let t = setup();
+    let id = project(&t, false);
+    assert_eq!(id, 0);
+    let p = t.c.get_project(&id);
+    assert_eq!(p.stage_count, 1);
+    assert_eq!(p.funded, 0);
+    let st = t.c.get_stage(&id, &0);
+    assert_eq!(st.status, StageStatus::Locked);
+    assert_eq!(st.approvals_needed, 1);
+    assert_eq!(project(&t, false), 1); // ids count up
 }
