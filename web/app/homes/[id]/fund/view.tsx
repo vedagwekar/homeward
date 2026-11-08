@@ -7,7 +7,6 @@ import { dollars, homewardFee, nextStage, rupees, totalFunded } from "@/lib/proj
 import { act, addFunding, useProjects, useStatus } from "@/lib/store";
 import { Back } from "../../../icons";
 
-const ENGINEER_VISIT = 5000; // shortcut: demo estimate, replace with real quotes from engineers
 
 export default function View({ id }: { id: string }) {
   const project = useProjects().find((p) => p.id === id);
@@ -25,7 +24,7 @@ export default function View({ id }: { id: string }) {
   ];
   const picked = options[Math.min(choice, options.length - 1)];
   const fee = homewardFee(picked.amount);
-  const total = picked.amount + fee + ENGINEER_VISIT;
+  const total = picked.amount + fee;
   const cad = dollars(total, project.rupeesPerCad);
 
   if (done !== null) {
@@ -93,11 +92,10 @@ export default function View({ id }: { id: string }) {
             <span className="muted">{rupees(picked.amount)}</span>
           </div>
           <div className="row">
-            <div className="grow">Engineer visit, estimate</div>
-            <span className="muted">{rupees(ENGINEER_VISIT)}</span>
-          </div>
-          <div className="row">
-            <div className="grow">Homeward fee, 1.5%</div>
+            <div className="grow">
+              <span>Homeward fee, 1.5%</span>
+              <small>Pays the engineer, whether they approve or reject</small>
+            </div>
             <span className="muted">{rupees(fee)}</span>
           </div>
           <div className="row">
