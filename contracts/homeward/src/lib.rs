@@ -372,6 +372,63 @@ impl Homeward {
         Ok(())
     }
 
+    // ---------- freeze and resolve ----------
+
+    /// The parent or a sponsor stops the project. Nothing pays out while it's frozen.
+    pub fn freeze(e: Env, caller: Address, id: u32) -> Result<(), Error> {
+        caller.require_auth();
+        let mut p = load_project(&e, id)?;
+        if caller != p.parent && !p.sponsors.contains(&caller) {
+            return Err(Error::NotAuthorized);
+        }
+        p.frozen = true;
+        save_project(&e, id, &p);
+        e.events()
+            .publish((symbol_short!("frozen"), id), caller);
+        Ok(())
+    }
+
+    /// Admin settles a frozen project. `refund_bps` of the unspent money goes back
+    /// to sponsors in proportion to what they paid in, and the rest goes to the
+    /// builder for work done. The project stays frozen.
+    pub fn resolve(e: Env, id: u32, refund_bps: u32) -> Result<(), Error> {
+        admin(&e).require_auth();
+        let mut p = load_project(&e, id)?;
+        if !p.frozen {
+            return Err(Error::WrongStatus);
+        }
+        // Above 100% would pay out more than the project has left.
+        if refund_bps > 10_000 {
+            return Err(Error::BadShares);
+        }
+
+        let unspent = p.funded - p.spent;
+        let refund_total = unspent * refund_bps as i128 / 10_000;
+        let n = p.sponsors.len();
+        let mut refunded: i128 = 0;
+        let mut i: u32 = 0;
+        for s in p.sponsors.iter() {
+            // Last sponsor gets whatever is left, so rounding never loses a unit.
+            let share = if i == n - 1 {
+                refund_total - refunded
+            } else if p.funded > 0 {
+                refund_total * storage::contribution(&e, id, &s) / p.funded
+            } else {
+                0
+            };
+            pay(&e, &s, share);
+            refunded += share;
+            i += 1;
+        }
+        pay(&e, &p.builder, unspent - refunded);
+
+        p.spent = p.funded;
+        save_project(&e, id, &p);
+        e.events()
+            .publish((symbol_short!("resolved"), id), refunded);
+        Ok(())
+    }
+
     // ---------- read-only views (free to call, no signature needed) ----------
     pub fn get_project(e: Env, id: u32) -> Result<Project, Error> {
         load_project(&e, id)
