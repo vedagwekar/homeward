@@ -22,6 +22,15 @@ fn pay(e: &Env, to: &Address, amount: i128) {
     }
 }
 
+/// True if `who` funds, lives in, builds, supplies or gets paid from this stage.
+fn has_stake(p: &Project, st: &Stage, who: &Address) -> bool {
+    *who == p.builder
+        || *who == p.supplier
+        || *who == p.parent
+        || p.sponsors.contains(who)
+        || st.payees.iter().any(|py| py.to == *who)
+}
+
 #[contractimpl]
 impl Homeward {
     /// Runs once, at deploy. Stores who the admin is, which token we use,
@@ -150,7 +159,29 @@ impl Homeward {
     ) -> Result<(), Error> {
         admin(&e).require_auth();
 
+        let p = load_project(&e, id)?;
+        if p.frozen {
+            return Err(Error::Frozen);
+        }
         let mut st = load_stage(&e, id, stage)?;
+
+        // An engineer must be independent: nobody who pays or gets paid can sign
+        // off, and a re-check needs two different people.
+        let other = if slot == 1 { &st.inspector2 } else { &st.inspector };
+        if has_stake(&p, &st, &inspector) || other.as_ref() == Some(&inspector) {
+            return Err(Error::NotAuthorized);
+        }
+
+        // Once proof is in, a named engineer can't be swapped for a friendlier one.
+        // An empty slot can still be filled, so a re-check is never stuck.
+        let current = if slot == 1 { &st.inspector } else { &st.inspector2 };
+        let proof_in = matches!(
+            st.status,
+            StageStatus::Submitted | StageStatus::Approved | StageStatus::Paid
+        );
+        if proof_in && current.is_some() {
+            return Err(Error::WrongStatus);
+        }
 
         if slot == 1 {
             st.inspector = Some(inspector.clone());
