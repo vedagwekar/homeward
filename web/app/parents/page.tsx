@@ -29,7 +29,7 @@ export default function Parents() {
   const [phone, setPhone] = useState<"smart" | "basic">("smart");
   const [language, setLanguage] = useState<Language>("English");
   const project = projects[who];
-  const stage = project.stages.find(isActive);
+  const stage = project.frozen ? undefined : project.stages.find(isActive);
   const ready = stage?.status === "submitted" && stage.engineerDecision === "approved" && !stage.amma;
   const busy = useStatus().state === "loading";
   const answer = (amma: "ok" | "recheck") =>

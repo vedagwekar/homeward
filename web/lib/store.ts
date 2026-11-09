@@ -2,7 +2,7 @@
 
 import { useSyncExternalStore } from "react";
 import rawSeed from "@/mock/projects.json";
-import { isActive, settle } from "./project.mjs";
+import { isActive, refundSplit, settle } from "./project.mjs";
 
 // All app data goes through this file. Swap these functions for the backend API when it's ready.
 export type Stage = {
@@ -36,6 +36,8 @@ export type Project = {
   parent: string;
   sponsors: { name: string; city: string; paidIn: number }[];
   engineer: { name: string; licence: string; secondName: string };
+  builder: { name: string; role: string };
+  frozen?: boolean; // build stopped and unspent money returned
   stages: Stage[];
 };
 
@@ -99,6 +101,18 @@ export function addFunding(projectId: string, sponsor: string, amount: number) {
   );
 }
 
+// shortcut: the contract's freeze/resolve covers "stop and return everything"; returning part of
+// the spare money while the build continues needs a contract function, ask Ved before relying on it.
+export function returnMoney(projectId: string, amount: number, stop: boolean) {
+  write(
+    read().map((p) => {
+      if (p.id !== projectId) return p;
+      const split = refundSplit(p.sponsors, amount);
+      return { ...p, frozen: stop || p.frozen, sponsors: p.sponsors.map((s, i) => ({ ...s, paidIn: s.paidIn - split[i].amount })) };
+    }),
+  );
+}
+
 export function resetDemo() {
   try {
     localStorage.removeItem(KEY);
@@ -109,7 +123,7 @@ export function resetDemo() {
 // The one stage being worked on, for the Builder, Engineer and Amma views.
 export function activeStage(projects: Project[]) {
   for (const project of projects) {
-    const stage = project.stages.find(isActive);
+    const stage = project.frozen ? undefined : project.stages.find(isActive);
     if (stage) return { project, stage };
   }
   return null;
