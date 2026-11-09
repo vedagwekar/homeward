@@ -229,6 +229,73 @@ fn assign_inspector_works() {
 }
 
 #[test]
+fn engineer_cannot_have_a_stake_in_the_project() {
+    let t = setup();
+    let id = project(&t, false);
+    for who in [&t.builder, &t.supplier, &t.parent, &t.s1, &t.s2, &t.labour] {
+        assert_eq!(
+            t.c.try_assign_inspector(&id, &0, who, &1),
+            Err(Ok(Error::NotAuthorized))
+        );
+    }
+    assert_eq!(t.c.get_stage(&id, &0).inspector, None);
+}
+
+#[test]
+fn second_engineer_must_be_a_different_person() {
+    let t = setup();
+    let id = project(&t, false);
+    t.c.assign_inspector(&id, &0, &t.i1, &1);
+    assert_eq!(
+        t.c.try_assign_inspector(&id, &0, &t.i1, &2),
+        Err(Ok(Error::NotAuthorized))
+    );
+    assert_eq!(t.c.get_stage(&id, &0).inspector2, None);
+}
+
+#[test]
+fn engineer_cannot_be_swapped_once_proof_is_in() {
+    let t = setup();
+    let id = project(&t, false);
+    to_submitted(&t, id);
+    let friend = Address::generate(&t.e);
+    assert_eq!(
+        t.c.try_assign_inspector(&id, &0, &friend, &1),
+        Err(Ok(Error::WrongStatus))
+    );
+    assert_eq!(
+        t.c.try_assign_inspector(&id, &0, &friend, &2),
+        Err(Ok(Error::WrongStatus))
+    );
+    assert_eq!(t.c.get_stage(&id, &0).inspector, Some(t.i1.clone()));
+}
+
+#[test]
+fn empty_engineer_slot_can_be_filled_after_proof() {
+    let t = setup();
+    let id = project(&t, false);
+    t.c.fund(&t.s1, &id, &2_000);
+    t.c.open_stage(&id, &0, &h(&t.e, 1));
+    t.c.assign_inspector(&id, &0, &t.i1, &1);
+    t.c.submit_proof(&id, &0, &h(&t.e, 2));
+
+    t.c.assign_inspector(&id, &0, &t.i2, &2);
+    t.c.recheck(&t.parent, &id, &0);
+    assert_eq!(t.c.get_stage(&id, &0).approvals_needed, 2);
+}
+
+#[test]
+fn frozen_project_cannot_assign_an_engineer() {
+    let t = setup();
+    let id = project(&t, false);
+    t.c.freeze(&t.s1, &id);
+    assert_eq!(
+        t.c.try_assign_inspector(&id, &0, &t.i1, &1),
+        Err(Ok(Error::Frozen))
+    );
+}
+
+#[test]
 fn submit_proof_rejects_locked_stage() {
     let t = setup();
     let id = project(&t, false);
