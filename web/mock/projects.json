@@ -206,7 +206,11 @@
           }
         ]
       }
-    ]
+    ],
+    "builder": {
+      "name": "Thomas Varghese",
+      "role": "Builder"
+    }
   },
   {
     "id": "jalandhar",
@@ -317,6 +321,10 @@
           }
         ]
       }
-    ]
+    ],
+    "builder": {
+      "name": "Harjit Sandhu",
+      "role": "Builder"
+    }
   }
 ]

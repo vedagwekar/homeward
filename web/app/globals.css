@@ -260,6 +260,15 @@ a.row:active {
   padding: 0.7rem 0.9rem;
 }
 
+button.pill {
+  border: 0;
+  font-family: inherit;
+}
+
+button.pill:disabled {
+  opacity: 0.5;
+}
+
 .chevron {
   color: var(--secondary);
   height: 1rem;
@@ -395,6 +404,41 @@ footer {
   font-size: 0.9375rem;
   white-space: nowrap;
   width: 4.9rem;
+}
+
+.live {
+  position: relative;
+}
+
+.live-badge,
+.live-time {
+  border-radius: 6px;
+  color: #fff;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  padding: 0.2rem 0.5rem;
+  position: absolute;
+}
+
+.live-badge {
+  background: var(--tile-red);
+  left: 0.6rem;
+  top: 0.6rem;
+}
+
+.live-time {
+  background: rgb(0 0 0 / 0.6);
+  font-variant-numeric: tabular-nums;
+  right: 0.6rem;
+  top: 0.6rem;
+}
+
+.thumb {
+  border-radius: 8px;
+  flex: none;
+  height: 2.75rem;
+  object-fit: cover;
+  width: 2.75rem;
 }
 
 .photos {

@@ -32,9 +32,21 @@ export const homewardFee = (amount) => Math.round(amount * 0.015);
 // Budget split for the bar: each rupee sits in exactly one part.
 export function budgetParts(project) {
   const paid = totalPaid(project);
-  const waiting = project.stages.filter(isActive).reduce((t, s) => t + s.amount - s.materials, 0);
+  // A stopped build releases the labour it was holding for the active stage.
+  const waiting = project.frozen ? 0 : project.stages.filter(isActive).reduce((t, s) => t + s.amount - s.materials, 0);
   const ready = Math.max(totalFunded(project) - paid - waiting, 0);
   return { paid, waiting, ready, unfunded: project.budget - paid - waiting - ready };
+}
+
+// Splits money going back by what each person paid in. Rounding leftovers go to the biggest share,
+// so the parts always add up to the amount.
+/** @param {{ name: string, paidIn: number }[]} sponsors @param {number} amount @returns {{ name: string, amount: number }[]} */
+export function refundSplit(sponsors, amount) {
+  const total = sponsors.reduce((t, s) => t + s.paidIn, 0);
+  const parts = sponsors.map((s) => ({ name: s.name, amount: total ? Math.floor((amount * s.paidIn) / total) : 0 }));
+  const biggest = parts.reduce((b, p, i) => (sponsors[i].paidIn > sponsors[b].paidIn ? i : b), 0);
+  if (parts.length) parts[biggest].amount += amount - parts.reduce((t, p) => t + p.amount, 0);
+  return parts;
 }
 
 // Payment needs the engineer's approval, Amma's OK where required, and a second approval after "check again".

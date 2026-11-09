@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Anitha Krishnan",
+    "role": "Engineer",
+    "state": "Kerala",
+    "about": "Licensed civil engineer, 9 years, residential"
+  },
+  {
+    "name": "Joseph Mathew",
+    "role": "Builder",
+    "state": "Kerala",
+    "about": "House extensions and renovations, 14 years"
+  },
+  {
+    "name": "Suresh Nair",
+    "role": "Builder",
+    "state": "Kerala",
+    "about": "New houses and roof slabs, 11 years"
+  },
+  {
+    "name": "Gurpreet Dhillon",
+    "role": "Engineer",
+    "state": "Punjab",
+    "about": "Licensed structural engineer, 12 years"
+  },
+  {
+    "name": "Manjit Brar",
+    "role": "Builder",
+    "state": "Punjab",
+    "about": "Roof repairs and waterproofing, 8 years"
+  }
+]

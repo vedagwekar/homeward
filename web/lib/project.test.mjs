@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { budgetParts, canPay, dollars, homewardFee, nextStage, rupees, settle, timeline, totalFunded, totalPaid } from "./project.mjs";
+import { budgetParts, canPay, refundSplit, dollars, homewardFee, nextStage, rupees, settle, timeline, totalFunded, totalPaid } from "./project.mjs";
 
 const stages = [
   { name: "A", amount: 100, materials: 20, status: "paid" },
@@ -81,4 +81,15 @@ test("demo data: every stage's payouts add up to the stage", async () => {
     assert.equal(p.stages.reduce((t, s) => t + s.amount, 0), p.budget, p.id);
     for (const s of p.stages) assert.equal(s.payouts.reduce((t, x) => t + x.amount, 0), s.amount, s.slug);
   }
+});
+
+test("money back splits by what each person paid in and always adds up", () => {
+  const split = refundSplit([{ name: "A", paidIn: 600000 }, { name: "B", paidIn: 300000 }], 100001);
+  assert.deepEqual(split, [{ name: "A", amount: 66668 }, { name: "B", amount: 33333 }]);
+  assert.equal(split.reduce((t, s) => t + s.amount, 0), 100001);
+});
+
+test("a stopped build no longer holds labour for the active stage", () => {
+  const p = { budget: 1000, frozen: true, ...project(350) };
+  assert.equal(budgetParts(p).waiting, 0);
 });

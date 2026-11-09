@@ -12,12 +12,15 @@ export default function View({ id }: { id: string }) {
   if (!project) notFound();
   const next = nextStage(project);
   const family = [...project.sponsors.map((s) => s.name), project.parent];
+  const latest = [...project.stages].reverse().find((s) => s.photos.length && s.status !== "locked" && s.status !== "open");
+  const photo = latest?.photos[latest.photos.length - 1];
 
   return (
     <>
       <Back href="/" label="Homes" />
       <h1>{project.name}</h1>
       <p className="intro">{project.place}</p>
+      {project.frozen && <p className="note">This build is stopped. Unspent money has gone back to the family.</p>}
 
       <section className="group">
         <div className="pad">
@@ -41,6 +44,31 @@ export default function View({ id }: { id: string }) {
             </Link>
           </div>
         )}
+      </section>
+
+      <h3>On site</h3>
+      <section className="group">
+        {photo && latest && (
+          <Link className="row" href={`/homes/${project.id}/stages/${latest.slug}`}>
+            <img className="thumb" src={photo.src} alt="" />
+            <div className="grow">
+              <span>{photo.caption}</span>
+              <small>
+                {latest.name}. Sample image
+              </small>
+            </div>
+          </Link>
+        )}
+        <Link className="row" href={`/homes/${project.id}/camera`}>
+          <Tile name="clock" tone="red" />
+          <div className="grow">
+            <span>Site camera</span>
+            <small>Watch the build live, any time</small>
+          </div>
+          <span className="chevron">
+            <Glyph name="chevron" />
+          </span>
+        </Link>
       </section>
 
       <h3>Stages</h3>
@@ -110,6 +138,26 @@ export default function View({ id }: { id: string }) {
       </section>
 
       <section className="group spaced">
+        <Link className="row" href={`/homes/${project.id}/team`}>
+          <Tile name="hammer" tone="orange" />
+          <div className="grow">
+            <span>Builder and engineer</span>
+            <small>Your team, or find someone checked by Homeward</small>
+          </div>
+          <span className="chevron">
+            <Glyph name="chevron" />
+          </span>
+        </Link>
+        <Link className="row" href={`/homes/${project.id}/money-back`}>
+          <Tile name="back" tone="green" />
+          <div className="grow">
+            <span>Money back</span>
+            <small>Overcharged, or the build stopped? Get unspent money back</small>
+          </div>
+          <span className="chevron">
+            <Glyph name="chevron" />
+          </span>
+        </Link>
         <Link className="row" href="/help">
           <Tile name="help" tone="gray" />
           <div className="grow">If something goes wrong</div>
