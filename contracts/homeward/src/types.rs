@@ -72,6 +72,7 @@ pub struct Stage {
     pub code_hash: Option<BytesN<32>>,  // sha256 of the stage code
     pub video_hash: Option<BytesN<32>>, // sha256 of the proof video
     pub approved_at: u64,
+    pub report_hash: Option<BytesN<32>>, // sha256 of the engineer's report
 }
 
 #[contracttype]
