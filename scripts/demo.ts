@@ -2,9 +2,8 @@
 // Run with ./scripts/demo.sh. Each run creates a new project, so it's safe to repeat.
 // It checks the money as it goes and exits with an error if anything is wrong.
 import { createHash, randomInt } from "node:crypto";
-import { Asset, BASE_FEE, Horizon, Keypair, Networks, Operation, TransactionBuilder } from "@stellar/stellar-sdk";
-import { clientFor, read, send, StageStatus, tokenBalance, type StageInput } from "../backend/src/chain";
-import { addr, cfg, formatUnits, keypair, rupeesToUnits, RUPEES_PER_TUSDC } from "../backend/src/config";
+import { clientFor, ensureTusdc, read, send, StageStatus, tokenBalance, type StageInput } from "../backend/src/chain";
+import { addr, cfg, formatUnits, rupeesToUnits, RUPEES_PER_TUSDC } from "../backend/src/config";
 
 const sha256 = (text: string) => createHash("sha256").update(text).digest();
 const stageCode = () => `HW-${randomInt(1000, 9999)}-${randomInt(1000, 9999)}`;
@@ -75,36 +74,14 @@ async function balances() {
   return out;
 }
 
-/** Keeps the demo repeatable: the test issuer tops up a sponsor who is running low. */
-async function topUpIfNeeded(role: "sponsor1" | "sponsor2", needed: bigint) {
-  const balance = await tokenBalance(addr[role]);
-  if (balance >= needed) return;
-  const horizon = new Horizon.Server("https://horizon-testnet.stellar.org");
-  const issuer = Keypair.fromSecret(keypair("issuer").secret());
-  const tx = new TransactionBuilder(await horizon.loadAccount(issuer.publicKey()), {
-    fee: BASE_FEE,
-    networkPassphrase: Networks.TESTNET,
-  })
-    .addOperation(Operation.payment({
-      destination: addr[role],
-      asset: new Asset("TUSDC", issuer.publicKey()),
-      amount: "50000",
-    }))
-    .setTimeout(180)
-    .build();
-  tx.sign(issuer);
-  await horizon.submitTransaction(tx);
-  console.log(`   Topped up ${role} with 50,000 test TUSDC`);
-}
-
 async function main() {
   console.log("HOMEWARD DEMO on Stellar Testnet");
   console.log(`Contract: https://stellar.expert/explorer/testnet/contract/${cfg.contractId}`);
   console.log(`Demo rate: 1 TUSDC = Rs ${RUPEES_PER_TUSDC}. Rupee payouts are simulated.`);
 
   section("Getting ready");
-  await topUpIfNeeded("sponsor1", sponsor1Amount + fee(sponsor1Amount));
-  await topUpIfNeeded("sponsor2", sponsor2Amount + fee(sponsor2Amount));
+  await ensureTusdc("sponsor1", sponsor1Amount + fee(sponsor1Amount));
+  await ensureTusdc("sponsor2", sponsor2Amount + fee(sponsor2Amount));
   const start = await balances();
 
   const admin = clientFor("admin");
