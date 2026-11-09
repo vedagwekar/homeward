@@ -6,7 +6,7 @@ extern crate std;
 
 use super::*;
 use soroban_sdk::{
-    testutils::Address as _,
+    testutils::{Address as _, Ledger},
     token::{StellarAssetClient, TokenClient},
     vec, Address, BytesN, Env,
 };
@@ -239,4 +239,168 @@ fn submit_proof_rejects_locked_stage() {
         t.c.try_submit_proof(&id, &0, &video_hash),
         Err(Ok(Error::WrongStatus))
     );
+}
+
+// ---------- stage flow: open, approve, split pay (Ved) ----------
+
+/// One-stage project with custom labour, parent sign-off and hold time.
+fn custom(t: &T, labour: i128, parent_must: bool, hold_secs: u64) -> u32 {
+    let payees = vec![
+        &t.e,
+        Payee {
+            to: t.labour.clone(),
+            bps: 4_000,
+        },
+        Payee {
+            to: t.builder.clone(),
+            bps: 6_000,
+        },
+    ];
+    let stages = vec![
+        &t.e,
+        StageInput {
+            materials: 100,
+            labour_amount: labour,
+            payees,
+            parent_must_approve: parent_must,
+            pre_pour: true,
+            hold_secs,
+        },
+    ];
+    t.c.create_project(
+        &vec![&t.e, t.s1.clone(), t.s2.clone()],
+        &t.parent,
+        &t.builder,
+        &t.supplier,
+        &stages,
+    )
+}
+
+/// Runs the real steps up to "waiting for the engineer": fund, open, assign, proof.
+fn to_submitted(t: &T, id: u32) {
+    t.c.fund(&t.s1, &id, &2_000);
+    t.c.open_stage(&id, &0, &h(&t.e, 1));
+    t.c.assign_inspector(&id, &0, &t.i1, &1);
+    t.c.assign_inspector(&id, &0, &t.i2, &2);
+    t.c.submit_proof(&id, &0, &h(&t.e, 2));
+}
+
+#[test]
+fn t1_no_payout_without_approval() {
+    let t = setup();
+    let id = project(&t, false);
+    to_submitted(&t, id);
+    assert_eq!(t.c.get_stage(&id, &0).status, StageStatus::Submitted);
+    assert_eq!(t.tok.balance(&t.supplier), 100); // materials go first
+    assert_eq!(t.tok.balance(&t.builder), 0);
+    assert_eq!(t.tok.balance(&t.labour), 0);
+}
+
+#[test]
+fn t2_stranger_cannot_approve() {
+    let t = setup();
+    let id = project(&t, false);
+    to_submitted(&t, id);
+    let stranger = Address::generate(&t.e);
+    let r = t.c.try_decide(&stranger, &id, &0, &true, &h(&t.e, 3));
+    assert_eq!(r, Err(Ok(Error::NotAuthorized)));
+    // The second engineer has no say until someone asks for a re-check.
+    let r = t.c.try_decide(&t.i2, &id, &0, &true, &h(&t.e, 3));
+    assert_eq!(r, Err(Ok(Error::NotAuthorized)));
+    assert_eq!(t.tok.balance(&t.builder), 0);
+}
+
+#[test]
+fn t3_rejected_stays_locked_then_can_resubmit() {
+    let t = setup();
+    let id = project(&t, false);
+    to_submitted(&t, id);
+    t.c.decide(&t.i1, &id, &0, &false, &h(&t.e, 3));
+    assert_eq!(t.c.get_stage(&id, &0).status, StageStatus::Rejected);
+    assert_eq!(t.tok.balance(&t.builder), 0);
+    assert_eq!(t.tok.balance(&t.labour), 0);
+    assert_eq!(t.tok.balance(&t.c.address), 1_900); // 2000 funded - 100 materials
+
+    t.c.submit_proof(&id, &0, &h(&t.e, 4));
+    t.c.decide(&t.i1, &id, &0, &true, &h(&t.e, 5));
+    assert_eq!(t.c.get_stage(&id, &0).status, StageStatus::Paid);
+}
+
+#[test]
+fn t5_split_and_rounding() {
+    let t = setup();
+    // 1001 does not split evenly: 40% = 400.4, rounds down to 400.
+    let id = custom(&t, 1_001, false, 0);
+
+    // Can't open a stage the project can't fully pay for.
+    assert_eq!(
+        t.c.try_open_stage(&id, &0, &h(&t.e, 1)),
+        Err(Ok(Error::InsufficientFunds))
+    );
+
+    to_submitted(&t, id);
+    assert_eq!(
+        t.c.try_open_stage(&id, &0, &h(&t.e, 1)),
+        Err(Ok(Error::WrongStatus))
+    ); // can't pay the supplier twice
+
+    t.c.decide(&t.i1, &id, &0, &true, &h(&t.e, 3));
+
+    assert_eq!(t.tok.balance(&t.supplier), 100);
+    assert_eq!(t.tok.balance(&t.labour), 400);
+    assert_eq!(t.tok.balance(&t.builder), 601); // last payee gets the rounding
+    assert_eq!(t.tok.balance(&t.c.address), 2_000 - 100 - 1_001);
+    assert_eq!(t.c.get_stage(&id, &0).status, StageStatus::Paid);
+    assert_eq!(t.c.get_project(&id).spent, 1_101);
+
+    let cert = t.c.get_certificate(&id, &0).unwrap();
+    assert_eq!(cert.amount, 1_001);
+    assert_eq!(cert.report_hash, h(&t.e, 3));
+    assert_eq!(cert.approvers, vec![&t.e, t.i1.clone()]);
+
+    // Paying again is impossible.
+    assert_eq!(
+        t.c.try_release(&id, &0, &h(&t.e, 3)),
+        Err(Ok(Error::WrongStatus))
+    );
+}
+
+#[test]
+fn parent_must_approve_blocks_payment() {
+    let t = setup();
+    let id = project(&t, true);
+    to_submitted(&t, id);
+
+    t.c.decide(&t.i1, &id, &0, &true, &h(&t.e, 3));
+    assert_eq!(t.c.get_stage(&id, &0).status, StageStatus::Submitted);
+    assert_eq!(t.tok.balance(&t.builder), 0);
+    assert_eq!(
+        t.c.try_decide(&t.i1, &id, &0, &true, &h(&t.e, 3)),
+        Err(Ok(Error::AlreadyApproved))
+    );
+
+    t.c.decide(&t.parent, &id, &0, &true, &h(&t.e, 3));
+    assert_eq!(t.c.get_stage(&id, &0).status, StageStatus::Paid);
+    assert_eq!(t.tok.balance(&t.builder), 600);
+    let cert = t.c.get_certificate(&id, &0).unwrap();
+    assert_eq!(cert.approvers, vec![&t.e, t.i1.clone(), t.parent.clone()]);
+}
+
+#[test]
+fn t7_hold_blocks_early_release() {
+    let t = setup();
+    let id = custom(&t, 1_000, false, 100);
+    to_submitted(&t, id);
+    t.c.decide(&t.i1, &id, &0, &true, &h(&t.e, 3));
+    assert_eq!(t.c.get_stage(&id, &0).status, StageStatus::Approved);
+    assert_eq!(t.tok.balance(&t.builder), 0);
+    assert_eq!(
+        t.c.try_release(&id, &0, &h(&t.e, 3)),
+        Err(Ok(Error::TooEarly))
+    );
+
+    t.e.ledger().with_mut(|l| l.timestamp += 101);
+    t.c.release(&id, &0, &h(&t.e, 3));
+    assert_eq!(t.c.get_stage(&id, &0).status, StageStatus::Paid);
+    assert_eq!(t.tok.balance(&t.builder), 600);
 }
