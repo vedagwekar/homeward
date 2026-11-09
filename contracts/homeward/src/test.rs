@@ -63,7 +63,13 @@ pub fn setup<'a>() -> T<'a> {
         labour: Address::generate(&e),
         i1: Address::generate(&e),
         i2: Address::generate(&e),
-        e, c, tok, admin, platform, s1, s2,
+        e,
+        c,
+        tok,
+        admin,
+        platform,
+        s1,
+        s2,
     }
 }
 
@@ -77,8 +83,14 @@ pub fn h(e: &Env, b: u8) -> BytesN<32> {
 pub fn project(t: &T, parent_must: bool) -> u32 {
     let payees = vec![
         &t.e,
-        Payee { to: t.labour.clone(), bps: 4_000 },
-        Payee { to: t.builder.clone(), bps: 6_000 },
+        Payee {
+            to: t.labour.clone(),
+            bps: 4_000,
+        },
+        Payee {
+            to: t.builder.clone(),
+            bps: 6_000,
+        },
     ];
     let stages = vec![
         &t.e,
@@ -121,16 +133,33 @@ fn t4_bad_shares_rejected() {
     let t = setup();
     let payees = vec![
         &t.e,
-        Payee { to: t.labour.clone(), bps: 4_000 },
-        Payee { to: t.builder.clone(), bps: 5_000 }, // only 90% in total
+        Payee {
+            to: t.labour.clone(),
+            bps: 4_000,
+        },
+        Payee {
+            to: t.builder.clone(),
+            bps: 5_000,
+        }, // only 90% in total
     ];
     let stages = vec![
         &t.e,
-        StageInput { materials: 100, labour_amount: 1_000, payees,
-                     parent_must_approve: false, pre_pour: false, hold_secs: 0 },
+        StageInput {
+            materials: 100,
+            labour_amount: 1_000,
+            payees,
+            parent_must_approve: false,
+            pre_pour: false,
+            hold_secs: 0,
+        },
     ];
     let r = t.c.try_create_project(
-        &vec![&t.e, t.s1.clone()], &t.parent, &t.builder, &t.supplier, &stages);
+        &vec![&t.e, t.s1.clone()],
+        &t.parent,
+        &t.builder,
+        &t.supplier,
+        &stages,
+    );
     assert_eq!(r, Err(Ok(Error::BadShares)));
 }
 
@@ -146,4 +175,68 @@ fn create_project_stores_everything() {
     assert_eq!(st.status, StageStatus::Locked);
     assert_eq!(st.approvals_needed, 1);
     assert_eq!(project(&t, false), 1); // ids count up
+}
+
+#[test]
+fn fund_works() {
+    let t = setup();
+    let id = project(&t, false);
+
+    let sponsor_before = t.tok.balance(&t.s1);
+
+    t.c.fund(&t.s1, &id, &1000);
+
+    assert_eq!(t.tok.balance(&t.s1), sponsor_before - 1015);
+    assert_eq!(t.tok.balance(&t.platform), 15);
+    assert_eq!(t.tok.balance(&t.c.address), 1000);
+    assert_eq!(t.c.get_project(&id).funded, 1000);
+    assert_eq!(t.c.contribution(&id, &t.s1), 1000);
+}
+
+#[test]
+fn t2_stranger_cannot_fund() {
+    let t = setup();
+    let id = project(&t, false);
+
+    let stranger = Address::generate(&t.e);
+
+    assert_eq!(
+        t.c.try_fund(&stranger, &id, &1000),
+        Err(Ok(Error::NotSponsor))
+    );
+}
+
+#[test]
+fn zero_amount_fails() {
+    let t = setup();
+    let id = project(&t, false);
+
+    assert_eq!(t.c.try_fund(&t.s1, &id, &0), Err(Ok(Error::BadAmount)));
+}
+
+#[test]
+fn assign_inspector_works() {
+    let t = setup();
+    let id = project(&t, false);
+
+    t.c.assign_inspector(&id, &0, &t.i1, &1);
+    t.c.assign_inspector(&id, &0, &t.i2, &2);
+
+    let st = t.c.get_stage(&id, &0);
+
+    assert_eq!(st.inspector, Some(t.i1.clone()));
+    assert_eq!(st.inspector2, Some(t.i2.clone()));
+}
+
+#[test]
+fn submit_proof_rejects_locked_stage() {
+    let t = setup();
+    let id = project(&t, false);
+
+    let video_hash = h(&t.e, 42);
+
+    assert_eq!(
+        t.c.try_submit_proof(&id, &0, &video_hash),
+        Err(Ok(Error::WrongStatus))
+    );
 }

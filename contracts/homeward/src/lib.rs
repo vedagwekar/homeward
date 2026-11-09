@@ -4,9 +4,9 @@
 //! Youdis: fund, assign_inspector, submit_proof, freeze, resolve.
 
 mod storage;
-mod types;
 #[cfg(test)]
 mod test;
+mod types;
 
 use soroban_sdk::{contract, contractimpl, symbol_short, token, Address, BytesN, Env, Vec};
 use storage::*;
@@ -96,8 +96,92 @@ impl Homeward {
             i += 1;
         }
         bump_instance(&e);
-        e.events().publish((symbol_short!("created"), id), project.stage_count);
+        e.events()
+            .publish((symbol_short!("created"), id), project.stage_count);
         Ok(id)
+    }
+
+    pub fn fund(e: Env, sponsor: Address, id: u32, amount: i128) -> Result<(), Error> {
+        sponsor.require_auth();
+
+        if amount <= 0 {
+            return Err(Error::BadAmount);
+        }
+        let mut p = load_project(&e, id)?;
+
+        if p.frozen {
+            return Err(Error::Frozen);
+        }
+
+        if !p.sponsors.contains(&sponsor) {
+            return Err(Error::NotSponsor);
+        }
+
+        let fee = (amount * fee_bps(&e) as i128) / 10_000;
+        let t = token::Client::new(&e, &token(&e));
+        t.transfer(&sponsor, &e.current_contract_address(), &amount);
+        if fee > 0 {
+            t.transfer(&sponsor, &platform(&e), &fee);
+        }
+
+        p.funded += amount;
+        save_project(&e, id, &p);
+        add_contribution(&e, id, &sponsor, amount);
+
+        e.events()
+            .publish((symbol_short!("funded"), id, sponsor), amount);
+        Ok(())
+    }
+
+    pub fn assign_inspector(
+        e: Env,
+        id: u32,
+        stage: u32,
+        inspector: Address,
+        slot: u32,
+    ) -> Result<(), Error> {
+        admin(&e).require_auth();
+
+        let mut st = load_stage(&e, id, stage)?;
+
+        if slot == 1 {
+            st.inspector = Some(inspector.clone());
+        } else {
+            st.inspector2 = Some(inspector.clone());
+        }
+
+        save_stage(&e, id, stage, &st);
+
+        e.events()
+            .publish((symbol_short!("assigned"), id, stage), inspector);
+
+        Ok(())
+    }
+
+    pub fn submit_proof(e: Env, id: u32, stage: u32, video_hash: BytesN<32>) -> Result<(), Error> {
+        let p = load_project(&e, id)?;
+        p.builder.require_auth();
+
+        if p.frozen {
+            return Err(Error::Frozen);
+        }
+
+        let mut st = load_stage(&e, id, stage)?;
+
+        if st.status != StageStatus::Open && st.status != StageStatus::Rejected {
+            return Err(Error::WrongStatus);
+        }
+
+        st.video_hash = Some(video_hash);
+        st.status = StageStatus::Submitted;
+        st.approvals = Vec::new(&e);
+        st.parent_ok = false;
+
+        save_stage(&e, id, stage, &st);
+
+        e.events().publish((symbol_short!("proof"), id, stage), ());
+
+        Ok(())
     }
 
     // ---------- read-only views (free to call, no signature needed) ----------
