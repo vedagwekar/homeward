@@ -19,3 +19,4 @@ uploads/
 # Local-only Claude Code guide
 CLAUDE.md
 .vercel
+packages/homeward-client/dist/
