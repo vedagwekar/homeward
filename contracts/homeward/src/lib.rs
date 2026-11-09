@@ -15,6 +15,13 @@ pub use types::*;
 #[contract]
 pub struct Homeward;
 
+/// Move `amount` of our token from the contract to `to`. Skips zero amounts.
+fn pay(e: &Env, to: &Address, amount: i128) {
+    if amount > 0 {
+        token::Client::new(e, &token(e)).transfer(&e.current_contract_address(), to, &amount);
+    }
+}
+
 #[contractimpl]
 impl Homeward {
     /// Runs once, at deploy. Stores who the admin is, which token we use,
@@ -181,6 +188,158 @@ impl Homeward {
 
         e.events().publish((symbol_short!("proof"), id, stage), ());
 
+        Ok(())
+    }
+
+    // ---------- stage flow (Ved) ----------
+
+    /// Admin starts a stage: checks the money is there, pays the supplier for
+    /// materials, and stores the hash of the stage code shown to the builder.
+    pub fn open_stage(e: Env, id: u32, stage: u32, code_hash: BytesN<32>) -> Result<(), Error> {
+        admin(&e).require_auth();
+        let mut p = load_project(&e, id)?;
+        if p.frozen {
+            return Err(Error::Frozen);
+        }
+        let mut st = load_stage(&e, id, stage)?;
+        if st.status != StageStatus::Locked {
+            return Err(Error::WrongStatus);
+        }
+        if p.funded - p.spent < st.materials + st.labour_amount {
+            return Err(Error::InsufficientFunds);
+        }
+        pay(&e, &p.supplier, st.materials);
+        p.spent += st.materials;
+        st.status = StageStatus::Open;
+        st.code_hash = Some(code_hash);
+        save_project(&e, id, &p);
+        save_stage(&e, id, stage, &st);
+        e.events()
+            .publish((symbol_short!("opened"), id, stage), st.materials);
+        Ok(())
+    }
+
+    /// An inspector or the parent approves or rejects a submitted stage.
+    /// When every required approval is in, money is released (now, or after the hold).
+    pub fn decide(
+        e: Env,
+        approver: Address,
+        id: u32,
+        stage: u32,
+        approve: bool,
+        report_hash: BytesN<32>,
+    ) -> Result<(), Error> {
+        approver.require_auth();
+        let p = load_project(&e, id)?;
+        if p.frozen {
+            return Err(Error::Frozen);
+        }
+        let mut st = load_stage(&e, id, stage)?;
+        if st.status != StageStatus::Submitted {
+            return Err(Error::WrongStatus);
+        }
+
+        let is_insp1 = st.inspector.clone().map_or(false, |a| a == approver);
+        let is_insp2 = st.inspector2.clone().map_or(false, |a| a == approver);
+        let is_parent = approver == p.parent;
+        if !(is_insp1 || is_insp2 || is_parent) {
+            return Err(Error::NotAuthorized);
+        }
+        // The 2nd inspector only has a say after a recheck was requested.
+        if is_insp2 && !is_insp1 && st.approvals_needed < 2 {
+            return Err(Error::NotAuthorized);
+        }
+
+        if !approve {
+            st.status = StageStatus::Rejected;
+            save_stage(&e, id, stage, &st);
+            e.events()
+                .publish((symbol_short!("rejected"), id, stage), approver);
+            return Ok(());
+        }
+
+        if is_parent {
+            st.parent_ok = true;
+        } else {
+            if st.approvals.contains(&approver) {
+                return Err(Error::AlreadyApproved);
+            }
+            st.approvals.push_back(approver.clone());
+        }
+        e.events()
+            .publish((symbol_short!("approved"), id, stage), approver);
+
+        let inspectors_done = st.approvals.len() >= st.approvals_needed;
+        let parent_done = !st.parent_must_approve || st.parent_ok;
+        if inspectors_done && parent_done {
+            st.status = StageStatus::Approved;
+            st.approved_at = e.ledger().timestamp();
+            save_stage(&e, id, stage, &st);
+            if st.hold_secs == 0 {
+                Self::release(e.clone(), id, stage, report_hash)?;
+            }
+        } else {
+            save_stage(&e, id, stage, &st);
+        }
+        Ok(())
+    }
+
+    /// Pays every payee of an approved stage in ONE call and records a certificate.
+    /// Anyone may call it once the hold time has passed (no auth needed: the
+    /// money can only ever go to the fixed payees).
+    pub fn release(e: Env, id: u32, stage: u32, report_hash: BytesN<32>) -> Result<(), Error> {
+        let mut p = load_project(&e, id)?;
+        if p.frozen {
+            return Err(Error::Frozen);
+        }
+        let mut st = load_stage(&e, id, stage)?;
+        if st.status != StageStatus::Approved {
+            return Err(Error::WrongStatus);
+        }
+        if e.ledger().timestamp() < st.approved_at + st.hold_secs {
+            return Err(Error::TooEarly);
+        }
+        if p.funded - p.spent < st.labour_amount {
+            return Err(Error::InsufficientFunds);
+        }
+
+        let n = st.payees.len();
+        let mut paid: i128 = 0;
+        let mut i: u32 = 0;
+        for py in st.payees.iter() {
+            // Last payee gets whatever is left, so rounding never loses a unit.
+            let amt = if i == n - 1 {
+                st.labour_amount - paid
+            } else {
+                st.labour_amount * py.bps as i128 / 10_000
+            };
+            pay(&e, &py.to, amt);
+            paid += amt;
+            e.events()
+                .publish((symbol_short!("paid"), id, stage), (py.to.clone(), amt));
+            i += 1;
+        }
+
+        p.spent += st.labour_amount;
+        st.status = StageStatus::Paid;
+        save_project(&e, id, &p);
+        save_stage(&e, id, stage, &st);
+
+        let mut approvers = st.approvals.clone();
+        if st.parent_ok {
+            approvers.push_back(p.parent.clone());
+        }
+        let cert = Certificate {
+            project: id,
+            stage,
+            time: e.ledger().timestamp(),
+            approvers,
+            report_hash,
+            amount: st.labour_amount,
+        };
+        save_cert(&e, id, stage, &cert);
+        e.events()
+            .publish((symbol_short!("cert"), id, stage), st.labour_amount);
         Ok(())
     }
 
