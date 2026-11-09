@@ -528,3 +528,136 @@ fn recheck_pulls_back_during_hold() {
     assert_eq!(t.c.get_stage(&id, &0).status, StageStatus::Paid);
     assert_eq!(t.tok.balance(&t.builder), 600);
 }
+
+// ---------- freeze and resolve ----------
+
+#[test]
+fn t8_freeze_and_resolve_refund() {
+    let t = setup();
+    let id = project(&t, false);
+    t.c.fund(&t.s1, &id, &600);
+    t.c.fund(&t.s2, &id, &400);
+    t.c.freeze(&t.s1, &id);
+    assert!(t.c.get_project(&id).frozen);
+
+    t.c.resolve(&id, &10_000);
+    assert_eq!(t.e.auths()[0].0, t.admin); // only the admin can settle
+
+    // Everything comes back except the 1.5% fee (9 and 6).
+    assert_eq!(t.tok.balance(&t.s1), START_BALANCE - 9);
+    assert_eq!(t.tok.balance(&t.s2), START_BALANCE - 6);
+    assert_eq!(t.tok.balance(&t.builder), 0);
+    assert_eq!(t.tok.balance(&t.c.address), 0);
+    assert_eq!(t.c.get_project(&id).spent, 1_000);
+    assert!(t.c.get_project(&id).frozen);
+}
+
+#[test]
+fn resolve_only_splits_what_is_unspent() {
+    let t = setup();
+    let id = project(&t, false);
+    t.c.fund(&t.s1, &id, &660);
+    t.c.fund(&t.s2, &id, &440);
+    t.c.open_stage(&id, &0, &h(&t.e, 1)); // 100 already gone to the supplier
+    t.c.freeze(&t.parent, &id);
+
+    t.c.resolve(&id, &5_000); // half of the 1000 left goes back, 60/40
+
+    assert_eq!(t.tok.balance(&t.supplier), 100);
+    assert_eq!(t.tok.balance(&t.s1), START_BALANCE - 660 - 9 + 300);
+    assert_eq!(t.tok.balance(&t.s2), START_BALANCE - 440 - 6 + 200);
+    assert_eq!(t.tok.balance(&t.builder), 500);
+    assert_eq!(t.tok.balance(&t.c.address), 0);
+}
+
+#[test]
+fn resolve_rounding_never_loses_a_unit() {
+    let t = setup();
+    let id = project(&t, false);
+    t.c.fund(&t.s1, &id, &367);
+    t.c.fund(&t.s2, &id, &734);
+    t.c.open_stage(&id, &0, &h(&t.e, 1));
+    t.c.freeze(&t.s2, &id);
+
+    t.c.resolve(&id, &10_000); // 1001 left; 1001 x 367 / 1101 rounds down to 333
+
+    assert_eq!(t.tok.balance(&t.s1), START_BALANCE - 367 - 5 + 333);
+    assert_eq!(t.tok.balance(&t.s2), START_BALANCE - 734 - 11 + 668);
+    assert_eq!(t.tok.balance(&t.builder), 0);
+    assert_eq!(t.tok.balance(&t.c.address), 0);
+}
+
+#[test]
+fn resolve_cannot_pay_out_twice_or_over_100_percent() {
+    let t = setup();
+    let id = project(&t, false);
+    t.c.fund(&t.s1, &id, &1_000);
+    assert_eq!(t.c.try_resolve(&id, &10_000), Err(Ok(Error::WrongStatus))); // not frozen
+    t.c.freeze(&t.s1, &id);
+    assert_eq!(t.c.try_resolve(&id, &10_001), Err(Ok(Error::BadShares)));
+
+    t.c.resolve(&id, &10_000);
+    let after = t.tok.balance(&t.s1);
+    t.c.resolve(&id, &10_000);
+    assert_eq!(t.tok.balance(&t.s1), after);
+    assert_eq!(t.tok.balance(&t.c.address), 0);
+}
+
+#[test]
+fn freeze_only_parent_or_sponsor() {
+    let t = setup();
+    let id = project(&t, false);
+    let stranger = Address::generate(&t.e);
+    assert_eq!(t.c.try_freeze(&stranger, &id), Err(Ok(Error::NotAuthorized)));
+    assert_eq!(t.c.try_freeze(&t.builder, &id), Err(Ok(Error::NotAuthorized)));
+    assert!(!t.c.get_project(&id).frozen);
+    t.c.freeze(&t.parent, &id);
+    assert_eq!(t.e.auths()[0].0, t.parent);
+}
+
+#[test]
+fn frozen_project_pays_nobody() {
+    let t = setup();
+    let id = project(&t, false);
+    to_submitted(&t, id);
+    t.c.freeze(&t.s1, &id);
+    assert_eq!(
+        t.c.try_decide(&t.i1, &id, &0, &true, &h(&t.e, 3)),
+        Err(Ok(Error::Frozen))
+    );
+    assert_eq!(t.c.try_fund(&t.s1, &id, &100), Err(Ok(Error::Frozen)));
+    assert_eq!(
+        t.c.try_submit_proof(&id, &0, &h(&t.e, 4)),
+        Err(Ok(Error::Frozen))
+    );
+    assert_eq!(t.tok.balance(&t.builder), 0);
+    assert_eq!(t.tok.balance(&t.labour), 0);
+}
+
+#[test]
+fn freeze_blocks_release_during_hold() {
+    let t = setup();
+    let id = custom(&t, 1_000, false, 100);
+    to_submitted(&t, id);
+    t.c.decide(&t.i1, &id, &0, &true, &h(&t.e, 3));
+    t.c.freeze(&t.parent, &id);
+    t.e.ledger().with_mut(|l| l.timestamp += 101);
+    assert_eq!(
+        t.c.try_release(&id, &0, &h(&t.e, 3)),
+        Err(Ok(Error::Frozen))
+    );
+    assert_eq!(t.tok.balance(&t.builder), 0);
+}
+
+#[test]
+fn frozen_project_cannot_open_a_stage() {
+    let t = setup();
+    let id = project(&t, false);
+    t.c.fund(&t.s1, &id, &2_000);
+    t.c.freeze(&t.s1, &id);
+    assert_eq!(
+        t.c.try_open_stage(&id, &0, &h(&t.e, 1)),
+        Err(Ok(Error::Frozen))
+    );
+    assert_eq!(t.tok.balance(&t.supplier), 0);
+}
