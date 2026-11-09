@@ -1,7 +1,7 @@
 import { Back } from "../icons";
 
 const answers = [
-  ["The engineer rejects the work", "The money stays locked. The builder fixes the problem and sends new proof. The engineer is paid either way, so they have no reason to approve bad work."],
+  ["The engineer rejects the work", "The money stays locked. The builder fixes the problem and sends new proof. The engineer is paid from Homeward's fee whether they approve or reject, so they have no reason to approve bad work."],
   ["A parent asks for a second check", "Payment stops. A second engineer must approve before any money moves."],
   ["The builder stops working", "You can freeze the project. In this demo, unspent money goes back to each family member based on what they paid in."],
   ["A family member stops paying", "Stages that aren't funded don't start. Each person's contribution stays on the record."],
