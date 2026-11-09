@@ -3,12 +3,13 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { useState } from "react";
-import { dollars, homewardFee, nextStage, rupees, totalFunded } from "@/lib/project.mjs";
-import { act, addFunding, useProjects, useStatus } from "@/lib/store";
+import { dollars, homewardFee, nextStage, totalFunded } from "@/lib/project.mjs";
+import { act, addFunding, useProjects, useStatus, useMoney } from "@/lib/store";
 import { Back } from "../../../icons";
 
 
 export default function View({ id }: { id: string }) {
+  const money = useMoney();
   const project = useProjects().find((p) => p.id === id);
   const [choice, setChoice] = useState(0);
   const [sponsor, setSponsor] = useState(project?.sponsors[0].name ?? "");
@@ -34,7 +35,7 @@ export default function View({ id }: { id: string }) {
         <section className="group">
           <div className="row">
             <div className="grow">From {sponsor}</div>
-            <span className="muted">{rupees(done)}</span>
+            <span className="muted">{money(done)}</span>
           </div>
           <div className="row">
             <div className="grow">Released when</div>
@@ -55,7 +56,7 @@ export default function View({ id }: { id: string }) {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          act({ loading: `Locking ${rupees(picked.amount)}`, done: `${rupees(picked.amount)} locked` }, () => {
+          act({ loading: `Locking ${money(picked.amount)}`, done: `${money(picked.amount)} locked` }, () => {
             addFunding(project.id, sponsor, picked.amount);
             setDone(picked.amount);
           });
@@ -68,7 +69,7 @@ export default function View({ id }: { id: string }) {
             <label className="row" key={o.label}>
               <input type="radio" name="amount" checked={picked === o} onChange={() => setChoice(i)} />
               <span className="grow">{o.label}</span>
-              <span className="muted">{rupees(o.amount)}</span>
+              <span className="muted">{money(o.amount)}</span>
             </label>
           ))}
         </fieldset>
@@ -89,14 +90,14 @@ export default function View({ id }: { id: string }) {
         <section className="group">
           <div className="row">
             <div className="grow">Locked for the build</div>
-            <span className="muted">{rupees(picked.amount)}</span>
+            <span className="muted">{money(picked.amount)}</span>
           </div>
           <div className="row">
             <div className="grow">
               <span>Homeward fee, 1.5%</span>
               <small>Pays the engineer, whether they approve or reject</small>
             </div>
-            <span className="muted">{rupees(fee)}</span>
+            <span className="muted">{money(fee)}</span>
           </div>
           <div className="row">
             <div className="grow">Exchange rate, demo</div>

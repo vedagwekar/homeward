@@ -1,11 +1,12 @@
 "use client";
 
 import { notFound } from "next/navigation";
-import { homewardFee, isActive, rupees, shortDate } from "@/lib/project.mjs";
-import { useProjects } from "@/lib/store";
+import { homewardFee, isActive, shortDate } from "@/lib/project.mjs";
+import { useProjects, useMoney } from "@/lib/store";
 import { Back, statusView, Tile } from "../../../../icons";
 
 export default function View({ id, slug }: { id: string; slug: string }) {
+  const money = useMoney();
   const project = useProjects().find((p) => p.id === id);
   const stage = project?.stages.find((s) => s.slug === slug);
   if (!project || !stage) notFound();
@@ -22,7 +23,7 @@ export default function View({ id, slug }: { id: string; slug: string }) {
         <div className="row">
           <Tile name={view.icon} tone={view.tone} />
           <div className="grow">{view.label}</div>
-          <span className="muted">{rupees(stage.amount)}</span>
+          <span className="muted">{money(stage.amount)}</span>
         </div>
         {stage.prePour && (
           <div className="row">
@@ -32,7 +33,7 @@ export default function View({ id, slug }: { id: string; slug: string }) {
         {isActive(stage) && stage.materials > 0 && (
           <div className="row">
             <div className="grow">Supplier paid when the stage opened</div>
-            <span className="muted">{rupees(stage.materials)}</span>
+            <span className="muted">{money(stage.materials)}</span>
           </div>
         )}
         {stage.paidOn && (
@@ -88,12 +89,12 @@ export default function View({ id, slug }: { id: string; slug: string }) {
             {stage.payouts.map((p) => (
               <div className="row" key={p.to}>
                 <div className="grow">{p.to}</div>
-                <span className="muted">{rupees(p.amount)}</span>
+                <span className="muted">{money(p.amount)}</span>
               </div>
             ))}
             <div className="row">
               <div className="grow">Homeward fee, 1.5%</div>
-              <span className="muted">{rupees(homewardFee(stage.amount))}</span>
+              <span className="muted">{money(homewardFee(stage.amount))}</span>
             </div>
           </section>
           <details className="group disclosure">

@@ -2,7 +2,7 @@
 
 import { useSyncExternalStore } from "react";
 import rawSeed from "@/mock/projects.json";
-import { isActive, refundSplit, settle } from "./project.mjs";
+import { dollars, isActive, refundSplit, rupees, settle } from "./project.mjs";
 
 // All app data goes through this file. Swap these functions for the backend API when it's ready.
 export type Stage = {
@@ -127,6 +127,38 @@ export function activeStage(projects: Project[]) {
     if (stage) return { project, stage };
   }
   return null;
+}
+
+// Family screens can show money in rupees or Canadian dollars. Builder and parent screens stay in rupees.
+const CURRENCY_KEY = "homeward-currency";
+let currency: "INR" | "CAD" = "INR";
+try {
+  if (typeof localStorage !== "undefined" && localStorage.getItem(CURRENCY_KEY) === "CAD") currency = "CAD";
+} catch {}
+
+export function setCurrency(next: "INR" | "CAD") {
+  currency = next;
+  try {
+    localStorage.setItem(CURRENCY_KEY, next);
+  } catch {}
+  listeners.forEach((l) => l());
+}
+
+export function useCurrency() {
+  return useSyncExternalStore(
+    (l) => {
+      listeners.add(l);
+      return () => listeners.delete(l);
+    },
+    () => currency,
+    () => "INR" as const,
+  );
+}
+
+// shortcut: one demo rate for every home (both use ₹67 per C$1), pass the home's own rate once rates are live
+export function useMoney(rupeesPerCad = seed[0].rupeesPerCad) {
+  const c = useCurrency();
+  return (n: number) => (c === "CAD" ? dollars(n, rupeesPerCad) : rupees(n));
 }
 
 // Every button that changes something shows loading, then success with a receipt link, or an error.

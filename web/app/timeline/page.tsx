@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { rupees, shortDate, timeline } from "@/lib/project.mjs";
-import { useProjects } from "@/lib/store";
+import { shortDate, timeline } from "@/lib/project.mjs";
+import { useProjects, useMoney } from "@/lib/store";
 
 const tabs = [
   ["all", "All"],
@@ -12,6 +12,7 @@ const tabs = [
 ] as const;
 
 export default function Timeline() {
+  const money = useMoney();
   const [tab, setTab] = useState<(typeof tabs)[number][0]>("all");
   const items = timeline(useProjects()).filter((i) => tab === "all" || i.track === tab);
 
@@ -36,7 +37,7 @@ export default function Timeline() {
               <span>{d.title}</span>
               <small>{d.project}</small>
             </div>
-            {d.amount && <span className="muted nowrap">{rupees(d.amount)}</span>}
+            {d.amount && <span className="muted nowrap">{money(d.amount)}</span>}
           </Link>
         ))}
       </section>
