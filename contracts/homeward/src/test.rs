@@ -360,7 +360,7 @@ fn t5_split_and_rounding() {
 
     // Paying again is impossible.
     assert_eq!(
-        t.c.try_release(&id, &0, &h(&t.e, 3)),
+        t.c.try_release(&id, &0),
         Err(Ok(Error::WrongStatus))
     );
 }
@@ -379,11 +379,12 @@ fn parent_must_approve_blocks_payment() {
         Err(Ok(Error::AlreadyApproved))
     );
 
-    t.c.decide(&t.parent, &id, &0, &true, &h(&t.e, 3));
+    t.c.decide(&t.parent, &id, &0, &true, &h(&t.e, 9));
     assert_eq!(t.c.get_stage(&id, &0).status, StageStatus::Paid);
     assert_eq!(t.tok.balance(&t.builder), 600);
     let cert = t.c.get_certificate(&id, &0).unwrap();
     assert_eq!(cert.approvers, vec![&t.e, t.i1.clone(), t.parent.clone()]);
+    assert_eq!(cert.report_hash, h(&t.e, 3)); // the engineer's report, not the parent's
 }
 
 #[test]
@@ -395,14 +396,16 @@ fn t7_hold_blocks_early_release() {
     assert_eq!(t.c.get_stage(&id, &0).status, StageStatus::Approved);
     assert_eq!(t.tok.balance(&t.builder), 0);
     assert_eq!(
-        t.c.try_release(&id, &0, &h(&t.e, 3)),
+        t.c.try_release(&id, &0),
         Err(Ok(Error::TooEarly))
     );
 
     t.e.ledger().with_mut(|l| l.timestamp += 101);
-    t.c.release(&id, &0, &h(&t.e, 3));
+    t.c.release(&id, &0);
     assert_eq!(t.c.get_stage(&id, &0).status, StageStatus::Paid);
     assert_eq!(t.tok.balance(&t.builder), 600);
+    // release takes no hash, so the certificate keeps the engineer's report.
+    assert_eq!(t.c.get_certificate(&id, &0).unwrap().report_hash, h(&t.e, 3));
 }
 
 // ---------- re-check: a second engineer before money moves (Ved) ----------
@@ -449,6 +452,7 @@ fn recheck_second_engineer_rejects_money_stays_locked() {
     let st = t.c.get_stage(&id, &0);
     assert_eq!(st.approvals_needed, 2);
     assert_eq!(st.approvals.len(), 0);
+    assert_eq!(st.report_hash, None); // the old report doesn't carry over
 }
 
 #[test]
@@ -506,7 +510,7 @@ fn recheck_pulls_back_during_hold() {
     assert_eq!(t.c.get_stage(&id, &0).status, StageStatus::Submitted);
     t.e.ledger().with_mut(|l| l.timestamp += 101);
     assert_eq!(
-        t.c.try_release(&id, &0, &h(&t.e, 3)),
+        t.c.try_release(&id, &0),
         Err(Ok(Error::WrongStatus))
     );
 
@@ -514,7 +518,7 @@ fn recheck_pulls_back_during_hold() {
     t.c.decide(&t.i2, &id, &0, &true, &h(&t.e, 3));
     assert_eq!(t.c.get_stage(&id, &0).status, StageStatus::Approved);
     assert_eq!(
-        t.c.try_release(&id, &0, &h(&t.e, 3)),
+        t.c.try_release(&id, &0),
         Err(Ok(Error::TooEarly))
     );
     // Both engineers are in, so a repeat can't strand the stage.
@@ -524,7 +528,7 @@ fn recheck_pulls_back_during_hold() {
     );
 
     t.e.ledger().with_mut(|l| l.timestamp += 101);
-    t.c.release(&id, &0, &h(&t.e, 3));
+    t.c.release(&id, &0);
     assert_eq!(t.c.get_stage(&id, &0).status, StageStatus::Paid);
     assert_eq!(t.tok.balance(&t.builder), 600);
 }
@@ -643,7 +647,7 @@ fn freeze_blocks_release_during_hold() {
     t.c.freeze(&t.parent, &id);
     t.e.ledger().with_mut(|l| l.timestamp += 101);
     assert_eq!(
-        t.c.try_release(&id, &0, &h(&t.e, 3)),
+        t.c.try_release(&id, &0),
         Err(Ok(Error::Frozen))
     );
     assert_eq!(t.tok.balance(&t.builder), 0);

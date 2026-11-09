@@ -830,6 +830,12 @@
                   },
                   {
                     "key": {
+                      "symbol": "report_hash"
+                    },
+                    "val": "void"
+                  },
+                  {
+                    "key": {
                       "symbol": "status"
                     },
                     "val": {
@@ -1011,6 +1017,12 @@
                     "val": {
                       "bool": true
                     }
+                  },
+                  {
+                    "key": {
+                      "symbol": "report_hash"
+                    },
+                    "val": "void"
                   },
                   {
                     "key": {

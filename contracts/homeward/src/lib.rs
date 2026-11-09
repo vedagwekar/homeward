@@ -98,6 +98,7 @@ impl Homeward {
                 code_hash: None,
                 video_hash: None,
                 approved_at: 0,
+                report_hash: None,
             };
             save_stage(&e, id, i, &st);
             i += 1;
@@ -183,6 +184,7 @@ impl Homeward {
         st.status = StageStatus::Submitted;
         st.approvals = Vec::new(&e);
         st.parent_ok = false;
+        st.report_hash = None;
 
         save_stage(&e, id, stage, &st);
 
@@ -265,6 +267,8 @@ impl Homeward {
                 return Err(Error::AlreadyApproved);
             }
             st.approvals.push_back(approver.clone());
+            // The certificate carries the engineer's report, never the parent's note.
+            st.report_hash = Some(report_hash);
         }
         e.events()
             .publish((symbol_short!("approved"), id, stage), approver);
@@ -276,7 +280,7 @@ impl Homeward {
             st.approved_at = e.ledger().timestamp();
             save_stage(&e, id, stage, &st);
             if st.hold_secs == 0 {
-                Self::release(e.clone(), id, stage, report_hash)?;
+                Self::release(e.clone(), id, stage)?;
             }
         } else {
             save_stage(&e, id, stage, &st);
@@ -287,7 +291,7 @@ impl Homeward {
     /// Pays every payee of an approved stage in ONE call and records a certificate.
     /// Anyone may call it once the hold time has passed (no auth needed: the
     /// money can only ever go to the fixed payees).
-    pub fn release(e: Env, id: u32, stage: u32, report_hash: BytesN<32>) -> Result<(), Error> {
+    pub fn release(e: Env, id: u32, stage: u32) -> Result<(), Error> {
         let mut p = load_project(&e, id)?;
         if p.frozen {
             return Err(Error::Frozen);
@@ -325,6 +329,8 @@ impl Homeward {
         save_project(&e, id, &p);
         save_stage(&e, id, stage, &st);
 
+        // Saved at approval, so whoever calls release can't choose it.
+        let report_hash = st.report_hash.clone().ok_or(Error::WrongStatus)?;
         let mut approvers = st.approvals.clone();
         if st.parent_ok {
             approvers.push_back(p.parent.clone());

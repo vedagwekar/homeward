@@ -602,6 +602,12 @@
                   },
                   {
                     "key": {
+                      "symbol": "report_hash"
+                    },
+                    "val": "void"
+                  },
+                  {
+                    "key": {
                       "symbol": "status"
                     },
                     "val": {
