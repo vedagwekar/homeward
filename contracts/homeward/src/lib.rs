@@ -343,6 +343,35 @@ impl Homeward {
         Ok(())
     }
 
+    /// The parent or a sponsor asks for a second engineer before money moves.
+    /// Works any time before the stage is paid. During a handover hold it pulls
+    /// an approved stage back to Submitted, so nothing can release until both
+    /// engineers have approved.
+    pub fn recheck(e: Env, caller: Address, id: u32, stage: u32) -> Result<(), Error> {
+        caller.require_auth();
+        let p = load_project(&e, id)?;
+        if caller != p.parent && !p.sponsors.contains(&caller) {
+            return Err(Error::NotAuthorized);
+        }
+        let mut st = load_stage(&e, id, stage)?;
+        // One re-check per stage. A repeat could strand a stage that both
+        // engineers already approved, since neither could approve it again.
+        if st.status == StageStatus::Paid || st.approvals_needed >= 2 {
+            return Err(Error::WrongStatus);
+        }
+        if st.inspector2.is_none() {
+            return Err(Error::NoInspector);
+        }
+        st.approvals_needed = 2;
+        if st.status == StageStatus::Approved {
+            st.status = StageStatus::Submitted;
+        }
+        save_stage(&e, id, stage, &st);
+        e.events()
+            .publish((symbol_short!("recheck"), id, stage), caller);
+        Ok(())
+    }
+
     // ---------- read-only views (free to call, no signature needed) ----------
     pub fn get_project(e: Env, id: u32) -> Result<Project, Error> {
         load_project(&e, id)
