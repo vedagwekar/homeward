@@ -404,3 +404,127 @@ fn t7_hold_blocks_early_release() {
     assert_eq!(t.c.get_stage(&id, &0).status, StageStatus::Paid);
     assert_eq!(t.tok.balance(&t.builder), 600);
 }
+
+// ---------- re-check: a second engineer before money moves (Ved) ----------
+
+#[test]
+fn t6_recheck_needs_second_inspector() {
+    let t = setup();
+    let id = project(&t, false);
+    to_submitted(&t, id);
+    t.c.recheck(&t.parent, &id, &0);
+
+    t.c.decide(&t.i1, &id, &0, &true, &h(&t.e, 3));
+    assert_eq!(t.c.get_stage(&id, &0).status, StageStatus::Submitted);
+    assert_eq!(t.tok.balance(&t.builder), 0);
+
+    t.c.decide(&t.i2, &id, &0, &true, &h(&t.e, 3));
+    assert_eq!(t.c.get_stage(&id, &0).status, StageStatus::Paid);
+    assert_eq!(t.tok.balance(&t.labour), 400);
+    assert_eq!(t.tok.balance(&t.builder), 600);
+    let cert = t.c.get_certificate(&id, &0).unwrap();
+    assert_eq!(cert.approvers, vec![&t.e, t.i1.clone(), t.i2.clone()]);
+}
+
+/// The demo story: Amma taps "check again", the second engineer spots
+/// recycled footage, and the money stays locked.
+#[test]
+fn recheck_second_engineer_rejects_money_stays_locked() {
+    let t = setup();
+    let id = project(&t, true);
+    to_submitted(&t, id);
+    t.c.recheck(&t.parent, &id, &0);
+
+    t.c.decide(&t.i1, &id, &0, &true, &h(&t.e, 3));
+    t.c.decide(&t.i2, &id, &0, &false, &h(&t.e, 4));
+
+    assert_eq!(t.c.get_stage(&id, &0).status, StageStatus::Rejected);
+    assert_eq!(t.tok.balance(&t.builder), 0);
+    assert_eq!(t.tok.balance(&t.labour), 0);
+    assert_eq!(t.tok.balance(&t.c.address), 1_900);
+    assert_eq!(t.c.get_certificate(&id, &0), None);
+
+    // New proof still needs both engineers, and approvals start over.
+    t.c.submit_proof(&id, &0, &h(&t.e, 5));
+    let st = t.c.get_stage(&id, &0);
+    assert_eq!(st.approvals_needed, 2);
+    assert_eq!(st.approvals.len(), 0);
+}
+
+#[test]
+fn recheck_only_parent_or_sponsor() {
+    let t = setup();
+    let id = project(&t, false);
+    to_submitted(&t, id);
+    let stranger = Address::generate(&t.e);
+    assert_eq!(
+        t.c.try_recheck(&stranger, &id, &0),
+        Err(Ok(Error::NotAuthorized))
+    );
+    assert_eq!(
+        t.c.try_recheck(&t.builder, &id, &0),
+        Err(Ok(Error::NotAuthorized))
+    );
+    assert_eq!(t.c.get_stage(&id, &0).approvals_needed, 1);
+
+    t.c.recheck(&t.s2, &id, &0); // a sponsor can ask too
+    assert_eq!(t.c.get_stage(&id, &0).approvals_needed, 2);
+}
+
+#[test]
+fn recheck_needs_a_second_inspector_assigned() {
+    let t = setup();
+    let id = project(&t, false);
+    t.c.assign_inspector(&id, &0, &t.i1, &1);
+    assert_eq!(
+        t.c.try_recheck(&t.parent, &id, &0),
+        Err(Ok(Error::NoInspector))
+    );
+}
+
+#[test]
+fn recheck_too_late_once_paid() {
+    let t = setup();
+    let id = project(&t, false);
+    to_submitted(&t, id);
+    t.c.decide(&t.i1, &id, &0, &true, &h(&t.e, 3));
+    assert_eq!(
+        t.c.try_recheck(&t.parent, &id, &0),
+        Err(Ok(Error::WrongStatus))
+    );
+}
+
+#[test]
+fn recheck_pulls_back_during_hold() {
+    let t = setup();
+    let id = custom(&t, 1_000, false, 100);
+    to_submitted(&t, id);
+    t.c.decide(&t.i1, &id, &0, &true, &h(&t.e, 3));
+    assert_eq!(t.c.get_stage(&id, &0).status, StageStatus::Approved);
+
+    t.c.recheck(&t.s1, &id, &0);
+    assert_eq!(t.c.get_stage(&id, &0).status, StageStatus::Submitted);
+    t.e.ledger().with_mut(|l| l.timestamp += 101);
+    assert_eq!(
+        t.c.try_release(&id, &0, &h(&t.e, 3)),
+        Err(Ok(Error::WrongStatus))
+    );
+
+    // The second approval restarts the hold.
+    t.c.decide(&t.i2, &id, &0, &true, &h(&t.e, 3));
+    assert_eq!(t.c.get_stage(&id, &0).status, StageStatus::Approved);
+    assert_eq!(
+        t.c.try_release(&id, &0, &h(&t.e, 3)),
+        Err(Ok(Error::TooEarly))
+    );
+    // Both engineers are in, so a repeat can't strand the stage.
+    assert_eq!(
+        t.c.try_recheck(&t.parent, &id, &0),
+        Err(Ok(Error::WrongStatus))
+    );
+
+    t.e.ledger().with_mut(|l| l.timestamp += 101);
+    t.c.release(&id, &0, &h(&t.e, 3));
+    assert_eq!(t.c.get_stage(&id, &0).status, StageStatus::Paid);
+    assert_eq!(t.tok.balance(&t.builder), 600);
+}
