@@ -44,6 +44,7 @@ export type Project = {
 const seed = rawSeed as Project[];
 
 const KEY = "homeward-demo";
+const STATUSES = ["locked", "open", "submitted", "rejected", "paid"];
 const listeners = new Set<() => void>();
 let cache: Project[] | null = null;
 
@@ -51,7 +52,10 @@ function read(): Project[] {
   if (cache) return cache;
   try {
     const saved = localStorage.getItem(KEY);
-    cache = saved ? JSON.parse(saved) : seed;
+    const parsed = saved ? JSON.parse(saved) : null;
+    // Demo data saved by an older version of the app has a different shape and would crash the screens.
+    const fits = (p: Project) => p.builder && p.stages.every((s) => STATUSES.includes(s.status));
+    cache = Array.isArray(parsed) && parsed.length === seed.length && parsed.every(fits) ? parsed : seed;
   } catch {
     cache = seed;
   }
