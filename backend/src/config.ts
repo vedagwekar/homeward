@@ -6,7 +6,7 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { Keypair } from "@stellar/stellar-sdk";
 
-const root = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
+export const root = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 loadEnv({ path: resolve(root, ".env"), quiet: true });
 
 function need(name: string): string {
@@ -44,6 +44,10 @@ export const UNITS_PER_TUSDC = 10_000_000n;
 export const RUPEES_PER_TUSDC = 85n;
 
 export const rupeesToUnits = (rupees: bigint) => (rupees * UNITS_PER_TUSDC) / RUPEES_PER_TUSDC;
+
+/** Back to whole rupees for the screens, rounded to the nearest rupee. */
+export const unitsToRupees = (units: bigint) =>
+  Number((units * RUPEES_PER_TUSDC + UNITS_PER_TUSDC / 2n) / UNITS_PER_TUSDC);
 
 /** 1234567890n becomes "123.45" (for printing only). */
 export function formatUnits(units: bigint): string {
