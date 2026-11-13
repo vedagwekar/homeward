@@ -3,11 +3,12 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { useState } from "react";
-import { budgetParts, refundSplit, rupees, totalFunded, totalPaid } from "@/lib/project.mjs";
-import { act, returnMoney, useProjects, useStatus } from "@/lib/store";
+import { budgetParts, refundSplit, totalFunded, totalPaid } from "@/lib/project.mjs";
+import { act, returnMoney, useProjects, useStatus, useMoney } from "@/lib/store";
 import { Back } from "../../../icons";
 
 export default function View({ id }: { id: string }) {
+  const money = useMoney();
   const project = useProjects().find((p) => p.id === id);
   const busy = useStatus().state === "loading";
   const [stop, setStop] = useState(false);
@@ -28,7 +29,7 @@ export default function View({ id }: { id: string }) {
           {done.map((s) => (
             <div className="row" key={s.name}>
               <div className="grow">{s.name}</div>
-              <span className="muted">{rupees(s.amount)}</span>
+              <span className="muted">{money(s.amount)}</span>
             </div>
           ))}
         </section>
@@ -52,7 +53,7 @@ export default function View({ id }: { id: string }) {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            act({ loading: `Returning ${rupees(amount)}`, done: `${rupees(amount)} returned` }, () => {
+            act({ loading: `Returning ${money(amount)}`, done: `${money(amount)} returned` }, () => {
               returnMoney(project.id, amount, stop);
               setDone(split);
             });
@@ -67,7 +68,7 @@ export default function View({ id }: { id: string }) {
                 <span>Money for future stages</span>
                 <small>The build keeps going</small>
               </span>
-              <span className="muted">{rupees(spare)}</span>
+              <span className="muted">{money(spare)}</span>
             </label>
             <label className="row">
               <input type="radio" name="kind" checked={stop} onChange={() => setStop(true)} />
@@ -75,7 +76,7 @@ export default function View({ id }: { id: string }) {
                 <span>Stop the build and return everything unspent</span>
                 <small>Includes money held for the stage in progress</small>
               </span>
-              <span className="muted">{rupees(unspent)}</span>
+              <span className="muted">{money(unspent)}</span>
             </label>
           </fieldset>
 
@@ -84,14 +85,14 @@ export default function View({ id }: { id: string }) {
             {split.map((s) => (
               <div className="row" key={s.name}>
                 <div className="grow">{s.name}</div>
-                <span className="muted">{rupees(s.amount)}</span>
+                <span className="muted">{money(s.amount)}</span>
               </div>
             ))}
           </section>
           <p className="note">Split by what each person paid in.</p>
 
           <button className="button" type="submit" disabled={busy || amount <= 0}>
-            Return {rupees(amount)}
+            Return {money(amount)}
           </button>
         </form>
       )}

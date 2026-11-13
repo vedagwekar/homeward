@@ -1,7 +1,8 @@
-import { budgetParts, rupees } from "@/lib/project.mjs";
-import type { Project } from "@/lib/store";
+import { budgetParts } from "@/lib/project.mjs";
+import { type Project, useMoney } from "@/lib/store";
 
 export default function BudgetBar({ project, legend = true }: { project: Project; legend?: boolean }) {
+  const money = useMoney();
   const parts = budgetParts(project);
   const bar = [
     { label: "Paid", amount: parts.paid, tone: "green" },
@@ -11,7 +12,7 @@ export default function BudgetBar({ project, legend = true }: { project: Project
   ];
   return (
     <>
-      <div className={legend ? "bar" : "bar thin"} role="img" aria-label={bar.map((b) => `${b.label} ${rupees(b.amount)}`).join(", ")}>
+      <div className={legend ? "bar" : "bar thin"} role="img" aria-label={bar.map((b) => `${b.label} ${money(b.amount)}`).join(", ")}>
         {bar.map((b) => (
           <span key={b.label} className={b.tone} style={{ flexGrow: b.amount }} />
         ))}
@@ -21,7 +22,7 @@ export default function BudgetBar({ project, legend = true }: { project: Project
           {bar.filter((b) => b.amount > 0).map((b) => (
             <li key={b.label}>
               <span className={`dot ${b.tone}`} />
-              {b.label} {rupees(b.amount)}
+              {b.label} {money(b.amount)}
             </li>
           ))}
         </ul>

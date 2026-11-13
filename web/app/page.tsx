@@ -1,12 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { nextStage, rupees, shortDate, timeline, totalFunded } from "@/lib/project.mjs";
-import { useProjects } from "@/lib/store";
+import { nextStage, shortDate, timeline, totalFunded } from "@/lib/project.mjs";
+import { useProjects, useMoney } from "@/lib/store";
 import BudgetBar from "./budget-bar";
+import CurrencySwitch from "./currency-switch";
 import { Glyph, Tile } from "./icons";
 
 export default function Homes() {
+  const money = useMoney();
   const projects = useProjects();
   const due = timeline(projects).slice(0, 3);
 
@@ -14,6 +16,7 @@ export default function Homes() {
     <>
       <h1>Homes</h1>
       <p className="intro">Pay for your parents' house one stage at a time. Each payment is released only after an engineer checks the work.</p>
+      <CurrencySwitch />
 
       <section className="group">
         {projects.map((p) => (
@@ -24,7 +27,7 @@ export default function Homes() {
               <small>{p.place}</small>
               <BudgetBar project={p} legend={false} />
               <small>
-                {rupees(totalFunded(p))} of {rupees(p.budget)} funded
+                {money(totalFunded(p))} of {money(p.budget)} funded
               </small>
             </div>
             <span className="chevron">
@@ -45,7 +48,7 @@ export default function Homes() {
               <div className="grow">
                 <strong>Fund {next.stage.name.toLowerCase()}</strong>
                 <small>
-                  {p.name}. Add {rupees(next.stillNeeded)}.
+                  {p.name}. Add {money(next.stillNeeded)}.
                 </small>
               </div>
               <Link className="pill" href={`/homes/${p.id}/fund`}>

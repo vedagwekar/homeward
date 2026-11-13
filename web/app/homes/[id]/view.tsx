@@ -2,12 +2,14 @@
 
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { nextStage, rupees, shortDate, totalFunded } from "@/lib/project.mjs";
-import { useProjects } from "@/lib/store";
+import { nextStage, shortDate, totalFunded } from "@/lib/project.mjs";
+import { useProjects, useMoney } from "@/lib/store";
 import BudgetBar from "../../budget-bar";
+import CurrencySwitch from "../../currency-switch";
 import { Back, Glyph, statusView, Tile } from "../../icons";
 
 export default function View({ id }: { id: string }) {
+  const money = useMoney();
   const project = useProjects().find((p) => p.id === id);
   if (!project) notFound();
   const next = nextStage(project);
@@ -20,6 +22,7 @@ export default function View({ id }: { id: string }) {
       <Back href="/" label="Homes" />
       <h1>{project.name}</h1>
       <p className="intro">{project.place}</p>
+      <CurrencySwitch />
       {project.frozen && <p className="note">This build is stopped. Unspent money has gone back to the family.</p>}
 
       <section className="group">
@@ -27,7 +30,7 @@ export default function View({ id }: { id: string }) {
           <div className="split">
             <strong>Budget</strong>
             <span className="muted">
-              {rupees(totalFunded(project))} of {rupees(project.budget)} funded
+              {money(totalFunded(project))} of {money(project.budget)} funded
             </span>
           </div>
           <BudgetBar project={project} />
@@ -37,7 +40,7 @@ export default function View({ id }: { id: string }) {
             <Tile name="plus" tone="green" />
             <div className="grow">
               <strong>Fund {next.stage.name.toLowerCase()}</strong>
-              <small>Add {rupees(next.stillNeeded)} to open the next stage.</small>
+              <small>Add {money(next.stillNeeded)} to open the next stage.</small>
             </div>
             <Link className="pill" href={`/homes/${project.id}/fund`}>
               Fund
@@ -82,7 +85,7 @@ export default function View({ id }: { id: string }) {
                 <span>{stage.name}</span>
                 <small>{view.label}</small>
               </div>
-              <span className="muted nowrap">{rupees(stage.amount)}</span>
+              <span className="muted nowrap">{money(stage.amount)}</span>
               <span className="chevron">
                 <Glyph name="chevron" />
               </span>
@@ -132,7 +135,7 @@ export default function View({ id }: { id: string }) {
               <span>{s.name}</span>
               <small>{s.city}</small>
             </div>
-            <span className="muted nowrap">{rupees(s.paidIn)}</span>
+            <span className="muted nowrap">{money(s.paidIn)}</span>
           </div>
         ))}
       </section>
