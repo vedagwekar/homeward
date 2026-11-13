@@ -2,7 +2,8 @@
 
 import { notFound } from "next/navigation";
 import { homewardFee, isActive, shortDate } from "@/lib/project.mjs";
-import { useProjects, useMoney } from "@/lib/store";
+import { CONTRACT_URL, useProjects, useMoney } from "@/lib/store";
+import GateTrack from "../../../../gate-track";
 import { Back, statusView, Tile } from "../../../../icons";
 
 export default function View({ id, slug }: { id: string; slug: string }) {
@@ -18,22 +19,17 @@ export default function View({ id, slug }: { id: string; slug: string }) {
     <>
       <Back href={`/homes/${project.id}`} label={project.name} />
       <h1>{stage.name}</h1>
+      <p className="intro">
+        {view.label}. {money(stage.amount)} for this stage.
+      </p>
 
       <section className="group">
-        <div className="row">
-          <Tile name={view.icon} tone={view.tone} />
-          <div className="grow">{view.label}</div>
-          <span className="muted">{money(stage.amount)}</span>
+        <div className="pad">
+          <GateTrack project={project} stage={stage} />
         </div>
         {stage.prePour && (
           <div className="row">
             <div className="grow">Steel is checked before concrete is poured</div>
-          </div>
-        )}
-        {isActive(stage) && stage.materials > 0 && (
-          <div className="row">
-            <div className="grow">Supplier paid when the stage opened</div>
-            <span className="muted">{money(stage.materials)}</span>
           </div>
         )}
         {stage.paidOn && (
@@ -53,7 +49,6 @@ export default function View({ id, slug }: { id: string; slug: string }) {
                 <img src={p.src} alt={p.caption} />
                 <figcaption>
                   {p.caption}
-                  <small>Sample image</small>
                 </figcaption>
               </figure>
             ))}
@@ -100,7 +95,10 @@ export default function View({ id, slug }: { id: string; slug: string }) {
           <details className="group disclosure">
             <summary>Certificate and technical proof</summary>
             <p>
-              This certificate links the stage, the approvals and the payment. <a href="#">View on Stellar Expert</a>
+              This certificate links the stage, the approvals and the payment.{" "}
+              <a className="link" href={CONTRACT_URL} target="_blank" rel="noreferrer">
+                See the contract on Stellar testnet
+              </a>
             </p>
           </details>
         </>

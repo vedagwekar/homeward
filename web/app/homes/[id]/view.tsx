@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { nextStage, shortDate, totalFunded } from "@/lib/project.mjs";
-import { useProjects, useMoney } from "@/lib/store";
+import { budgetParts, isActive, nextStage, shortDate } from "@/lib/project.mjs";
+import { CONTRACT_URL, useProjects, useMoney } from "@/lib/store";
 import BudgetBar from "../../budget-bar";
 import CurrencySwitch from "../../currency-switch";
+import GateTrack, { StageDots } from "../../gate-track";
 import { Back, Glyph, statusView, Tile } from "../../icons";
 
 export default function View({ id }: { id: string }) {
@@ -16,6 +17,8 @@ export default function View({ id }: { id: string }) {
   const family = [...project.sponsors.map((s) => s.name), project.parent];
   const latest = [...project.stages].reverse().find((s) => s.photos.length && s.status !== "locked" && s.status !== "open");
   const photo = latest?.photos[latest.photos.length - 1];
+  const parts = budgetParts(project);
+  const current = project.frozen ? undefined : project.stages.find(isActive) ?? project.stages.find((s) => s.status === "locked");
 
   return (
     <>
@@ -25,29 +28,40 @@ export default function View({ id }: { id: string }) {
       <CurrencySwitch />
       {project.frozen && <p className="note">This build is stopped. Unspent money has gone back to the family.</p>}
 
-      <section className="group">
-        <div className="pad">
-          <div className="split">
-            <strong>Budget</strong>
-            <span className="muted">
-              {money(totalFunded(project))} of {money(project.budget)} funded
-            </span>
-          </div>
-          <BudgetBar project={project} />
-        </div>
+      <section className="group hero">
+        <span className="muted">Locked in the Homeward contract</span>
+        <p className="hero-figure">{money(parts.waiting + parts.ready)}</p>
+        <p className="hero-rule">
+          Paid out one stage at a time, only after an independent engineer passes the work and {project.parent} approves.
+        </p>
+        <BudgetBar project={project} />
         {next && next.stillNeeded > 0 && (
-          <div className="row">
-            <Tile name="plus" tone="green" />
-            <div className="grow">
-              <strong>Fund {next.stage.name.toLowerCase()}</strong>
-              <small>Add {money(next.stillNeeded)} to open the next stage.</small>
-            </div>
-            <Link className="pill" href={`/homes/${project.id}/fund`}>
-              Fund
-            </Link>
-          </div>
+          <Link className="button" href={`/homes/${project.id}/fund`}>
+            Fund {next.stage.name.toLowerCase()}, {money(next.stillNeeded)}
+          </Link>
         )}
+        <a className="contract-link" href={CONTRACT_URL} target="_blank" rel="noreferrer">
+          See the contract on Stellar testnet
+        </a>
       </section>
+
+      {current && (
+        <>
+          <h3>{isActive(current) ? "Now" : "Next"}: {current.name}</h3>
+          <section className="group">
+            <div className="pad">
+              <StageDots project={project} current={current} />
+              <GateTrack project={project} stage={current} />
+            </div>
+            <Link className="row" href={`/homes/${project.id}/stages/${current.slug}`}>
+              <div className="grow">Photos, checks and payments</div>
+              <span className="chevron">
+                <Glyph name="chevron" />
+              </span>
+            </Link>
+          </section>
+        </>
+      )}
 
       <h3>On site</h3>
       <section className="group">
@@ -56,9 +70,7 @@ export default function View({ id }: { id: string }) {
             <img className="thumb" src={photo.src} alt="" />
             <div className="grow">
               <span>{photo.caption}</span>
-              <small>
-                {latest.name}. Sample image
-              </small>
+              <small>{latest.name}</small>
             </div>
           </Link>
         )}
@@ -107,9 +119,8 @@ export default function View({ id }: { id: string }) {
                     <span>{s.name}</span>
                     <small>Approved and paid {s.paidOn ? shortDate(s.paidOn) : ""}</small>
                   </div>
-                  {/* Real transaction link once the contract is live. */}
-                  <a className="link" href="#">
-                    Stellar Expert
+                  <a className="link" href={CONTRACT_URL} target="_blank" rel="noreferrer">
+                    Contract
                   </a>
                 </div>
               ))}

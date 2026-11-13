@@ -6,13 +6,13 @@ import { Glyph, type GlyphName, Tile } from "./icons";
 import { resetDemo } from "@/lib/store";
 
 const family: { href: string; label: string; icon: GlyphName; tone: string }[] = [
-  { href: "/", label: "Homes", icon: "home", tone: "blue" },
-  { href: "/timeline", label: "Timeline", icon: "calendar", tone: "red" },
+  { href: "/", label: "Homes", icon: "home", tone: "gray" },
+  { href: "/timeline", label: "Timeline", icon: "calendar", tone: "gray" },
 ];
 const others: typeof family = [
-  { href: "/builder", label: "Builder", icon: "hammer", tone: "orange" },
-  { href: "/engineer", label: "Engineer", icon: "shield", tone: "indigo" },
-  { href: "/parents", label: "Parents", icon: "person", tone: "pink" },
+  { href: "/builder", label: "Builder", icon: "hammer", tone: "gray" },
+  { href: "/engineer", label: "Engineer", icon: "shield", tone: "gray" },
+  { href: "/parents", label: "Parents", icon: "person", tone: "gray" },
 ];
 
 export default function Nav() {

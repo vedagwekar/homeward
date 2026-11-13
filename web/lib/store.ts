@@ -43,6 +43,9 @@ export type Project = {
 
 const seed = rawSeed as Project[];
 
+// Ved's Soroban contract on Stellar testnet. The demo data isn't wired to it yet.
+export const CONTRACT_URL = "https://stellar.expert/explorer/testnet/contract/CC2T4LZMG2UX7TCYX63MSCWSRYZO3XWNP3IACH47WQVM7NSI7XZP3JNO";
+
 const KEY = "homeward-demo";
 const STATUSES = ["locked", "open", "submitted", "rejected", "paid"];
 const listeners = new Set<() => void>();
@@ -194,10 +197,10 @@ export const clearStatus = () => setStatus({ state: "idle" });
 export async function act(text: { loading: string; done: string }, change: () => void) {
   setStatus({ state: "loading", text: text.loading });
   try {
-    // shortcut: fake 1.2 s delay and "#" receipt link, replace with the backend call on Mon Nov 9
+    // shortcut: fake 1.2 s delay and a link to the contract, not this transaction. Swap for the backend's {hash, explorer}.
     await new Promise((r) => setTimeout(r, 1200));
     change();
-    setStatus({ state: "done", text: text.done, link: "#" });
+    setStatus({ state: "done", text: text.done, link: CONTRACT_URL });
   } catch {
     setStatus({ state: "error", text: "That didn't go through. Nothing was paid. Try again." });
   }

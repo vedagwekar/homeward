@@ -31,7 +31,7 @@ export default function View({ id }: { id: string }) {
         <span className="live-time">{time && `${time} at the site`}</span>
         <figcaption>
           {project.place}
-          <small>Sample feed, simulated</small>
+          <small>Camera 1, facing the front of the house</small>
         </figcaption>
       </figure>
 
