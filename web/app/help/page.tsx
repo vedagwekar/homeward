@@ -1,7 +1,7 @@
 import { Back } from "../icons";
 
 const answers = [
-  ["The engineer rejects the work", "The money stays locked. The builder fixes the problem and sends new proof. The engineer is paid from Homeward's fee whether they approve or reject, so they have no reason to approve bad work."],
+  ["The engineer rejects the work", "The money stays locked. The builder fixes the problem and sends new proof. The engineer's visit price is agreed up front and is the same whether they approve or reject, so they have no reason to approve bad work."],
   ["A parent asks for a second check", "Payment stops. A second engineer must approve before any money moves."],
   ["The builder stops working", "Stop the build from the house page under Money back. Unspent money goes back to each family member based on what they paid in. Because it never left the locked account, nothing has to be sent back out of India."],
   ["You were overcharged, or a stage cost less", "Money that hasn't been released can come back to you at any time from Money back, without stopping the build."],

@@ -108,7 +108,7 @@ export default function View({ id }: { id: string }) {
             <strong>{cad} CAD</strong>
           </div>
         </section>
-        <p className="note">Transfer partner fees aren't included in this demo.</p>
+        <p className="note">Engineer visits are quoted separately at local rates. Transfer partner fees aren't included in this demo.</p>
 
         <button className="button" type="submit" disabled={busy}>
           Pay {cad} with Interac (simulated)
