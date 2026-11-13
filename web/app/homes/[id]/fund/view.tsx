@@ -95,7 +95,7 @@ export default function View({ id }: { id: string }) {
           <div className="row">
             <div className="grow">
               <span>Homeward fee, 1.5%</span>
-              <small>Pays the engineer, whether they approve or reject</small>
+              <small>Runs the locked account, checks and records</small>
             </div>
             <span className="muted">{money(fee)}</span>
           </div>
