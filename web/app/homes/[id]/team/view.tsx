@@ -43,7 +43,7 @@ export default function View({ id }: { id: string }) {
       </section>
 
       <h3>Find someone in {state}</h3>
-      <p className="note">Homeward checks each person's licence and past work, and interviews them, before they're listed. Engineers are paid from Homeward's fee, never by the builder. These are sample profiles.</p>
+      <p className="note">Homeward checks each person's licence and past work, and interviews them, before they're listed. Families pay each engineer visit at a price agreed up front, through Homeward, never through the builder. These are sample profiles.</p>
       <section className="group">
         {nearby.map((d) => (
           <div className="row" key={d.name}>
