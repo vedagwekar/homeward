@@ -29,9 +29,10 @@ export default function Engineer() {
     );
   }
   const decide = (decision: "approved" | "rejected") => {
-    act({ loading: decision === "approved" ? "Approving" : "Rejecting", done: decision === "approved" ? "Stage approved" : "Stage rejected. Money stays locked" }, () => {
-      updateStage(project.id, stage.slug, second ? { secondDecision: decision } : { engineerDecision: decision });
+    act({ loading: decision === "approved" ? "Approving" : "Rejecting", done: decision === "approved" ? "Stage approved" : "Stage rejected. Money stays locked" }, async () => {
+      const receipt = await updateStage(project.id, stage.slug, second ? { secondDecision: decision } : { engineerDecision: decision });
       setPassed([]);
+      return receipt;
     });
   };
   return (

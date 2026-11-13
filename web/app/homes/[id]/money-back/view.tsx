@@ -4,14 +4,14 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { useState } from "react";
 import { budgetParts, refundSplit, totalFunded, totalPaid } from "@/lib/project.mjs";
-import { act, returnMoney, useProjects, useStatus, useMoney } from "@/lib/store";
+import { act, LIVE, returnMoney, useProjects, useStatus, useMoney } from "@/lib/store";
 import { Back } from "../../../icons";
 
 export default function View({ id }: { id: string }) {
   const money = useMoney();
   const project = useProjects().find((p) => p.id === id);
   const busy = useStatus().state === "loading";
-  const [stop, setStop] = useState(false);
+  const [stop, setStop] = useState(LIVE); // on testnet only "stop and return everything" exists (freeze + resolve)
   // Kept after returning, because the totals change once the money has gone back.
   const [done, setDone] = useState<{ name: string; amount: number }[] | null>(null);
   if (!project) notFound();
@@ -53,9 +53,10 @@ export default function View({ id }: { id: string }) {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            act({ loading: `Returning ${money(amount)}`, done: `${money(amount)} returned` }, () => {
-              returnMoney(project.id, amount, stop);
+            act({ loading: `Returning ${money(amount)}`, done: `${money(amount)} returned` }, async () => {
+              const receipt = await returnMoney(project.id, amount, stop);
               setDone(split);
+              return receipt;
             });
           }}
         >
@@ -63,10 +64,10 @@ export default function View({ id }: { id: string }) {
           <fieldset className="group">
             <legend className="hidden">How much?</legend>
             <label className="row">
-              <input type="radio" name="kind" checked={!stop} onChange={() => setStop(false)} />
+              <input type="radio" name="kind" checked={!stop} disabled={LIVE} onChange={() => setStop(false)} />
               <span className="grow">
                 <span>Money for future stages</span>
-                <small>The build keeps going</small>
+                <small>{LIVE ? "The build keeps going. Not on testnet yet" : "The build keeps going"}</small>
               </span>
               <span className="muted">{money(spare)}</span>
             </label>

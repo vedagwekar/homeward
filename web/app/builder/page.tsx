@@ -1,17 +1,42 @@
 "use client";
 
-import { rupees } from "@/lib/project.mjs";
-import { act, activeStage, updateStage, useProjects, useStatus } from "@/lib/store";
+import { nextStage, rupees } from "@/lib/project.mjs";
+import { act, activeStage, startStage, updateStage, useProjects, useStatus } from "@/lib/store";
 
 // Rivan owns this screen. Keep it light for Android.
 export default function Builder() {
-  const active = activeStage(useProjects());
+  const projects = useProjects();
+  const active = activeStage(projects);
   const busy = useStatus().state === "loading";
   if (!active) {
+    // Nothing open: offer the next locked stage. In a real launch Homeward opens it once the family has funded it.
+    const project = projects.find((p) => !p.frozen && nextStage(p));
+    const next = project && nextStage(project);
     return (
       <>
         <h1>Builder</h1>
         <p className="intro">No stage needs proof right now.</p>
+        {project && next && (
+          <>
+            <button
+              className="button"
+              type="button"
+              disabled={busy || next.stillNeeded > 0}
+              onClick={() =>
+                act({ loading: `Starting ${next.stage.name}`, done: `${next.stage.name} started. Supplier paid for materials` }, () =>
+                  startStage(project.id, next.stage.slug),
+                )
+              }
+            >
+              Start {next.stage.name}
+            </button>
+            <p className="note">
+              {next.stillNeeded > 0
+                ? `${project.name} needs ${rupees(next.stillNeeded)} more funding before this stage can start.`
+                : "Demo step: Homeward opens a stage once it's funded. The supplier is paid for materials straight away."}
+            </p>
+          </>
+        )}
       </>
     );
   }

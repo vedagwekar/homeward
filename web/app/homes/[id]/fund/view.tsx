@@ -56,9 +56,10 @@ export default function View({ id }: { id: string }) {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          act({ loading: `Locking ${money(picked.amount)}`, done: `${money(picked.amount)} locked` }, () => {
-            addFunding(project.id, sponsor, picked.amount);
+          act({ loading: `Locking ${money(picked.amount)}`, done: `${money(picked.amount)} locked` }, async () => {
+            const receipt = await addFunding(project.id, sponsor, picked.amount);
             setDone(picked.amount);
+            return receipt;
           });
         }}
       >
