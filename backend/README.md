@@ -56,3 +56,14 @@ A write takes about 10 seconds. Show a loading state, and fetch the project agai
 - Money and status come from the contract. Names and photos come from `web/mock/projects.json`.
 - Partial refunds while a build continues are not supported by the contract.
 - `/api/timeline` is built from the API's own actions until the indexer is ready. `/api/anchor/deposit` isn't built yet.
+
+## Hosting (Railway)
+
+The repo-root `Dockerfile` builds the API, and `railway.json` tells Railway to use it and check `/api/health`.
+
+1. In Railway, create a project, choose **Deploy from GitHub repo**, and pick `homeward`.
+2. Right-click the service, choose **Attach volume**, and mount it at `/data`. SQLite and videos live there, so they survive redeploys.
+3. In **Variables**, open the **Raw Editor** and paste your local `.env`. Never commit it. Then add `WEB_ORIGIN=https://homeward-tan.vercel.app,http://localhost:3000`. Leave `PORT`, `DB_PATH` and `UPLOAD_DIR` out, because Railway and the Dockerfile set them.
+4. In **Settings → Networking**, click **Generate Domain**. `https://<name>.up.railway.app/api/health` should return `{"ok":true,...}`.
+5. In Vercel, set `NEXT_PUBLIC_API_URL` to that domain and redeploy. The variable is read at build time.
+6. Open the app and press **Reset demo** once. That sets up the builds on chain for the new disk, and takes about a minute.

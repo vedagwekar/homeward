@@ -1,0 +1,12 @@
+.env
+.env.*
+**/node_modules
+**/dist
+target
+web
+!web/mock/projects.json
+uploads
+*.sqlite
+.git
+docs
+contracts
