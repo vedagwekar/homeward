@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { budgetParts, canPay, refundSplit, dollars, homewardFee, nextStage, rupees, settle, timeline, totalFunded, totalPaid } from "./project.mjs";
+import { budgetParts, canPay, gates, refundSplit, dollars, homewardFee, nextStage, rupees, settle, timeline, totalFunded, totalPaid } from "./project.mjs";
 
 const stages = [
   { name: "A", amount: 100, materials: 20, status: "paid" },
@@ -92,4 +92,19 @@ test("money back splits by what each person paid in and always adds up", () => {
 test("a stopped build no longer holds labour for the active stage", () => {
   const p = { budget: 1000, frozen: true, ...project(350) };
   assert.equal(budgetParts(p).waiting, 0);
+});
+
+test("gates: an open stage waits on the builder, nothing else is lit", () => {
+  const open = { status: "open", amount: 375000, materials: 150000, parentMustApprove: true };
+  assert.deepEqual(gates(open, "Amma").map((g) => g.state), ["done", "now", "todo", "todo", "todo"]);
+  assert.equal(gates(open, "Amma").at(-1).amount, 225000);
+});
+
+test("gates: locked has nothing current, paid has everything done, rejected fails the engineer", () => {
+  const base = { amount: 100, materials: 0, parentMustApprove: false };
+  assert.deepEqual(gates({ ...base, status: "locked" }, "Dad").map((g) => g.state), ["todo", "todo", "todo"]);
+  assert.deepEqual(gates({ ...base, status: "paid" }, "Dad").map((g) => g.state), ["done", "done", "done"]);
+  assert.deepEqual(gates({ ...base, status: "rejected" }, "Dad").map((g) => g.state), ["done", "failed", "todo"]);
+  const waitingOnAmma = { ...base, status: "submitted", engineerDecision: "approved", parentMustApprove: true };
+  assert.deepEqual(gates(waitingOnAmma, "Amma").map((g) => g.state), ["done", "done", "now", "todo"]);
 });

@@ -9,7 +9,7 @@ export default function StatusBar() {
     <div className={`status ${status.state}`} role="status">
       {status.state === "loading" && <span className="spinner" aria-hidden="true" />}
       <span className="grow">{status.text}</span>
-      {status.state === "done" && <a href={status.link}>View on Stellar Expert</a>}
+      {status.state === "done" && <a href={status.link} target="_blank" rel="noreferrer">See the contract</a>}
       {status.state !== "loading" && (
         <button type="button" onClick={clearStatus} aria-label="Dismiss">
           ✕

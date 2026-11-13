@@ -58,7 +58,7 @@ export default function View({ id }: { id: string }) {
               className="pill"
               type="button"
               disabled={busy}
-              onClick={() => act({ loading: `Contacting ${d.name}`, done: `Quote request sent to ${d.name} (simulated)` }, () => {})}
+              onClick={() => act({ loading: `Contacting ${d.name}`, done: `Quote request sent to ${d.name}` }, () => {})}
             >
               Ask
             </button>

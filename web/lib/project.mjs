@@ -85,3 +85,25 @@ export function timeline(projects) {
   }
   return items.sort((a, b) => a.date.localeCompare(b.date));
 }
+
+// The checks a stage passes before its money moves, in the contract's order.
+// Each gate is done, failed, now (the one everyone is waiting on) or todo.
+export function gates(stage, parent) {
+  const paid = stage.status === "paid";
+  const proofIn = ["submitted", "rejected", "paid"].includes(stage.status);
+  const list = [];
+  if (stage.materials > 0) list.push({ key: "supplier", label: "Supplier paid for materials", amount: stage.materials, done: stage.status !== "locked" });
+  list.push({ key: "proof", label: "Builder sends photos and video", done: proofIn });
+  list.push({ key: "engineer", label: "Engineer checks the work", done: paid || stage.engineerDecision === "approved", failed: stage.status === "rejected" });
+  if (stage.parentMustApprove) {
+    const recheck = stage.amma === "recheck";
+    list.push({ key: "parent", label: recheck ? `${parent} asked for a second engineer` : `${parent} approves`, done: paid || stage.amma === "ok" || (recheck && stage.secondDecision === "approved") });
+  }
+  list.push({ key: "release", label: "Money released to the builder", amount: stage.amount - stage.materials, done: paid });
+  let found = stage.status === "locked";
+  return list.map((g) => {
+    const state = g.done ? "done" : g.failed ? "failed" : found ? "todo" : "now";
+    if (state !== "done") found = true;
+    return { key: g.key, label: g.label, amount: g.amount, state };
+  });
+}

@@ -100,7 +100,7 @@ export default function View({ id }: { id: string }) {
             <span className="muted">{money(fee)}</span>
           </div>
           <div className="row">
-            <div className="grow">Exchange rate, demo</div>
+            <div className="grow">Exchange rate</div>
             <span className="muted">₹{project.rupeesPerCad} per C$1</span>
           </div>
           <div className="row">
@@ -111,11 +111,7 @@ export default function View({ id }: { id: string }) {
         <p className="note">Transfer partner fees aren't included in this demo.</p>
 
         <button className="button" type="submit" disabled={busy}>
-          Pay {cad} with Interac (simulated)
-        </button>
-        {/* Youdis connects the SEP-24 deposit here on Mon Nov 9. */}
-        <button className="button quiet" type="button" disabled>
-          Deposit via anchor (coming soon)
+          Pay {cad} with Interac
         </button>
       </form>
     </>

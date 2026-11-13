@@ -33,7 +33,7 @@ export default function View({ id }: { id: string }) {
             </div>
           ))}
         </section>
-        <p className="note">Sent back by Interac (simulated). It never left the locked account, so nothing has to come back out of India.</p>
+        <p className="note">Sent back by Interac. It never left the locked account, so nothing has to come back out of India.</p>
         <Link className="button" href={`/homes/${project.id}`}>
           Done
         </Link>

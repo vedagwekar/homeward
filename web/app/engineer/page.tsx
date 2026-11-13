@@ -44,7 +44,6 @@ export default function Engineer() {
             <img src={p.src} alt={p.caption} />
             <figcaption>
               {p.caption}
-              <small>Sample image</small>
             </figcaption>
           </figure>
         ))}
