@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Anek_Malayalam, Manjari } from "next/font/google";
 import "./globals.css";
 import Nav from "./nav";
+import Link from "next/link";
 import StatusBar from "./status";
 import Brand from "./brand";
 
@@ -29,7 +30,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Brand />
           {children}
           <StatusBar />
-          <footer>Testnet demo with sample homes and photos. Interac, rupee payouts, SMS and engineer licences are simulated.</footer>
+          <footer>
+            Testnet demo with sample homes and photos. Interac, rupee payouts, SMS and engineer licences are simulated.{" "}
+            <Link className="link" href="/proof">
+              See every transaction on Stellar testnet
+            </Link>
+          </footer>
         </main>
       </body>
     </html>

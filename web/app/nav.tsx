@@ -6,20 +6,19 @@ import { Glyph, type GlyphName, Tile } from "./icons";
 import { resetDemo, type Session, useSession } from "@/lib/store";
 
 type Item = { href: string; label: string; icon: GlyphName };
-const proof: Item = { href: "/proof", label: "Proof", icon: "shield" };
-// Each person sees only their own screens.
+// A family has two places to go. Everyone else has one screen, so they get no menu at all.
 const menus: Record<Session["role"], Item[]> = {
-  sponsor: [{ href: "/", label: "Homes", icon: "home" }, { href: "/timeline", label: "Timeline", icon: "calendar" }, proof, { href: "/help", label: "Help", icon: "help" }],
-  parent: [{ href: "/parents", label: "My home", icon: "home" }, proof],
-  builder: [{ href: "/builder", label: "Site", icon: "hammer" }, proof],
-  engineer: [{ href: "/engineer", label: "Checks", icon: "shield" }, proof],
+  sponsor: [{ href: "/", label: "Homes", icon: "home" }, { href: "/timeline", label: "Timeline", icon: "calendar" }],
+  parent: [],
+  builder: [],
+  engineer: [],
 };
 const titles: Record<Session["role"], string> = { sponsor: "Family account", parent: "Home owner", builder: "Builder", engineer: "Engineer" };
 
 export default function Nav() {
   const path = usePathname();
   const session = useSession();
-  if (!session || path === "/signin") return null;
+  if (!session || path === "/signin" || menus[session.role].length < 2) return null;
   const active = (href: string) => path === href || (href === "/" && path.startsWith("/homes"));
   return (
     <nav aria-label="Main">

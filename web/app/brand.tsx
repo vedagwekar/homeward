@@ -18,7 +18,7 @@ export default function Brand() {
     <div className="brand">
       <Wordmark />
       <span>
-        {session ? `${session.name}, testnet demo` : "Testnet demo"}
+        {session ? session.name : "Testnet demo"}
         {session && (
           <button type="button" onClick={() => signIn(null)}>
             Sign out

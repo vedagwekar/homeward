@@ -324,6 +324,7 @@ button.pill:disabled {
 }
 
 .button:disabled {
+  background: var(--fill);
   color: var(--secondary);
 }
 
@@ -1009,4 +1010,29 @@ nav > a[aria-current="page"] {
   body:not(:has(nav)) {
     display: block;
   }
+}
+
+/* Home screen: the rest of the home's details stay folded away until wanted. */
+.more {
+  margin-top: 1.5rem;
+}
+
+.more > summary {
+  cursor: pointer;
+  font-weight: 600;
+  min-height: 2.75rem;
+  padding: 0.6rem 0.25rem;
+}
+
+/* Builder and engineer: one job, said in one line, with the steps numbered because they are a sequence. */
+.task {
+  font-size: 1.1875rem;
+  margin: 0 0 1rem;
+}
+
+.hint {
+  color: var(--secondary);
+  font-size: 0.9375rem;
+  margin: 0.5rem 0.25rem 0;
+  text-align: center;
 }
