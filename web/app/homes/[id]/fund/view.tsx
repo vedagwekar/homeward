@@ -4,7 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { useState } from "react";
 import { dollars, homewardFee, nextStage, totalFunded } from "@/lib/project.mjs";
-import { act, addFunding, useProjects, useStatus, useMoney } from "@/lib/store";
+import { act, addFunding, useProjects, useSession, useStatus, useMoney } from "@/lib/store";
 import { Back } from "../../../icons";
 
 
@@ -12,7 +12,10 @@ export default function View({ id }: { id: string }) {
   const money = useMoney();
   const project = useProjects().find((p) => p.id === id);
   const [choice, setChoice] = useState(0);
-  const [sponsor, setSponsor] = useState(project?.sponsors[0].name ?? "");
+  // Whoever is signed in pays, if they fund this home.
+  const me = useSession()?.name;
+  const [chosen, setSponsor] = useState("");
+  const sponsor = chosen || project?.sponsors.find((s) => s.name === me)?.name || (project?.sponsors[0].name ?? "");
   const [done, setDone] = useState<number | null>(null);
   const busy = useStatus().state === "loading";
   if (!project) notFound();
