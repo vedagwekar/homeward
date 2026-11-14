@@ -3,10 +3,11 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { budgetParts, isActive, nextStage, shortDate } from "@/lib/project.mjs";
-import { CONTRACT_URL, useProjects, useMoney } from "@/lib/store";
+import { CONTRACT_URL, useProjects, useMoney, useSession } from "@/lib/store";
 import BudgetBar from "../../budget-bar";
 import CurrencySwitch from "../../currency-switch";
 import GateTrack, { StageDots } from "../../gate-track";
+import House3D, { hasModel } from "../../house-3d";
 import { Back, Glyph, statusView, Tile } from "../../icons";
 
 export default function View({ id }: { id: string }) {
@@ -22,13 +23,14 @@ export default function View({ id }: { id: string }) {
 
   return (
     <>
-      <Back href="/" label="Homes" />
+      {useSession()?.role !== "parent" && <Back href="/" label="Homes" />}
       <h1>{project.name}</h1>
       <p className="intro">{project.place}</p>
       <CurrencySwitch />
       {project.frozen && <p className="note">This build is stopped. Unspent money has gone back to the family.</p>}
 
       <section className="group hero">
+        {hasModel(project.id) && <House3D project={project} />}
         <span className="muted">Locked in the Homeward contract</span>
         <p className="hero-figure">{money(parts.waiting + parts.ready)}</p>
         <p className="hero-rule">
@@ -40,9 +42,12 @@ export default function View({ id }: { id: string }) {
             Fund {next.stage.name.toLowerCase()}, {money(next.stillNeeded)}
           </Link>
         )}
-        <a className="contract-link" href={CONTRACT_URL} target="_blank" rel="noreferrer">
-          See the contract on Stellar testnet
-        </a>
+        <p className="held">
+          Held by a Stellar smart contract. Homeward can't withdraw it.{" "}
+          <Link className="link" href="/proof">
+            See the proof
+          </Link>
+        </p>
       </section>
 
       {current && (
