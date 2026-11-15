@@ -26,7 +26,7 @@ Built for the Blockchain Innovation Challenge powered by Stellar (UWaterloo Velo
 
 **Real on Stellar Testnet:** creating a project, funding, opening stages, supplier payment, proof hashes, engineer and parent approvals, the second check, split payouts, certificates, the builder's deposit and held-back payments, reporting a builder who stopped, freezing and refunds. `scripts/demo.sh` runs the whole story on Testnet, and `scripts/security.sh` runs the deposit paths.
 
-**Simulated:** Interac, rupee payouts, SMS, KYC, engineer licences, site photos and the site camera. The web app runs on demo data in the browser and is being connected to the backend API.
+**Simulated:** Interac and UAE bank transfers, rupee payouts, SMS, KYC, engineer licences, site photos and the site camera. The web app runs on demo data in the browser and is being connected to the backend API.
 
 ## Repo layout
 

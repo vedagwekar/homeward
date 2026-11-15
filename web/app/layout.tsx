@@ -33,7 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
           <StatusBar />
           <footer>
-            Testnet demo. Interac, rupee payouts and SMS are simulated.{" "}
+            Testnet demo. Interac, UAE bank transfers, rupee payouts and SMS are simulated.{" "}
             <Link className="link" href="/proof">
               See transactions on Stellar testnet
             </Link>

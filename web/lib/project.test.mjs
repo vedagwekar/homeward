@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { budgetParts, canPay, canReturnDeposit, claimStatus, defaultPayback, depositNeeded, duration, feeAfterCredit, gates, isStalled, securityHeld, refundSplit, dollars, homewardFee, nextStage, rupees, settle, timeline, totalFunded, totalPaid } from "./project.mjs";
+import { CURRENCIES, currencyForCity, foreign, budgetParts, canPay, canReturnDeposit, claimStatus, defaultPayback, depositNeeded, duration, feeAfterCredit, gates, isStalled, securityHeld, refundSplit, dollars, homewardFee, nextStage, rupees, settle, timeline, totalFunded, totalPaid } from "./project.mjs";
 
 const stages = [
   { name: "A", amount: 100, materials: 20, status: "paid" },
@@ -197,4 +197,12 @@ test("duration: demo windows read as seconds and minutes, a launch's as days", (
   assert.equal(duration(3 * 3600), "3 hours");
   assert.equal(duration(30 * 86400), "30 days");
   assert.equal(duration(-5), "0 seconds");
+});
+
+test("a Dubai sender sees dirhams, a Toronto sender sees Canadian dollars", () => {
+  assert.equal(currencyForCity("Dubai"), "AED");
+  assert.equal(currencyForCity("Toronto"), "CAD");
+  assert.equal(CURRENCIES.AED.rate, 23);
+  assert.match(foreign(230000, "AED"), /10,000/); // ₹2,30,000 at ₹23 is AED 10,000
+  assert.equal(foreign(300000, "CAD"), "$4,480");
 });

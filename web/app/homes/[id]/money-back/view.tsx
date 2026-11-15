@@ -35,7 +35,7 @@ function Inner({ id }: { id: string }) {
             </div>
           ))}
         </section>
-        <p className="note">Sent back by Interac. It never left the locked account.</p>
+        <p className="note">Sent back to the sender's bank. It never left the locked account.</p>
         <Link className="button" href={`/homes/${project.id}`}>
           Done
         </Link>

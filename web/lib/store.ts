@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useSyncExternalStore } from "react";
 import rawSeed from "@/mock/projects.json";
-import { canReturnDeposit, defaultPayback, depositNeeded, dollars, isActive, isStalled, refundSplit, rupees, securityHeld, settle } from "./project.mjs";
+import { CURRENCIES, currencyForCity, foreign, canReturnDeposit, defaultPayback, depositNeeded, isActive, isStalled, refundSplit, rupees, securityHeld, settle } from "./project.mjs";
 
 export type VideoReview =
   | { status: "unavailable"; summary: string }
@@ -45,7 +45,6 @@ export type Project = {
   name: string;
   place: string;
   budget: number;
-  rupeesPerCad: number;
   parent: string;
   sponsors: { name: string; city: string; paidIn: number; credit?: number }[]; // credit: fee-free funding earned back from a stopped build
   engineer: { name: string; licence: string; secondName: string };
@@ -319,14 +318,16 @@ export function activeStage(projects: Project[]) {
   return null;
 }
 
-// Family screens can show money in rupees or Canadian dollars. Builder and parent screens stay in rupees.
+// Family screens can show money in rupees or in what the sender uses: Canadian dollars for Anil in Toronto,
+// dirhams for Meera in Dubai. Builder and parent screens stay in rupees.
 const CURRENCY_KEY = "homeward-currency";
-let currency: "INR" | "CAD" = "INR";
+type Shown = "INR" | "ABROAD";
+let currency: Shown = "INR";
 try {
-  if (typeof localStorage !== "undefined" && localStorage.getItem(CURRENCY_KEY) === "CAD") currency = "CAD";
+  if (typeof localStorage !== "undefined" && ["ABROAD", "CAD", "AED"].includes(localStorage.getItem(CURRENCY_KEY) ?? "")) currency = "ABROAD";
 } catch {}
 
-export function setCurrency(next: "INR" | "CAD") {
+export function setCurrency(next: Shown) {
   currency = next;
   try {
     localStorage.setItem(CURRENCY_KEY, next);
@@ -341,14 +342,23 @@ export function useCurrency() {
       return () => listeners.delete(l);
     },
     () => currency,
-    () => "INR" as const,
+    () => "INR" as Shown,
   );
 }
 
-// shortcut: one demo rate for every home (both use ₹67 per C$1), pass the home's own rate once rates are live
-export function useMoney(rupeesPerCad = seed[0].rupeesPerCad) {
-  const c = useCurrency();
-  return (n: number) => (c === "CAD" ? dollars(n, rupeesPerCad) : rupees(n));
+/** The currency the signed-in sender uses, from the city they send from. Not signed in as a sender: Canadian dollars. */
+export function useHomeCurrency() {
+  const session = useSession();
+  const projects = useProjects();
+  const city = session?.role === "sponsor" ? projects.flatMap((p) => p.sponsors).find((s) => s.name === session.name)?.city : undefined;
+  return CURRENCIES[currencyForCity(city) as keyof typeof CURRENCIES];
+}
+
+// shortcut: one demo rate per currency (see CURRENCIES), the same for every home.
+export function useMoney() {
+  const shown = useCurrency();
+  const home = useHomeCurrency();
+  return (n: number) => (shown === "ABROAD" ? foreign(n, home.code) : rupees(n));
 }
 
 // Every button that changes something shows loading, then success with a receipt link, or an error.

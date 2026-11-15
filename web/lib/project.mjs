@@ -1,10 +1,30 @@
 export const rupees = (n) =>
   new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(n);
 
-export const dollars = (rupeeAmount, rupeesPerCad) =>
-  new Intl.NumberFormat("en-CA", { style: "currency", currency: "CAD", maximumFractionDigits: 0 }).format(
+// The money a family member sends from abroad. Demo rates, shown as such. The UAE dirham is pegged to the
+// US dollar, so ₹23 per dirham is the ₹85 per dollar the backend uses, divided by 3.67.
+export const CURRENCIES = {
+  CAD: { code: "CAD", label: "$ CAD", rate: 67, locale: "en-CA", perUnit: "C$1", method: "Interac" },
+  AED: { code: "AED", label: "AED dirham", rate: 23, locale: "en-AE", perUnit: "AED 1", method: "bank transfer" },
+};
+
+/** The currency a sender uses, from the city they send from. */
+export const currencyForCity = (city = "") => (/dubai|abu dhabi|sharjah|uae|emirates/i.test(city) ? "AED" : "CAD");
+
+/** Rupees as the sender's currency, to the nearest 10 so a demo rate never looks falsely exact. */
+export function foreign(rupeeAmount, code = "CAD") {
+  const c = CURRENCIES[code] ?? CURRENCIES.CAD;
+  return new Intl.NumberFormat(c.locale, { style: "currency", currency: c.code, maximumFractionDigits: 0 }).format(
+    Math.round(rupeeAmount / c.rate / 10) * 10,
+  );
+}
+
+export const dollars = (rupeeAmount, rupeesPerCad) => {
+  // Kept for older callers: Canadian dollars at the given rate.
+  return new Intl.NumberFormat("en-CA", { style: "currency", currency: "CAD", maximumFractionDigits: 0 }).format(
     Math.round(rupeeAmount / rupeesPerCad / 10) * 10,
   );
+};
 
 export const totalFunded = (project) => project.sponsors.reduce((sum, s) => sum + s.paidIn, 0);
 
