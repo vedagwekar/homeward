@@ -25,6 +25,15 @@ test("a caller over the limit gets 429 with a wait time, and a new window resets
   assert.equal((await last.json() as { error: string }).error.startsWith("Too many requests"), true);
 });
 
+test("callers are counted by X-Real-IP, so one caller can't hide behind several proxy addresses", async () => {
+  delete process.env.RATE_LIMIT;
+  const s = serve((app) => app.get("/x", limiter("t", { limit: 2, windowMs: 60_000 }), (_q, r) => void r.json({})));
+  const as = (ip: string) => fetch(s.url + "/x", { headers: { "x-real-ip": ip } }).then((r) => r.status);
+  const codes = [await as("1.1.1.1"), await as("1.1.1.1"), await as("1.1.1.1"), await as("2.2.2.2")];
+  s.close();
+  assert.deepEqual(codes, [200, 200, 429, 200]);
+});
+
 test("RATE_LIMIT=off lets everything through (local tests only)", async () => {
   process.env.RATE_LIMIT = "off";
   const s = serve((app) => app.get("/x", limiter("t", { limit: 1, windowMs: 60_000 }), (_q, r) => void r.json({})));
