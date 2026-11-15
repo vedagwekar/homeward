@@ -83,8 +83,10 @@ const derive = (p: Project): Project => {
 
 const seed = (rawSeed as unknown as Project[]).map(prepare);
 
-// Ved's Soroban contract on Stellar testnet.
-export const CONTRACT_URL = "https://stellar.expert/explorer/testnet/contract/CC2T4LZMG2UX7TCYX63MSCWSRYZO3XWNP3IACH47WQVM7NSI7XZP3JNO";
+// Ved's Soroban contract on Stellar testnet, with the builder's deposit (deployed 15 Nov 2026).
+export const CONTRACT_URL = "https://stellar.expert/explorer/testnet/contract/CC2NYVUTHJWBRTDG7J4O6VB7TINL5MTNOTTXOMVMHKSCUYZR4W3M6QF2";
+// The first version, from 9 Nov, before the deposit was added. Its transactions stay valid.
+export const FIRST_CONTRACT_URL = "https://stellar.expert/explorer/testnet/contract/CC2T4LZMG2UX7TCYX63MSCWSRYZO3XWNP3IACH47WQVM7NSI7XZP3JNO";
 
 // The backend's address. When it's set, every button sends a real testnet transaction through
 // the backend, which signs as the right person. When it isn't, the app runs on mock data saved in
