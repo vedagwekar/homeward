@@ -1,0 +1,37 @@
+name: checks
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo test
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: npm ci
+        working-directory: web
+      - run: node --test lib/*.test.mjs
+        working-directory: web
+      - run: npm run build
+        working-directory: web
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: npm install && npm run build
+        working-directory: packages/homeward-client
+      - run: npm install
+        working-directory: backend
+      - run: npm run typecheck && npm test
+        working-directory: backend

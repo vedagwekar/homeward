@@ -2,6 +2,20 @@
 
 The web app talks only to this server. The server holds the demo keys and signs on Stellar Testnet, so keys never reach the browser.
 
+## Protection on a public server
+
+This is a demo: anyone can still play any role. These settings only stop floods and the most destructive calls (`src/guard.ts`, checked by `npm test`).
+
+| Setting | What it does |
+|---|---|
+| Request limits | Per caller: 300 reads a minute, 40 writes a minute, 10 video uploads per 10 minutes, 12 "start over" calls an hour. Over the limit gets `429` and a wait time. |
+| `ADMIN_KEY` | When set, settling a disputed report needs the `x-admin-key` header. Set it on the host. The web app never calls that route. |
+| `TRUST_PROXY` | Number of proxies in front of the server (default 1, right for Railway), so limits see the real caller. |
+| `MAX_TOP_UPS_PER_HOUR` | Caps free test-money top-ups from the issuer (default 30 an hour in all). |
+| `RATE_LIMIT=off` | Local tests only. `npm run smoke` sets it. |
+
+Uploads are hashed in a stream (no 200 MB file held in memory), and a refused upload is deleted.
+
 ## Run it
 
 Needs Node 22.13 or newer and a `.env` file in the repo root (see `.env.example`).
@@ -79,7 +93,7 @@ The repo-root `Dockerfile` builds the API, and `railway.json` tells Railway to u
 
 1. In Railway, create a project, choose **Deploy from GitHub repo**, and pick `homeward`.
 2. Right-click the service, choose **Attach volume**, and mount it at `/data`. SQLite and videos live there, so they survive redeploys.
-3. In **Variables**, open the **Raw Editor** and paste your local `.env`. Never commit it. Then add `WEB_ORIGIN=https://homeward-tan.vercel.app,http://localhost:3000`. Leave `PORT`, `DB_PATH` and `UPLOAD_DIR` out, because Railway and the Dockerfile set them (blank values are ignored).
+3. In **Variables**, open the **Raw Editor** and paste your local `.env`. Never commit it. Then add `WEB_ORIGIN=https://homeward-ecru.vercel.app,http://localhost:3000`. Leave `PORT`, `DB_PATH` and `UPLOAD_DIR` out, because Railway and the Dockerfile set them (blank values are ignored).
 4. In **Settings → Networking**, click **Generate Domain**. `https://<name>.up.railway.app/api/health` should return `{"ok":true,...}` with the contract ID you expect (`CC2NYVUT…` for the deposit contract). If it shows another ID, fix `CONTRACT_ID` in Variables.
 5. In Vercel, set `NEXT_PUBLIC_API_URL` to that domain and redeploy. The variable is read at build time.
 6. Open the app and press **Reset demo** once. That sets up the builds on chain for the new disk, and takes about a minute.

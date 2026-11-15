@@ -8,6 +8,7 @@ import type { AddressInfo } from "node:net";
 const temp = mkdtempSync(join(tmpdir(), "homeward-smoke-"));
 process.env.DB_PATH = join(temp, "smoke.sqlite");
 process.env.UPLOAD_DIR = join(temp, "uploads");
+process.env.RATE_LIMIT = "off"; // one machine makes every call here; the limits have their own check below
 
 const { createApp } = await import("./routes");
 const { ensureTusdc, tokenBalance } = await import("./chain");

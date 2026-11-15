@@ -16,7 +16,7 @@ Built for the Blockchain Innovation Challenge powered by Stellar (UWaterloo Velo
 
 ## Links
 
-- Live app: https://homeward-tan.vercel.app
+- Live app: https://homeward-ecru.vercel.app
 - Contract on Stellar Testnet: `CC2NYVUTHJWBRTDG7J4O6VB7TINL5MTNOTTXOMVMHKSCUYZR4W3M6QF2`
   ([Stellar Expert](https://stellar.expert/explorer/testnet/contract/CC2NYVUTHJWBRTDG7J4O6VB7TINL5MTNOTTXOMVMHKSCUYZR4W3M6QF2))
 - First version of the contract, before the builder's deposit: `CC2T4LZMG2UX7TCYX63MSCWSRYZO3XWNP3IACH47WQVM7NSI7XZP3JNO`

@@ -11,6 +11,7 @@ import { allProjectViews, displayFor, hasActiveStage, projectView, securityTerms
 import { ChainError, clientFor, ensureTusdc, read, send, StageStatus } from "./chain";
 import { addr, cfg, root, rupeesToUnits, unitsToRupees, type Role } from "./config";
 import { newStageCode, sha256 } from "./codes";
+import { adminOnly, limits, safeHeaders, warnIfOpen } from "./guard";
 import { addAction, chainIdFor, getMeta, markPaid, saveBuild, saveCode, saveRejection, saveVideo, saveVideoReview, videoMime } from "./db";
 import { reviewVideo } from "./video-review";
 
@@ -77,6 +78,8 @@ const receipt = (r: { hash: string; explorer: string }) => ({ hash: r.hash, expl
 
 export function createApi() {
   const api = express.Router();
+  // Writes (POST) are limited more tightly than reads. Uploads and "start over" have their own limits.
+  api.use((req, res, next) => (req.method === "GET" ? limits.read : limits.write)(req, res, next));
 
   api.get("/health", (_req, res) => {
     res.json({ ok: true, network: "testnet", contractId: cfg.contractId });
@@ -99,7 +102,7 @@ export function createApi() {
   });
 
   /** Sets up a build on chain. Pass fresh: true to start it again from scratch. */
-  api.post("/project", async (req, res) => {
+  api.post("/project", limits.reset, async (req, res) => {
     const slug = req.body?.slug;
     const display = typeof slug === "string" ? displayFor(slug) : undefined;
     if (!display) throw new HttpError(404, "We couldn't find that build.");
@@ -163,7 +166,7 @@ export function createApi() {
     res.json({ code, ...receipt(out) });
   });
 
-  api.post("/stages/:stage/proof", upload.single("video"), async (req, res) => {
+  api.post("/stages/:stage/proof", limits.upload, upload.single("video"), async (req, res) => {
     const file = req.file;
     if (!file || !file.size) {
       if (file) await unlink(file.path).catch(() => {});
@@ -337,7 +340,7 @@ export function createApi() {
   });
 
   /** Only the admin can settle a report the builder disputed: forfeit it or dismiss it. */
-  api.post("/project/:id/default/settle", async (req, res) => {
+  api.post("/project/:id/default/settle", adminOnly(), async (req, res) => {
     const { chainId } = locateBuild(req.params.id);
     if (typeof req.body?.forfeit !== "boolean") throw bad("forfeit must be true or false");
     const forfeit = req.body.forfeit as boolean;
@@ -360,8 +363,12 @@ export function createApi() {
 export function createApp() {
   const app = express();
   const origins = (process.env.WEB_ORIGIN || "http://localhost:3000").split(",").map((o) => o.trim());
+  app.disable("x-powered-by");
+  app.set("trust proxy", Number(process.env.TRUST_PROXY ?? 1)); // the host's proxy, so limits see the real caller
+  app.use(safeHeaders);
   app.use(cors({ origin: origins }));
   app.use(express.json({ limit: "100kb" }));
+  warnIfOpen();
   app.use("/api", createApi());
 
   // Every failure leaves here in plain words, without internal details.
