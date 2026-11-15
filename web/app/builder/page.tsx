@@ -1,8 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import { depositNeeded, nextStage, rupees } from "@/lib/project.mjs";
-import { act, activeStage, postDeposit, startStage, updateStage, useProjects, useStatus } from "@/lib/store";
+import { act, activeStage, LIVE, postDeposit, startStage, submitVideoProof, useProjects, useStatus } from "@/lib/store";
 import GateTrack from "../gate-track";
+import VideoReviewPanel from "../video-review";
 import BuilderSecurity from "./security";
 
 // The builder's one screen: what to do now, the code to film, and when the money comes. Keep it light for Android.
@@ -72,21 +74,11 @@ export default function Builder() {
             <small>Today's code</small>
             <p className="code">{stage.code}</p>
           </section>
-          <button
-            className="button"
-            type="button"
-            disabled={busy}
-            onClick={() =>
-              act({ loading: "Sending", done: "Video sent" }, () =>
-                updateStage(project.id, stage.slug, { status: "submitted", engineerDecision: null, secondDecision: null, amma: null }),
-              )
-            }
-          >
-            {stage.status === "rejected" ? "Send new video" : "Send video"}
-          </button>
-          <p className="hint">Demo: sends a sample video.</p>
+          <ProofForm key={`${project.id}/${stage.slug}/${stage.status}`} project={project.id} stage={stage.slug} resubmit={stage.status === "rejected"} busy={busy} />
         </>
       )}
+
+      {stage.videoReview && <VideoReviewPanel review={stage.videoReview} />}
 
       <h3>Your payment</h3>
       <section className="group pad">
@@ -94,5 +86,30 @@ export default function Builder() {
       </section>
       <BuilderSecurity project={project} />
     </>
+  );
+}
+
+function ProofForm({ project, stage, resubmit, busy }: { project: string; stage: string; resubmit: boolean; busy: boolean }) {
+  const [video, setVideo] = useState<File>();
+
+  return (
+    <form onSubmit={(event) => {
+      event.preventDefault();
+      act({ loading: LIVE ? "Uploading video and checking proof" : "Sending", done: "Video sent" }, () => submitVideoProof(project, stage, video));
+    }}>
+      {LIVE && (
+        <>
+          <label className="group pad proof-upload">
+            <span>Proof video</span>
+            <input type="file" accept="video/*,.mov" required disabled={busy} onChange={(event) => setVideo(event.target.files?.[0])} />
+          </label>
+          <p className="hint">For AI review with Google Gemini, use a short MP4, MOV, or WebM clip up to 14 MB. The engineer reviews the submission.</p>
+        </>
+      )}
+      <button className="button" type="submit" disabled={busy || (LIVE && !video)}>
+        {resubmit ? "Send new video" : "Send video"}
+      </button>
+      {!LIVE && <p className="hint">Demo: sends sample proof. Connect the backend to upload a video for AI review.</p>}
+    </form>
   );
 }

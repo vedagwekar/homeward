@@ -4,6 +4,16 @@ import { useEffect, useState, useSyncExternalStore } from "react";
 import rawSeed from "@/mock/projects.json";
 import { canReturnDeposit, defaultPayback, depositNeeded, dollars, isActive, isStalled, refundSplit, rupees, securityHeld, settle } from "./project.mjs";
 
+export type VideoReview =
+  | { status: "unavailable"; summary: string }
+  | {
+      status: "reviewed";
+      clarity: "clear" | "unclear";
+      stageCode: "visible" | "not_visible" | "uncertain";
+      stageWork: "matches" | "unclear" | "unrelated";
+      summary: string;
+    };
+
 // All app data goes through this file. Swap these functions for the backend API when it's ready.
 export type Stage = {
   slug: string;
@@ -15,6 +25,8 @@ export type Stage = {
   checklist: { item: string; result: string | null }[];
   payouts: { to: string; amount: number }[];
   paidOn?: string;
+  videoUrl?: string;
+  videoReview?: VideoReview;
   code?: string;
   fundBy?: string;
   steelBy?: string;
@@ -93,6 +105,8 @@ export const FIRST_CONTRACT_URL = "https://stellar.expert/explorer/testnet/contr
 // this browser. The browser never holds a key either way.
 const API = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "");
 export const LIVE = Boolean(API);
+
+export const proofVideoUrl = (path: string) => `${API}${path}`;
 
 /** A deliberate "no" from the rules, worded for the person who hit it. */
 class Refusal extends Error {}
@@ -176,7 +190,6 @@ export function useProjects() {
 /** Each screen action, as the contract call that makes it happen. */
 function stageOnChain(project: string, slug: string, change: Partial<Stage>): Promise<Receipt> {
   const at = `/stages/${slug}`;
-  if (change.status === "submitted") return sendProof(project, slug);
   if (change.status === "open") return api(`${at}/open`, { project });
   const engineer = change.secondDecision ?? change.engineerDecision;
   if (engineer) {
@@ -188,12 +201,15 @@ function stageOnChain(project: string, slug: string, change: Partial<Stage>): Pr
   return Promise.reject(new Error("That step isn't on testnet yet."));
 }
 
-// shortcut: a small sample file stands in for the builder's phone video. Its fingerprint (sha256) goes
-// on chain exactly as a real video's would. The timestamp makes every sample a different video.
-function sendProof(project: string, slug: string) {
+export function submitVideoProof(project: string, slug: string, video?: File): Promise<Receipt> | undefined {
+  if (!LIVE) {
+    return updateStage(project, slug, { status: "submitted", engineerDecision: null, secondDecision: null, amma: null });
+  }
+  if (!video?.size) return refuse("Choose a video to submit.");
+  if (video.size > 200 * 1024 * 1024) return refuse("Choose a video under 200 MB.");
   const form = new FormData();
   form.set("project", project);
-  form.set("video", new Blob([`Sample proof for ${slug}, ${new Date().toISOString()}`], { type: "video/mp4" }), "proof.mp4");
+  form.set("video", video);
   return api(`/stages/${slug}/proof`, form);
 }
 

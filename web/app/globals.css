@@ -1046,3 +1046,20 @@ nav > a[aria-current="page"] {
 .group.pad + .group {
   margin-top: 0.75rem;
 }
+
+.proof-upload {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.proof-upload input {
+  font: inherit;
+  width: 100%;
+}
+
+.proof-video {
+  display: block;
+  margin-top: 0.75rem;
+  max-height: 25rem;
+  width: 100%;
+}

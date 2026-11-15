@@ -7,7 +7,7 @@ const answers = [
   ["You were overcharged, or a stage cost less", "Money that hasn't been released can come back to you at any time from Money back, without stopping the build."],
   ["A family member stops paying", "Stages that aren't funded don't start. Each person's contribution stays on the record."],
   ["Who controls the locked money?", "In this demo, a Stellar Testnet contract enforces the rules. A real launch needs a licensed partner, and that isn't confirmed yet."],
-  ["Who can see site videos and the camera?", "Only the family and assigned engineers. The site camera points at the building, not at people, workers are told it's there, and clips are deleted after 7 days. Only a fingerprint of each proof video goes on the public record."],
+  ["Who can see site videos and the camera?", "The family and assigned engineers review site videos. When AI review is enabled, eligible proof videos are shared with Google Gemini. The site camera points at the building, not at people, workers are told it's there, and clips are deleted after 7 days. Only a fingerprint of each proof video goes on the public record."],
 ];
 
 export default function Help() {

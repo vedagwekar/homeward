@@ -2,14 +2,18 @@
 // and the server signs. "as" is a demo role switcher, not real sign-in.
 import cors from "cors";
 import express, { type NextFunction, type Request, type Response } from "express";
-import { mkdirSync, readFileSync } from "node:fs";
+import { createHash } from "node:crypto";
+import { createReadStream, mkdirSync } from "node:fs";
+import { unlink } from "node:fs/promises";
 import { resolve } from "node:path";
 import multer from "multer";
 import { allProjectViews, displayFor, hasActiveStage, projectView, securityTerms, sponsorRole, stageInput, timelineView } from "./builds";
 import { ChainError, clientFor, ensureTusdc, read, send, StageStatus } from "./chain";
 import { addr, cfg, root, rupeesToUnits, unitsToRupees, type Role } from "./config";
 import { newStageCode, sha256 } from "./codes";
-import { addAction, chainIdFor, markPaid, saveBuild, saveCode, saveRejection, saveVideo, videoMime } from "./db";
+import { adminOnly, limits, safeHeaders, warnIfOpen } from "./guard";
+import { addAction, chainIdFor, getMeta, markPaid, saveBuild, saveCode, saveRejection, saveVideo, saveVideoReview, videoMime } from "./db";
+import { reviewVideo } from "./video-review";
 
 const uploadDir = process.env.UPLOAD_DIR || resolve(root, "uploads");
 mkdirSync(uploadDir, { recursive: true });
@@ -74,6 +78,8 @@ const receipt = (r: { hash: string; explorer: string }) => ({ hash: r.hash, expl
 
 export function createApi() {
   const api = express.Router();
+  // Writes (POST) are limited more tightly than reads. Uploads and "start over" have their own limits.
+  api.use((req, res, next) => (req.method === "GET" ? limits.read : limits.write)(req, res, next));
 
   api.get("/health", (_req, res) => {
     res.json({ ok: true, network: "testnet", contractId: cfg.contractId });
@@ -96,7 +102,7 @@ export function createApi() {
   });
 
   /** Sets up a build on chain. Pass fresh: true to start it again from scratch. */
-  api.post("/project", async (req, res) => {
+  api.post("/project", limits.reset, async (req, res) => {
     const slug = req.body?.slug;
     const display = typeof slug === "string" ? displayFor(slug) : undefined;
     if (!display) throw new HttpError(404, "We couldn't find that build.");
@@ -160,16 +166,43 @@ export function createApi() {
     res.json({ code, ...receipt(out) });
   });
 
-  api.post("/stages/:stage/proof", upload.single("video"), async (req, res) => {
-    if (!req.file) throw bad("Please attach a video file in the 'video' field.");
-    const { chainId, index, stageName } = locateStage(req);
+  api.post("/stages/:stage/proof", limits.upload, upload.single("video"), async (req, res) => {
     const file = req.file;
-    const video = sha256(readFileSync(file.path));
-    const out = await serial(() =>
-      write(chainId, index, "proof", `Proof video sent for ${stageName}`, () =>
-        clientFor("builder").submit_proof({ id: chainId, stage: index, video_hash: video })));
-    saveVideo(chainId, index, file.filename, file.mimetype);
-    res.json({ videoHash: video.toString("hex"), ...receipt(out) });
+    if (!file || !file.size) {
+      if (file) await unlink(file.path).catch(() => {});
+      throw bad("Please attach a video file in the 'video' field.");
+    }
+
+    let keepUpload = false;
+    try {
+      const { chainId, index, stageName, display } = locateStage(req);
+      const hash = createHash("sha256");
+      for await (const chunk of createReadStream(file.path)) hash.update(chunk);
+      const video = hash.digest();
+      const { out, code } = await serial(async () => {
+        const code = getMeta(chainId, index)?.code;
+        // Keep the footage if the network loses the response after submission.
+        keepUpload = true;
+        const out = await write(chainId, index, "proof", `Proof video sent for ${stageName}`, () =>
+          clientFor("builder").submit_proof({ id: chainId, stage: index, video_hash: video }));
+        saveVideo(chainId, index, file.filename, file.mimetype);
+        return { out, code };
+      });
+
+      const videoReview = await reviewVideo(file, {
+        name: stageName,
+        code,
+        checklist: display.stages[index].checklist.map((check) => check.item),
+      });
+      // A newer proof may have arrived while the AI was reviewing this upload.
+      saveVideoReview(chainId, index, file.filename, videoReview);
+      res.json({ videoHash: video.toString("hex"), videoReview, ...receipt(out) });
+    } catch (error) {
+      if (error instanceof ChainError) keepUpload = false;
+      throw error;
+    } finally {
+      if (!keepUpload) await unlink(file.path).catch(() => {});
+    }
   });
 
   api.post("/stages/:stage/decide", async (req, res) => {
@@ -307,7 +340,7 @@ export function createApi() {
   });
 
   /** Only the admin can settle a report the builder disputed: forfeit it or dismiss it. */
-  api.post("/project/:id/default/settle", async (req, res) => {
+  api.post("/project/:id/default/settle", adminOnly(), async (req, res) => {
     const { chainId } = locateBuild(req.params.id);
     if (typeof req.body?.forfeit !== "boolean") throw bad("forfeit must be true or false");
     const forfeit = req.body.forfeit as boolean;
@@ -330,8 +363,12 @@ export function createApi() {
 export function createApp() {
   const app = express();
   const origins = (process.env.WEB_ORIGIN || "http://localhost:3000").split(",").map((o) => o.trim());
+  app.disable("x-powered-by");
+  app.set("trust proxy", Number(process.env.TRUST_PROXY ?? 1)); // the host's proxy, so limits see the real caller
+  app.use(safeHeaders);
   app.use(cors({ origin: origins }));
   app.use(express.json({ limit: "100kb" }));
+  warnIfOpen();
   app.use("/api", createApi());
 
   // Every failure leaves here in plain words, without internal details.
@@ -340,7 +377,10 @@ export function createApp() {
     if (err instanceof ChainError) {
       return void res.status(err.code === "NotAuthorized" ? 403 : 400).json({ error: err.message, code: err.code });
     }
-    if (err instanceof multer.MulterError) return void res.status(400).json({ error: "That video couldn't be uploaded." });
+    if (err instanceof multer.MulterError) {
+      if (err.code === "LIMIT_FILE_SIZE") return void res.status(413).json({ error: "Choose a video under 200 MB." });
+      return void res.status(400).json({ error: "That video couldn't be uploaded." });
+    }
     console.error(err instanceof Error ? err.message : err);
     res.status(502).json({ error: "That didn't go through. Nothing was paid. Try again." });
   });

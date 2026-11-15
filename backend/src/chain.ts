@@ -139,8 +139,16 @@ export async function tokenBalance(owner: string): Promise<bigint> {
  * Demo only: keeps test sponsors funded so the demo can be repeated. Does nothing
  * when the issuer key isn't configured.
  */
+// The issuer pays out test money on request, so one caller can't drain it: a few top-ups an hour in all.
+const topUps: number[] = [];
+const MAX_TOP_UPS_PER_HOUR = Number(process.env.MAX_TOP_UPS_PER_HOUR ?? 30);
+
 export async function ensureTusdc(role: "sponsor1" | "sponsor2" | "builder", needed: bigint) {
   if (!process.env.ISSUER_SECRET || (await tokenBalance(addr[role])) >= needed) return false;
+  const hourAgo = Date.now() - 3_600_000;
+  while (topUps.length && topUps[0] < hourAgo) topUps.shift();
+  if (topUps.length >= MAX_TOP_UPS_PER_HOUR) return false; // the call then fails on its own with "not enough money"
+  topUps.push(Date.now());
   const horizon = new Horizon.Server("https://horizon-testnet.stellar.org");
   const issuer = keypair("issuer");
   const tx = new TransactionBuilder(await horizon.loadAccount(issuer.publicKey()), {
