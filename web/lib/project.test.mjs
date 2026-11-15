@@ -108,3 +108,11 @@ test("gates: locked has nothing current, paid has everything done, rejected fail
   const waitingOnAmma = { ...base, status: "submitted", engineerDecision: "approved", parentMustApprove: true };
   assert.deepEqual(gates(waitingOnAmma, "Amma").map((g) => g.state), ["done", "done", "now", "todo"]);
 });
+
+test("gates: a second engineer's rejection shows as sent back and leaves the money locked", () => {
+  const stage = { status: "rejected", amount: 225000, materials: 0, parentMustApprove: true, engineerDecision: "approved", amma: "recheck", secondDecision: "rejected" };
+  const track = gates(stage, "Amma");
+  assert.deepEqual(track.map((g) => g.state), ["done", "done", "failed", "todo"]);
+  assert.equal(track[2].label, "Second engineer sent it back");
+  assert.equal(track.at(-1).state, "todo");
+});
