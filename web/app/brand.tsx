@@ -2,7 +2,7 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { signIn, useProjects, useSession } from "@/lib/store";
+import { setHomeFocus, signIn, useProjects, useSession } from "@/lib/store";
 import { Wordmark } from "./logo";
 
 // Pages anyone can open without signing in: the sign-in screen, the guided tour, the transaction record and the price tool.
@@ -53,7 +53,7 @@ export function RoleSwitch() {
     <div className="role-switch" role="group" aria-label="Demo role">
       <small>Demo role</small>
       {roles.map((r) => (
-        <button key={r.label} type="button" aria-pressed={session.role === r.to.role} onClick={() => { signIn(r.to); router.push(r.href); }}>
+        <button key={r.label} type="button" aria-pressed={session.role === r.to.role} onClick={() => { signIn(r.to); setHomeFocus(p.id); router.push(r.href); }}>
           {r.label}
         </button>
       ))}

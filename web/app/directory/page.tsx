@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { DEMO_STEPS, stageOwner } from "@/lib/demo.mjs";
 import { rupees } from "@/lib/project.mjs";
-import { type Session, signIn, useProjects } from "@/lib/store";
+import { type Session, setHomeFocus, signIn, useProjects } from "@/lib/store";
 import { Wordmark } from "../logo";
 
 // The map of the app: who each person is, what they do, and who every stage is waiting on right now.
@@ -30,6 +30,7 @@ export default function Directory() {
   })[role];
   const enter = (role: Session["role"]) => {
     signIn(who(role));
+    setHomeFocus(project.id);
     router.push(HOME[role]);
   };
   const title = Object.fromEntries(ROLES.map((r) => [r.role, r.title])) as Record<string, string>;

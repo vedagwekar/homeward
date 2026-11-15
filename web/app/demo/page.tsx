@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { DEMO_STEPS, demoStep } from "@/lib/demo.mjs";
-import { LIVE, resetDemo, type Session, signIn, useProjects, useStatus } from "@/lib/store";
+import { LIVE, resetDemo, setHomeFocus, type Session, signIn, useProjects, useStatus } from "@/lib/store";
 import { Wordmark } from "../logo";
 
 // A guided tour for anyone at the table: it shows where the story is, and who to be next.
@@ -47,6 +47,7 @@ export default function Tour() {
   const person = who[step.who];
   const go = () => {
     signIn(person);
+    setHomeFocus(project.id);
     router.push(step.href);
   };
 
