@@ -1,14 +1,106 @@
-[{"kind":"created","label":"Build set up with fixed payees","hash":"4093385ec82e3ad0a9ef2bc8d3f4a4f4fd3aa9afe05950c48827dc0a71f19d75","at":"2026-11-13T06:12:37.654Z","stage":null,"home":"thrissur"},
-{"kind":"created","label":"Build set up with fixed payees","hash":"81fbd9d8bb654e798d6490c571df66c0e42d383b7617aa6a67acf722222041cd","at":"2026-11-13T06:13:31.123Z","stage":null,"home":"jalandhar"},
-{"kind":"funded","label":"Anil locked Rs 100000","hash":"2ec63f75aea3795eb02a26165891929534b50023baccf382ccb9e57b5610460f","at":"2026-11-13T06:14:36.469Z","stage":null,"home":"jalandhar"},
-{"kind":"opened","label":"Prep and scaffolding started, supplier paid","hash":"63b21fe75b7a558bc0c403cd7a98683b9374ba8292215c125bd12530300f83b9","at":"2026-11-13T06:15:01.066Z","stage":0,"home":"jalandhar"},
-{"kind":"proof","label":"Proof video sent for Prep and scaffolding","hash":"eb554e6ecd983850a320bf167b003636f4ac0e1fc65bffd61e2dbf814d5ce057","at":"2026-11-13T06:15:15.141Z","stage":0,"home":"jalandhar"},
-{"kind":"approved","label":"The engineer approved Prep and scaffolding","hash":"822ad3a4637092a3d88ba8078d156671358fe37e48fa77b769d507641246849e","at":"2026-11-13T06:16:22.456Z","stage":0,"home":"jalandhar"},
-{"kind":"paid","label":"Prep and scaffolding approved, builder and labour paid","hash":"a92495cfc498fac878845a01ffc7ba70ee9255309989c9247d0f41212052c6b1","at":"2026-11-13T06:16:52.239Z","stage":0,"home":"jalandhar"},
-{"kind":"funded","label":"Anil locked Rs 300000","hash":"db1f224a33ff848981a9f4c9cb8ca223108560dc3c6eeabe514d78a43b1aab50","at":"2026-11-13T06:17:32.090Z","stage":null,"home":"jalandhar"},
-{"kind":"opened","label":"Roof slab repair started, supplier paid","hash":"4c6b34f9104c1ac9391083b044b2e585591808a71c5fc5ab95f6a4750dc2cbd9","at":"2026-11-13T06:17:49.497Z","stage":1,"home":"jalandhar"},
-{"kind":"proof","label":"Proof video sent for Roof slab repair","hash":"9c2f366051718e86b048514fbe8ba051a99fd3126f6cbfd281cd00a49070dd48","at":"2026-11-13T06:18:06.810Z","stage":1,"home":"jalandhar"},
-{"kind":"approved","label":"The engineer approved Roof slab repair","hash":"991307d95c378342c49a7ea365692580300f4f95c504d7c4eaa2d5e2e2c29f6b","at":"2026-11-13T06:18:25.136Z","stage":1,"home":"jalandhar"},
-{"kind":"recheck","label":"Second check requested for Roof slab repair","hash":"f7491e80f6e393e983704a8abf817ca44931e3e102099b7197bd6b94ce4043c2","at":"2026-11-13T06:18:44.408Z","stage":1,"home":"jalandhar"},
-{"kind":"rejected","label":"The second engineer rejected Roof slab repair","hash":"3f4d5311e383b896a514aeebb261fe26a452a43b81f9f67f9c475acbf8c00ed8","at":"2026-11-13T06:19:11.967Z","stage":1,"home":"jalandhar"},
-{"kind":"funded","label":"Anil locked Rs 100000","hash":"70b61b6d758a74bc6e899127fd71c1c661c1e8a1e8bd7713b5e6598fb736bf6e","at":"2026-11-13T06:51:45.414Z","stage":null,"home":"jalandhar"}]
+[
+  {
+    "kind": "created",
+    "label": "Build set up with fixed payees",
+    "hash": "2ee9742331790832a7e22a6979b1214daff821118667cd45b8b5274e48fc34b7",
+    "at": "2026-11-15T02:10:00.000Z",
+    "stage": null,
+    "home": "thrissur"
+  },
+  {
+    "kind": "deposit",
+    "label": "The builder put in a deposit of Rs 75000",
+    "hash": "1deb4bb3f9b5544699f2c854979658c2828ad9e800f1258b99ced87dce24f79f",
+    "at": "2026-11-15T02:10:05.000Z",
+    "stage": null,
+    "home": "thrissur"
+  },
+  {
+    "kind": "funded",
+    "label": "Anil locked Rs 900000",
+    "hash": "e5b543c844e4e7397baf2f3244cb0698a7e84a79545678726530a58397a42b48",
+    "at": "2026-11-15T02:10:10.000Z",
+    "stage": null,
+    "home": "thrissur"
+  },
+  {
+    "kind": "funded",
+    "label": "Meera locked Rs 600000",
+    "hash": "2345eff2f0dde18df9980fe684aaebf46f4353bfaff63f3883289a327e1dfce8",
+    "at": "2026-11-15T02:10:15.000Z",
+    "stage": null,
+    "home": "thrissur"
+  },
+  {
+    "kind": "opened",
+    "label": "Foundation and plinth started, supplier paid",
+    "hash": "555200e9da4f0d43eb63df0b62dda03a512e6a722416bc73e03aadbb7b783c0f",
+    "at": "2026-11-15T02:11:10.000Z",
+    "stage": "foundation",
+    "home": "thrissur"
+  },
+  {
+    "kind": "proof",
+    "label": "Proof video sent for Foundation and plinth",
+    "hash": "62aa59cd3633c800707f9b3db4b32de519b05bcf8966a912be6636091365a751",
+    "at": "2026-11-15T02:11:15.000Z",
+    "stage": "foundation",
+    "home": "thrissur"
+  },
+  {
+    "kind": "approved",
+    "label": "The engineer approved Foundation and plinth",
+    "hash": "8c2eaf7436088868c124a5897fadaa971549aa1231a1b74f001dbef252ef7ab6",
+    "at": "2026-11-15T02:11:20.000Z",
+    "stage": "foundation",
+    "home": "thrissur"
+  },
+  {
+    "kind": "paid",
+    "label": "Foundation and plinth approved, builder and labour paid",
+    "hash": "34e3407e652b2c86aa0c5b51d9599cd4390fd998b5b8fb410a6ce9bb6f0b8bf9",
+    "at": "2026-11-15T02:11:25.000Z",
+    "stage": "foundation",
+    "home": "thrissur"
+  },
+  {
+    "kind": "opened",
+    "label": "Roof slab started, supplier paid",
+    "hash": "5122d4cc470394f8d254749878b1c7c692f1b66a200fb355a8936a2298900d95",
+    "at": "2026-11-15T02:11:30.000Z",
+    "stage": "roof",
+    "home": "thrissur"
+  },
+  {
+    "kind": "proof",
+    "label": "Proof video sent for Roof slab",
+    "hash": "8de7f7c276359cc511d6b5d7856e312a21486f89de39a63ba73752543df32b3d",
+    "at": "2026-11-15T02:11:35.000Z",
+    "stage": "roof",
+    "home": "thrissur"
+  },
+  {
+    "kind": "recheck",
+    "label": "Second check requested for Roof slab",
+    "hash": "7107795662748661f16e0e72fac93b17b768a7633a6be399a516f39b01129a0f",
+    "at": "2026-11-15T02:11:40.000Z",
+    "stage": "roof",
+    "home": "thrissur"
+  },
+  {
+    "kind": "approved",
+    "label": "The engineer approved Roof slab",
+    "hash": "b9b11562aaf783b2e94a652c410238f82f9910126fab22226242cc99a624291f",
+    "at": "2026-11-15T02:11:45.000Z",
+    "stage": "roof",
+    "home": "thrissur"
+  },
+  {
+    "kind": "rejected",
+    "label": "The second engineer rejected Roof slab",
+    "hash": "3e0b3eb01e22d4fb3336970fc1de75c2edb561f4b86970420d2fdc1005697173",
+    "at": "2026-11-15T02:11:50.000Z",
+    "stage": "roof",
+    "home": "thrissur"
+  }
+]

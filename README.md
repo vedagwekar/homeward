@@ -17,12 +17,14 @@ Built for the Blockchain Innovation Challenge powered by Stellar (UWaterloo Velo
 ## Links
 
 - Live app: https://homeward-tan.vercel.app
-- Contract on Stellar Testnet: `CC2T4LZMG2UX7TCYX63MSCWSRYZO3XWNP3IACH47WQVM7NSI7XZP3JNO`
+- Contract on Stellar Testnet: `CC2NYVUTHJWBRTDG7J4O6VB7TINL5MTNOTTXOMVMHKSCUYZR4W3M6QF2`
+  ([Stellar Expert](https://stellar.expert/explorer/testnet/contract/CC2NYVUTHJWBRTDG7J4O6VB7TINL5MTNOTTXOMVMHKSCUYZR4W3M6QF2))
+- First version of the contract, before the builder's deposit: `CC2T4LZMG2UX7TCYX63MSCWSRYZO3XWNP3IACH47WQVM7NSI7XZP3JNO`
   ([Stellar Expert](https://stellar.expert/explorer/testnet/contract/CC2T4LZMG2UX7TCYX63MSCWSRYZO3XWNP3IACH47WQVM7NSI7XZP3JNO))
 
 ## What's real and what's simulated
 
-**Real on Stellar Testnet:** creating a project, funding, opening stages, supplier payment, proof hashes, engineer and parent approvals, the second check, split payouts, certificates, freezing and refunds. `scripts/demo.sh` runs the whole story on Testnet.
+**Real on Stellar Testnet:** creating a project, funding, opening stages, supplier payment, proof hashes, engineer and parent approvals, the second check, split payouts, certificates, the builder's deposit and held-back payments, reporting a builder who stopped, freezing and refunds. `scripts/demo.sh` runs the whole story on Testnet, and `scripts/security.sh` runs the deposit paths.
 
 **Simulated:** Interac, rupee payouts, SMS, KYC, engineer licences, site photos and the site camera. The web app runs on demo data in the browser and is being connected to the backend API.
 

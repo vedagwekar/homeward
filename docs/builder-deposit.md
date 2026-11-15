@@ -102,7 +102,7 @@ Payees can never change. That is the strongest promise in the pitch. So a defaul
 
 ## Not done yet
 
-- **Switching the app over.** The app's contract link (`CONTRACT_URL` in `web/lib/store.ts`), the proof page's saved transactions (`web/mock/proof.json`, from the first contract), the README and the Devpost wording still point at the first contract.
+- **Other places that still name the first contract:** the Devpost text and the submitted form (Krish), and `docs/Homeward-Pitch-Strategies.md`. The app, the proof page and the README now use the new one and link the first as "First version".
 - **Real money.** A deposit in rupees must be held by a licensed partner, like the family's money.
 - **Disputes.** The admin's settlement of a contested claim is still a trusted step.
 - **Unvalidated numbers.** 5%, 10%, 30 days, 7 days and 60 days are starting points to test with builders.

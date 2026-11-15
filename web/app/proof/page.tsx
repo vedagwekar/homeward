@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { rupees } from "@/lib/project.mjs";
-import { CONTRACT_URL, LIVE, loadProof, type ProofItem, useProjects } from "@/lib/store";
+import { CONTRACT_URL, FIRST_CONTRACT_URL, LIVE, loadProof, type ProofItem, useProjects } from "@/lib/store";
 
 const CONTRACT_ID = CONTRACT_URL.split("/").pop() ?? "";
 const when = (iso: string) => new Date(iso).toLocaleString("en-CA", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
@@ -20,6 +20,8 @@ export default function Proof() {
     loadProof().then(setItems, () => setFailed(true));
   }, []);
   const homeName = (id: string) => projects.find((p) => p.id === id)?.name ?? id;
+  // The saved transactions are listed newest first, so the last one is when the run began.
+  const ran = items?.length ? new Date(items[items.length - 1].at).toLocaleDateString("en-CA", { month: "long", day: "numeric", year: "numeric" }) : "";
 
   return (
     <>
@@ -39,6 +41,15 @@ export default function Proof() {
         </div>
         <div className="row">
           <div className="grow">
+            <span>First version</span>
+            <small>Before the builder's deposit. Still valid.</small>
+          </div>
+          <a className="link" href={FIRST_CONTRACT_URL} target="_blank" rel="noreferrer">
+            Open
+          </a>
+        </div>
+        <div className="row">
+          <div className="grow">
             <span>Network</span>
             <small>Stellar testnet. Test money only.</small>
           </div>
@@ -52,7 +63,7 @@ export default function Proof() {
       </section>
 
       <h3>Every transaction</h3>
-      {!LIVE && <p className="note">Run on 13 Nov 2026. Each opens on Stellar Expert.</p>}
+      {!LIVE && ran && <p className="note">Run on {ran}. Each opens on Stellar Expert.</p>}
       <section className="group">
         {failed && <p className="pad">We couldn't load the records. The contract link above still works.</p>}
         {!items && !failed && <p className="pad muted">Loading the records</p>}
