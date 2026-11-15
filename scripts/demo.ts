@@ -40,6 +40,8 @@ const budget = stages.reduce((sum, s) => sum + s.materialsUnits + s.labourUnits,
 const sponsor1Amount = (budget * 60n) / 100n;
 const sponsor2Amount = budget - sponsor1Amount;
 const fee = (amount: bigint) => (amount * 150n) / 10_000n;
+const deposit = budget / 20n; // the builder's deposit: 5% of the build
+const heldBack = (labourUnits: bigint) => labourUnits / 10n; // 10% of a stage's labour, taken from the builder's share only
 
 let failures = 0;
 function check(label: string, actual: unknown, expected: unknown) {
@@ -82,6 +84,7 @@ async function main() {
   section("Getting ready");
   await ensureTusdc("sponsor1", sponsor1Amount + fee(sponsor1Amount));
   await ensureTusdc("sponsor2", sponsor2Amount + fee(sponsor2Amount));
+  await ensureTusdc("builder", deposit); // the builder needs test money to post a deposit
   const start = await balances();
 
   const admin = clientFor("admin");
@@ -97,8 +100,14 @@ async function main() {
     builder: addr.builder,
     supplier: addr.supplier,
     stages: stageInputs,
+    // The builder keeps 5% with the contract (up front) and 10% of each payment is held back until handover.
+    terms: { deposit, upfront: deposit, retention_bps: 1_000, defects_secs: 60n, stall_secs: 120n, response_secs: 45n },
   }));
   console.log(`   Project id: ${id}`);
+
+  section("1b. The builder posts the deposit before work starts");
+  await step(`Builder puts ${formatUnits(deposit)} TUSDC (5%) into the contract`,
+    clientFor("builder").post_deposit({ id, amount: deposit }));
 
   section("2. Two siblings fund one build");
   await step(`Sibling 1 locks ${formatUnits(sponsor1Amount)} TUSDC (60%)`,
@@ -140,7 +149,7 @@ async function main() {
   const labourShare = (f.labourUnits * 4_000n) / 10_000n;
   const afterFoundation = await balances();
   check("Labour got 40%", afterFoundation.labour - beforeFoundation.labour, labourShare);
-  check("Builder got 60%", afterFoundation.builder - beforeFoundation.builder, f.labourUnits - labourShare);
+  check("Builder got 60%, less 10% of the labour held back", afterFoundation.builder - beforeFoundation.builder, f.labourUnits - labourShare - heldBack(f.labourUnits));
   check("Stage is Paid", (await read(admin.get_stage({ id, stage: FOUNDATION }))).status, StageStatus.Paid);
   const cert = await read(admin.get_certificate({ id, stage: FOUNDATION }));
   check("Certificate records the amount", cert?.amount, f.labourUnits);
@@ -177,9 +186,9 @@ async function main() {
     sponsor2: -(sponsor2Amount + fee(sponsor2Amount)),
     supplier: f.materialsUnits + r.materialsUnits,
     labour: labourShare,
-    builder: f.labourUnits - labourShare,
+    builder: f.labourUnits - labourShare - heldBack(f.labourUnits) - deposit,
     platform: totalFee,
-    contract: budget - f.materialsUnits - f.labourUnits - r.materialsUnits,
+    contract: budget - f.materialsUnits - f.labourUnits - r.materialsUnits + deposit + heldBack(f.labourUnits),
   };
   for (const name of Object.keys(WATCHED) as Name[]) {
     const change = afterRoof[name] - start[name];
@@ -188,6 +197,13 @@ async function main() {
   }
   const project = await read(admin.get_project({ id }));
   check("Contract's spent total matches", project.spent, f.materialsUnits + f.labourUnits + r.materialsUnits);
+
+  section("7. The builder's security");
+  check("Deposit is held by the contract", project.deposit_held, deposit);
+  check("10% of the foundation labour is held back", project.retention_held, heldBack(f.labourUnits));
+  check("Workers were never held back", afterRoof.labour - start.labour, labourShare);
+  console.log("   Both come back to the builder after handover and the defects period (return_deposit),");
+  console.log("   or go to the family if the builder abandons the job (claim_default, then finalize_default).");
 
   console.log(failures ? `\nDEMO FAILED: ${failures} check(s) did not pass.` : "\nDEMO PASSED: the whole story ran on testnet.");
   process.exitCode = failures ? 1 : 0;

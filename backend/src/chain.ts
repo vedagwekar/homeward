@@ -30,10 +30,15 @@ const FRIENDLY: Record<string, string> = {
   Frozen: "This build has been stopped, so nothing can be paid.",
   InsufficientFunds: "There isn't enough money locked for this stage yet.",
   NotSponsor: "Only family members on this build can add money.",
-  TooEarly: "The handover waiting period hasn't finished yet.",
+  TooEarly: "The waiting period hasn't finished yet.",
   NoInspector: "A second engineer needs to be assigned first.",
   AlreadyApproved: "This engineer has already approved this stage.",
   BadAmount: "Please enter an amount above zero.",
+  DepositNeeded: "The builder's deposit has to be in before the first stage can start.",
+  NotStalled: "The builder has sent proof since, so this report no longer applies.",
+  ClaimOpen: "There is already an open report on this build.",
+  NoClaim: "There is no open report on this build.",
+  TooLate: "The builder's time to respond has passed.",
 };
 
 export class ChainError extends Error {
@@ -134,7 +139,7 @@ export async function tokenBalance(owner: string): Promise<bigint> {
  * Demo only: keeps test sponsors funded so the demo can be repeated. Does nothing
  * when the issuer key isn't configured.
  */
-export async function ensureTusdc(role: "sponsor1" | "sponsor2", needed: bigint) {
+export async function ensureTusdc(role: "sponsor1" | "sponsor2" | "builder", needed: bigint) {
   if (!process.env.ISSUER_SECRET || (await tokenBalance(addr[role])) >= needed) return false;
   const horizon = new Horizon.Server("https://horizon-testnet.stellar.org");
   const issuer = keypair("issuer");

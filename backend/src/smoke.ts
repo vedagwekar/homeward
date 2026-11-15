@@ -78,6 +78,17 @@ async function main() {
   await ok("Anil locks the whole budget", "/fund", { project: P, sponsor: "Anil", amount: 500_000 });
   check("Paid-in shows on the build", (await view()).sponsors[0].paidIn, 500_000);
 
+  section("Builder's security (Dad's build: the deposit is earned from the first payment)");
+  v = await view();
+  check("Terms are on chain: a 5% deposit", v.security.depositTarget, 25_000);
+  check("Nothing has to be posted up front", v.security.upfront, 0);
+  check("Retention is 10%", v.security.retentionPct, 10);
+  check("Unknown role can't report a default", (await post(`/project/${P}/default/claim`, { as: "builder", stage: "prep" })).status, 400);
+  check("A report needs a real stage", (await post(`/project/${P}/default/claim`, { as: "parent", stage: "nowhere" })).status, 400);
+  check("No report to confirm", (await post(`/project/${P}/default/confirm`, { as: "inspector1" })).body.code, "NoClaim");
+  check("No report to carry out", (await post(`/project/${P}/default/finalize`)).body.code, "NoClaim");
+  check("Nothing to return before handover", (await post(`/project/${P}/return-deposit`)).body.code, "WrongStatus");
+
   section("Stage: approve and pay");
   const opened = await ok("Prep opens", "/stages/prep/open", { project: P });
   check("Builder gets a stage code", /^HW-\d{4}-\d{4}$/.test(opened.code), true);
@@ -94,6 +105,7 @@ async function main() {
   check("Engineer's decision shows", prep.engineerDecision, "approved");
   check("Amma's decision shows", prep.amma, "ok");
   check("Paid date shows", typeof prep.paidOn, "string");
+  check("The first payment filled the deposit", (await view()).security.deposit, 25_000);
   check("Certificate links the payout", String(prep.certificate?.explorer).includes("stellar.expert"), true);
   const video = await fetch(base.replace(/\/api$/, "") + prep.videoUrl);
   check("Video can be watched", await video.text(), "video-one");
@@ -139,6 +151,8 @@ async function main() {
   await ok("Unspent money returned", `/project/${P}/resolve`);
   v = await view();
   check("Everything is accounted for", v.spent, 500_000);
+  check("A stop with no default returns the builder's security", v.security.deposit, 0);
+  check("...and marks it returned", v.security.returned, true);
   const spentRupees = 100_000 + 100_000 + 140_000; // prep, handover, repairs materials
   const fee = 500_000 * 0.015;
   const change = unitsToRupees(before - (await tokenBalance(addr.sponsor1)));

@@ -210,6 +210,15 @@
     "builder": {
       "name": "Thomas Varghese",
       "role": "Builder"
+    },
+    "security": {
+      "depositPct": 5,
+      "retentionPct": 10,
+      "postUpfront": true,
+      "defectsSecs": 60,
+      "stallSecs": 120,
+      "responseSecs": 45,
+      "posted": 75000
     }
   },
   {
@@ -325,6 +334,14 @@
     "builder": {
       "name": "Harjit Sandhu",
       "role": "Builder"
+    },
+    "security": {
+      "depositPct": 5,
+      "retentionPct": 10,
+      "postUpfront": false,
+      "defectsSecs": 60,
+      "stallSecs": 120,
+      "responseSecs": 45
     }
   }
 ]

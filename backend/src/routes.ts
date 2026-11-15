@@ -5,9 +5,9 @@ import express, { type NextFunction, type Request, type Response } from "express
 import { mkdirSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import multer from "multer";
-import { allProjectViews, displayFor, hasActiveStage, projectView, sponsorRole, stageInput, timelineView } from "./builds";
+import { allProjectViews, displayFor, hasActiveStage, projectView, securityTerms, sponsorRole, stageInput, timelineView } from "./builds";
 import { ChainError, clientFor, ensureTusdc, read, send, StageStatus } from "./chain";
-import { addr, cfg, root, rupeesToUnits, type Role } from "./config";
+import { addr, cfg, root, rupeesToUnits, unitsToRupees, type Role } from "./config";
 import { newStageCode, sha256 } from "./codes";
 import { addAction, chainIdFor, markPaid, saveBuild, saveCode, saveRejection, saveVideo, videoMime } from "./db";
 
@@ -111,6 +111,7 @@ export function createApi() {
         builder: addr.builder,
         supplier: addr.supplier,
         stages: display.stages.map(stageInput),
+        terms: securityTerms(display),
       }));
       const id = made.result;
       addAction(id, null, "created", "Build set up with fixed payees", made.hash);
@@ -223,6 +224,96 @@ export function createApi() {
     const out = await serial(() =>
       write(chainId, null, "resolved", "Unspent money returned", () =>
         clientFor("admin").resolve({ id: chainId, refund_bps: refund })));
+    res.json(receipt(out));
+  });
+
+  // ---- the builder's deposit, and what happens if the builder fails ----
+
+  /** The builder puts their deposit into the contract. By default, whatever is still to post. */
+  api.post("/project/:id/deposit", async (req, res) => {
+    const { chainId } = locateBuild(req.params.id);
+    const out = await serial(async () => {
+      const p = await read(clientFor("admin").get_project({ id: chainId }));
+      const left = p.terms.deposit - p.deposit_held;
+      let amount = left;
+      if (req.body?.amount !== undefined) {
+        if (!Number.isSafeInteger(req.body.amount) || req.body.amount <= 0) throw bad("Amount must be a whole number of rupees above zero.");
+        amount = rupeesToUnits(BigInt(req.body.amount));
+      }
+      if (amount <= 0n || amount > left) throw bad("That is more than the deposit still to post.");
+      await ensureTusdc("builder", amount);
+      return write(chainId, null, "deposit", `The builder posted a deposit of Rs ${unitsToRupees(amount)}`, () =>
+        clientFor("builder").post_deposit({ id: chainId, amount }));
+    });
+    res.json(receipt(out));
+  });
+
+  /** After handover and the defects period, the builder's deposit and held-back payments go back to them. */
+  api.post("/project/:id/return-deposit", async (req, res) => {
+    const { chainId } = locateBuild(req.params.id);
+    const out = await serial(() =>
+      write(chainId, null, "returned", "The builder's deposit and held-back payments were returned", () =>
+        clientFor("admin").return_deposit({ id: chainId })));
+    res.json(receipt(out));
+  });
+
+  /** A family member says the builder has failed on a stage. */
+  api.post("/project/:id/default/claim", async (req, res) => {
+    const { chainId, display } = locateBuild(req.params.id);
+    const as = oneOf(req.body?.as, SIGNERS, "as");
+    const index = display.stages.findIndex((s) => s.slug === req.body?.stage);
+    if (index < 0) throw bad("Say which stage the builder failed on.");
+    const out = await serial(() =>
+      write(chainId, index, "claimed", `The family reported that the builder stopped on ${display.stages[index].name}`, () =>
+        clientFor(as as Role).claim_default({ caller: addr[as], id: chainId, stage: index })));
+    res.json(receipt(out));
+  });
+
+  /** An engineer on the claimed stage confirms it. */
+  api.post("/project/:id/default/confirm", async (req, res) => {
+    const { chainId } = locateBuild(req.params.id);
+    const as = oneOf(req.body?.as, ["inspector1", "inspector2"] as const, "as");
+    const out = await serial(() =>
+      write(chainId, null, "confirmed", "An engineer confirmed the builder has failed", () =>
+        clientFor(as).confirm_default({ engineer: addr[as], id: chainId })));
+    res.json(receipt(out));
+  });
+
+  /** The builder disputes the report during their response window. */
+  api.post("/project/:id/default/contest", async (req, res) => {
+    const { chainId } = locateBuild(req.params.id);
+    const out = await serial(() =>
+      write(chainId, null, "contested", "The builder disputed the report", () =>
+        clientFor("builder").contest_default({ id: chainId })));
+    res.json(receipt(out));
+  });
+
+  /** After the builder's window with no dispute, carries the default out: the money goes back to the family. */
+  api.post("/project/:id/default/finalize", async (req, res) => {
+    const { chainId } = locateBuild(req.params.id);
+    const out = await serial(() =>
+      write(chainId, null, "defaulted", "Build ended: unspent money and the builder's deposit went back to the family", () =>
+        clientFor("admin").finalize_default({ id: chainId })));
+    res.json(receipt(out));
+  });
+
+  api.post("/project/:id/default/withdraw", async (req, res) => {
+    const { chainId } = locateBuild(req.params.id);
+    const as = oneOf(req.body?.as, SIGNERS, "as");
+    const out = await serial(() =>
+      write(chainId, null, "withdrawn", "The report was withdrawn", () =>
+        clientFor(as as Role).withdraw_claim({ caller: addr[as], id: chainId })));
+    res.json(receipt(out));
+  });
+
+  /** Only the admin can settle a report the builder disputed: forfeit it or dismiss it. */
+  api.post("/project/:id/default/settle", async (req, res) => {
+    const { chainId } = locateBuild(req.params.id);
+    if (typeof req.body?.forfeit !== "boolean") throw bad("forfeit must be true or false");
+    const forfeit = req.body.forfeit as boolean;
+    const out = await serial(() =>
+      write(chainId, null, forfeit ? "defaulted" : "dismissed", forfeit ? "The disputed report was upheld: the family got the money back" : "The disputed report was dismissed", () =>
+        clientFor("admin").settle_default({ id: chainId, forfeit_it: forfeit })));
     res.json(receipt(out));
   });
 

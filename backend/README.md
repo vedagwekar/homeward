@@ -40,7 +40,15 @@ This takes a minute or two. Pass `"fresh":true` to restart a build from scratch.
 | `POST /api/stages/:stage/recheck` | `{project, as}`, `as` is `parent`, `sponsor1` or `sponsor2` | that role |
 | `POST /api/stages/:stage/release` | `{project}`, after the handover hold | admin |
 | `POST /api/project/:id/freeze` | `{as}`, same roles as recheck | that role |
-| `POST /api/project/:id/resolve` | `{refundBps?}`, default is a full refund | admin |
+| `POST /api/project/:id/resolve` | `{refundBps?}`, default is a full refund. Also returns the builder's security to the builder | admin |
+| `POST /api/project/:id/deposit` | `{amount?}` in rupees, default is whatever is still to post | builder |
+| `POST /api/project/:id/return-deposit` | After the last stage and the defects period | admin (anyone could) |
+| `POST /api/project/:id/default/claim` | `{as, stage}`, `as` is `parent`, `sponsor1` or `sponsor2`, `stage` is a stage slug | that role |
+| `POST /api/project/:id/default/confirm` | `{as}`, `as` is `inspector1` or `inspector2` | that engineer |
+| `POST /api/project/:id/default/contest` | The builder disputes during their response window | builder |
+| `POST /api/project/:id/default/finalize` | After the response window with no dispute: money goes back to the family | admin (anyone could) |
+| `POST /api/project/:id/default/withdraw` | `{as}`, the family takes the report back | that role |
+| `POST /api/project/:id/default/settle` | `{forfeit}`, only for a disputed report | admin |
 
 Every write returns `{hash, explorer}`, plus anything listed above. `decide` also returns `paid`.
 
@@ -55,6 +63,8 @@ A write takes about 10 seconds. Show a loading state, and fetch the project agai
 - An approved handover shows as `submitted` with `holdUntil` (Unix seconds). Call `release` after that time.
 - Money and status come from the contract. Names and photos come from `web/mock/projects.json`.
 - Partial refunds while a build continues are not supported by the contract.
+- Each home's security terms (deposit %, retention %, whether the deposit is posted up front, and the three time windows) come from the `security` block in `web/mock/projects.json`. They are fixed on chain when the build is set up. The demo windows are seconds; a launch would use days.
+- The project view returns a `security` block: what the builder has posted and had held back, any open report, and whether the build ended. Sponsors also carry a fee `credit`.
 - `/api/timeline` is built from the API's own actions until the indexer is ready. `/api/anchor/deposit` isn't built yet.
 
 ## Hosting (Railway)
