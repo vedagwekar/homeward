@@ -206,3 +206,11 @@ test("a Dubai sender sees dirhams, a Toronto sender sees Canadian dollars", () =
   assert.match(foreign(230000, "AED"), /10,000/); // ₹2,30,000 at ₹23 is AED 10,000
   assert.equal(foreign(300000, "CAD"), "$4,480");
 });
+
+test("deposit needed follows what the contract holds, even if the sample's starting value says otherwise", () => {
+  const live = { security: { upfront: 75000, posted: 75000, deposit: 0 } }; // Testnet: nothing held yet
+  assert.equal(depositNeeded(live), true);
+  assert.equal(depositNeeded({ security: { upfront: 75000, posted: 75000, deposit: 75000 } }), false);
+  assert.equal(depositNeeded({ security: { upfront: 0, deposit: 0 } }), false);
+  assert.equal(depositNeeded({ security: { upfront: 75000, posted: 0 } }), true); // mock before derive
+});
