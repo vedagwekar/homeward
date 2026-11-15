@@ -113,3 +113,68 @@ export function gates(stage, parent) {
     return { key: g.key, label: g.label, amount: g.amount, state };
   });
 }
+
+// ---- the builder's security ----
+
+// What the builder has with the contract, the way the contract holds it: the deposit (posted up front,
+// or earned from the builder's first payment) and a share of each stage's labour held back once the
+// deposit is full. Only the builder's own share is ever held back.
+export function securityHeld(project) {
+  const s = project.security;
+  const target = s?.depositTarget ?? Math.round((project.budget * (s?.depositPct ?? 0)) / 100);
+  if (!s || s.returned || s.defaulted) return { target, deposit: 0, retention: 0 };
+  let deposit = s.posted ?? 0;
+  let retention = 0;
+  for (const stage of project.stages) {
+    if (stage.status !== "paid") continue;
+    const labour = stage.amount - stage.materials;
+    const builder = stage.payouts.find((p) => p.to === "Builder")?.amount ?? 0;
+    if (deposit < target) deposit += Math.min(target - deposit, builder);
+    else retention += Math.min(Math.round((labour * s.retentionPct) / 100), builder);
+  }
+  return { target, deposit, retention };
+}
+
+// True while the builder still has to post part of the deposit before the first stage can open.
+export const depositNeeded = (project) => Boolean(project.security) && (project.security.upfront ?? 0) > (project.security.posted ?? 0);
+
+// After the last stage is paid and the defects period has passed, the builder's security can go back to them.
+export function canReturnDeposit(project, now) {
+  const s = project.security;
+  if (!s || s.returned || s.defaulted || s.claim) return false;
+  if (project.stages.some((st) => st.status !== "paid")) return false;
+  return now >= (s.completedAt ?? Infinity) + s.defectsSecs;
+}
+
+// Where a report that the builder failed stands: nobody has confirmed it, the builder's time to
+// respond is running, it can be carried out, or the builder disputed it.
+export function claimStatus(security, now) {
+  const c = security?.claim;
+  if (!c) return { phase: "none" };
+  if (!c.confirmed) return { phase: "needs-engineer" };
+  if (c.contested) return { phase: "contested" };
+  const left = c.at + security.responseSecs - now;
+  return left > 0 ? { phase: "waiting", secsLeft: left } : { phase: "ready" };
+}
+
+// A stage that has been waiting on the builder (open, or sent back) for the stall period counts on its own.
+export const isStalled = (stage, security, now) =>
+  (stage.status === "open" || stage.status === "rejected") && stage.since !== undefined && now >= stage.since + security.stallSecs;
+
+// Money that a stopped build puts back in the family's hands: what was never paid out, plus the builder's security.
+export const defaultPayback = (project) => ({
+  unspent: totalFunded(project) - totalPaid(project),
+  fromBuilder: securityHeld(project).deposit + securityHeld(project).retention,
+});
+
+// The fee on a funding, after any fee-free credit the person earned back from a stopped build.
+export const feeAfterCredit = (amount, credit = 0) => homewardFee(amount - Math.min(credit, amount));
+
+// A length of time in words. The demo's windows are seconds; a launch would use days.
+export function duration(secs) {
+  const s = Math.max(0, Math.round(secs));
+  if (s < 90) return `${s} second${s === 1 ? "" : "s"}`;
+  if (s < 5400) return `${Math.round(s / 60)} minutes`;
+  if (s < 129600) return `${Math.round(s / 3600)} hours`;
+  return `${Math.round(s / 86400)} days`;
+}

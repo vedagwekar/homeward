@@ -1,8 +1,8 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import rawSeed from "@/mock/projects.json";
-import { dollars, isActive, refundSplit, rupees, settle } from "./project.mjs";
+import { canReturnDeposit, defaultPayback, depositNeeded, dollars, isActive, isStalled, refundSplit, rupees, securityHeld, settle } from "./project.mjs";
 
 // All app data goes through this file. Swap these functions for the backend API when it's ready.
 export type Stage = {
@@ -25,6 +25,7 @@ export type Stage = {
   engineerDecision?: "approved" | "rejected" | null;
   amma?: "ok" | "recheck" | null;
   secondDecision?: "approved" | "rejected" | null;
+  since?: number; // unix seconds: when the stage last started waiting on the builder
 };
 
 export type Project = {
@@ -34,14 +35,53 @@ export type Project = {
   budget: number;
   rupeesPerCad: number;
   parent: string;
-  sponsors: { name: string; city: string; paidIn: number }[];
+  sponsors: { name: string; city: string; paidIn: number; credit?: number }[]; // credit: fee-free funding earned back from a stopped build
   engineer: { name: string; licence: string; secondName: string };
   builder: { name: string; role: string };
   frozen?: boolean; // build stopped and unspent money returned
+  security?: Security; // what the builder keeps with the contract
   stages: Stage[];
 };
 
-const seed = rawSeed as Project[];
+/** A report that the builder failed on a stage. */
+export type Claim = { stage: string; at: number; confirmed: boolean; contested: boolean; stalled: boolean };
+
+/** The builder's deposit and retention: the terms, what is held now, and where a report stands. All money in rupees. */
+export type Security = {
+  depositPct: number;
+  retentionPct: number;
+  depositTarget: number;
+  upfront: number; // the part that must be posted before the first stage opens
+  defectsSecs: number;
+  stallSecs: number;
+  responseSecs: number;
+  deposit: number; // held now
+  retention: number; // held now
+  posted?: number; // mock mode: the deposit the builder has put in
+  returned?: boolean;
+  defaulted?: boolean;
+  completedAt?: number;
+  claim?: Claim;
+};
+
+const nowSecs = () => Math.floor(Date.now() / 1000);
+
+// Mock mode: the numbers the contract would hold, and the builder's clock started on any stage already waiting.
+function prepare(p: Project): Project {
+  const raw = p.security as (Security & { postUpfront?: boolean }) | undefined;
+  if (!raw) return p;
+  const target = raw.depositTarget ?? Math.round((p.budget * raw.depositPct) / 100);
+  const stages = p.stages.map((s) => (s.since === undefined && (s.status === "open" || s.status === "rejected") ? { ...s, since: nowSecs() } : s));
+  const next = { ...p, stages, security: { ...raw, depositTarget: target, upfront: raw.upfront ?? (raw.postUpfront ? target : 0), deposit: 0, retention: 0 } };
+  return derive(next);
+}
+const derive = (p: Project): Project => {
+  if (!p.security) return p;
+  const held = securityHeld(p);
+  return { ...p, security: { ...p.security, deposit: held.deposit, retention: held.retention } };
+};
+
+const seed = (rawSeed as unknown as Project[]).map(prepare);
 
 // Ved's Soroban contract on Stellar testnet.
 export const CONTRACT_URL = "https://stellar.expert/explorer/testnet/contract/CC2T4LZMG2UX7TCYX63MSCWSRYZO3XWNP3IACH47WQVM7NSI7XZP3JNO";
@@ -51,6 +91,12 @@ export const CONTRACT_URL = "https://stellar.expert/explorer/testnet/contract/CC
 // this browser. The browser never holds a key either way.
 const API = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "");
 export const LIVE = Boolean(API);
+
+/** A deliberate "no" from the rules, worded for the person who hit it. */
+class Refusal extends Error {}
+const refuse = (message: string): never => {
+  throw new Refusal(message);
+};
 
 /** What the backend returns for every write: the transaction hash and its Stellar Expert page. */
 export type Receipt = { hash: string; explorer: string };
@@ -96,7 +142,7 @@ function read(): Project[] {
     const saved = localStorage.getItem(KEY);
     const parsed = saved ? JSON.parse(saved) : null;
     // Demo data saved by an older version of the app has a different shape and would crash the screens.
-    const fits = (p: Project) => p.builder && p.stages.every((s) => STATUSES.includes(s.status));
+    const fits = (p: Project) => p.builder && p.security && p.stages.every((s) => STATUSES.includes(s.status));
     cache = Array.isArray(parsed) && parsed.length === seed.length && parsed.every(fits) ? parsed : seed;
   } catch {
     cache = seed;
@@ -105,7 +151,7 @@ function read(): Project[] {
 }
 
 function write(next: Project[]) {
-  cache = next;
+  cache = LIVE ? next : next.map(derive); // live numbers come from the contract
   try {
     if (!LIVE) localStorage.setItem(KEY, JSON.stringify(next));
   } catch {
@@ -153,29 +199,42 @@ export function updateStage(projectId: string, slug: string, change: Partial<Sta
   if (LIVE) return stageOnChain(projectId, slug, change);
   const apply = (stage: Stage): Stage => {
     const next = settle({ ...stage, ...change }) as Stage;
-    return next.status === "paid" && stage.status !== "paid" ? { ...next, paidOn: new Date().toISOString().slice(0, 10) } : next;
+    // The builder's clock starts whenever a stage starts waiting on them.
+    const waiting = next.status !== stage.status && (next.status === "open" || next.status === "rejected");
+    const stamped = waiting ? { ...next, since: nowSecs() } : next;
+    return next.status === "paid" && stage.status !== "paid" ? { ...stamped, paidOn: new Date().toISOString().slice(0, 10) } : stamped;
   };
+  // The last stage being paid starts the defects period.
+  const finish = (p: Project): Project =>
+    p.security && !p.security.completedAt && p.stages.every((s) => s.status === "paid") ? { ...p, security: { ...p.security, completedAt: nowSecs() } } : p;
   write(
     read().map((p) =>
-      p.id === projectId ? { ...p, stages: p.stages.map((s) => (s.slug === slug ? apply(s) : s)) } : p,
+      p.id === projectId ? finish({ ...p, stages: p.stages.map((s) => (s.slug === slug ? apply(s) : s)) }) : p,
     ),
   );
 }
 
 /** Opens the next stage: the contract pays the supplier for materials and the builder gets a stage code. */
 export function startStage(projectId: string, slug: string) {
+  if (!LIVE && depositNeeded(read().find((p) => p.id === projectId)!)) refuse("The builder's deposit has to be in before the first stage can start.");
   const code = `HW-${1000 + Math.floor(Math.random() * 9000)}-${1000 + Math.floor(Math.random() * 9000)}`;
   return updateStage(projectId, slug, { status: "open", code }); // live: the backend makes the code
 }
 
 export function addFunding(projectId: string, sponsor: string, amount: number): Promise<Receipt> | undefined {
   if (LIVE) return api("/fund", { project: projectId, sponsor, amount: Math.round(amount) });
+  // Fee-free credit follows the person from build to build, like the contract's, and is used up first.
+  let left = amount;
   write(
-    read().map((p) =>
-      p.id !== projectId
-        ? p
-        : { ...p, sponsors: p.sponsors.map((s) => (s.name === sponsor ? { ...s, paidIn: s.paidIn + amount } : s)) },
-    ),
+    read().map((p) => ({
+      ...p,
+      sponsors: p.sponsors.map((s) => {
+        if (s.name !== sponsor) return s;
+        const used = Math.min(s.credit ?? 0, left);
+        left -= used;
+        return { ...s, credit: (s.credit ?? 0) - used, paidIn: s.paidIn + (p.id === projectId ? amount : 0) };
+      }),
+    })),
   );
 }
 
@@ -292,7 +351,7 @@ export async function act(text: { loading: string; done: string }, change: Chang
     // Live: this transaction's page. Mock or simulated steps: the contract's page.
     setStatus({ state: "done", text: text.done, link: receipt?.explorer ?? CONTRACT_URL });
   } catch (e) {
-    const text = LIVE && e instanceof Error ? e.message : "That didn't go through. Nothing was paid. Try again.";
+    const text = (LIVE || e instanceof Refusal) && e instanceof Error ? e.message : "That didn't go through. Nothing was paid. Try again.";
     setStatus({ state: "error", text });
   }
 }
@@ -358,4 +417,99 @@ export async function loadProof(): Promise<ProofItem[]> {
   }
   const saved = (await import("@/mock/proof.json")).default as Omit<ProofItem, "explorer">[];
   return saved.map((i) => ({ ...i, explorer: TX_URL + i.hash })).reverse();
+}
+
+// ---- the builder's deposit, and what happens if the builder fails ----
+// Live, each of these is one contract call. In mock mode they follow the same rules, with real clocks.
+
+const find = (projectId: string) => read().find((p) => p.id === projectId)!;
+function change(projectId: string, edit: (p: Project) => Project) {
+  write(read().map((p) => (p.id === projectId ? edit(p) : p)));
+}
+const withSecurity = (p: Project, extra: Partial<Security>): Project => ({ ...p, security: { ...p.security!, ...extra } });
+
+/** The family member who is acting, in the backend's words. */
+export function familyRole(project: Project, session: Session | null | undefined): "parent" | "sponsor1" | "sponsor2" {
+  if (session?.role === "parent") return "parent";
+  return project.sponsors.findIndex((s) => s.name === session?.name) === 1 ? "sponsor2" : "sponsor1";
+}
+
+/** The builder puts their deposit into the contract. */
+export function postDeposit(projectId: string): Promise<Receipt> | undefined {
+  if (LIVE) return api(`/project/${projectId}/deposit`, {});
+  change(projectId, (p) => withSecurity(p, { posted: p.security!.depositTarget }));
+}
+
+/** After handover and the defects period, the builder's deposit and held-back payments go back to them. */
+export function returnDeposit(projectId: string): Promise<Receipt> | undefined {
+  if (LIVE) return api(`/project/${projectId}/return-deposit`, {});
+  if (!canReturnDeposit(find(projectId), nowSecs())) refuse("The waiting period hasn't finished yet.");
+  change(projectId, (p) => withSecurity(p, { returned: true }));
+}
+
+/** A family member reports that the builder has failed on a stage. */
+export function claimDefault(projectId: string, stage: string, as: "parent" | "sponsor1" | "sponsor2"): Promise<Receipt> | undefined {
+  if (LIVE) return api(`/project/${projectId}/default/claim`, { as, stage });
+  const p = find(projectId);
+  if (p.security!.claim) refuse("There is already an open report on this build.");
+  const st = p.stages.find((s) => s.slug === stage);
+  if (!st) refuse("Say which stage the builder failed on.");
+  const stalled = isStalled(st!, p.security!, nowSecs());
+  change(projectId, (q) => withSecurity(q, { claim: { stage, at: nowSecs(), confirmed: stalled, contested: false, stalled } }));
+}
+
+/** An engineer on that stage confirms the report. The builder's time to respond starts now. */
+export function confirmDefault(projectId: string): Promise<Receipt> | undefined {
+  if (LIVE) return api(`/project/${projectId}/default/confirm`, { as: "inspector1" });
+  const claim = find(projectId).security!.claim;
+  if (!claim) refuse("There is no open report on this build.");
+  if (claim!.confirmed) refuse("This stage isn't ready for that step yet.");
+  change(projectId, (p) => withSecurity(p, { claim: { ...claim!, confirmed: true, at: nowSecs() } }));
+}
+
+/** The builder disputes the report during their time to respond. */
+export function contestDefault(projectId: string): Promise<Receipt> | undefined {
+  if (LIVE) return api(`/project/${projectId}/default/contest`, {});
+  const s = find(projectId).security!;
+  if (!s.claim) refuse("There is no open report on this build.");
+  if (!s.claim!.confirmed || s.claim!.contested) refuse("This stage isn't ready for that step yet.");
+  if (nowSecs() >= s.claim!.at + s.responseSecs) refuse("The builder's time to respond has passed.");
+  change(projectId, (p) => withSecurity(p, { claim: { ...s.claim!, contested: true } }));
+}
+
+/** The family takes their report back. */
+export function withdrawClaim(projectId: string, as: "parent" | "sponsor1" | "sponsor2"): Promise<Receipt> | undefined {
+  if (LIVE) return api(`/project/${projectId}/default/withdraw`, { as });
+  if (!find(projectId).security!.claim) refuse("There is no open report on this build.");
+  change(projectId, (p) => withSecurity(p, { claim: undefined }));
+}
+
+/** After the builder's time to respond, carries the report out: unspent money and the builder's deposit go back to the family. */
+export function finalizeDefault(projectId: string): Promise<Receipt> | undefined {
+  if (LIVE) return api(`/project/${projectId}/default/finalize`, {});
+  const p = find(projectId);
+  const claim = p.security!.claim;
+  if (!claim) refuse("There is no open report on this build.");
+  if (!claim!.confirmed || claim!.contested) refuse("This stage isn't ready for that step yet.");
+  if (nowSecs() < claim!.at + p.security!.responseSecs) refuse("The waiting period hasn't finished yet.");
+  const stage = p.stages.find((s) => s.slug === claim!.stage)!;
+  if (claim!.stalled && !isStalled(stage, p.security!, nowSecs())) refuse("The builder has sent proof since, so this report no longer applies.");
+  const split = refundSplit(p.sponsors, defaultPayback(p).unspent);
+  change(projectId, (q) => ({
+    ...withSecurity(q, { defaulted: true, claim: undefined }),
+    frozen: true,
+    // What each person got back is theirs to put into a new build without paying the fee a second time.
+    sponsors: q.sponsors.map((s, i) => ({ ...s, paidIn: s.paidIn - split[i].amount, credit: (s.credit ?? 0) + split[i].amount })),
+  }));
+}
+
+/** Ticks once a second, so countdowns stay true. 0 until the page has loaded in the browser. */
+export function useNow() {
+  const [now, setNow] = useState(0);
+  useEffect(() => {
+    setNow(nowSecs());
+    const tick = setInterval(() => setNow(nowSecs()), 1000);
+    return () => clearInterval(tick);
+  }, []);
+  return now;
 }

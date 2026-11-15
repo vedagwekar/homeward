@@ -85,10 +85,16 @@ Payees can never change. That is the strongest promise in the pitch. So a defaul
 - It cannot change terms, payees or stages after `create_project`.
 - `resolve` still lets the admin choose how much unspent family money goes back, as before. It cannot touch the builder's security. That only returns to the builder or goes to the sponsors.
 
+## Backend and app (written, not yet run against a live contract)
+
+- **Client.** Regenerated from the wasm (`packages/homeward-client`).
+- **Backend.** `create_project` passes each home's terms (from `web/mock/projects.json`). New routes: deposit, return-deposit, and default claim, confirm, contest, finalize, withdraw and settle (see `backend/README.md`). The project view reports a `security` block and each sponsor's fee `credit`. `scripts/demo.ts` and `backend/src/smoke.ts` are updated. The backend typechecks.
+- **App.** The builder has a deposit step and a deposit card. Families see the builder's held money and a "Builder stopped?" screen. The engineer can confirm a report. The Fund screen waives the fee on refunded money. In mock mode the same rules run with real clocks. 27 unit tests cover the rules.
+- **Copy.** Every screen was cut down to short lines.
+
 ## Not done yet
 
-- **Deployment.** This is a new contract with a new ID. The old contract stays on Testnet with its transactions, so the links in the submitted form still work. Nothing has been deployed.
-- **Backend and app.** `create_project` has a new argument, so the generated client must be regenerated, and the backend, `scripts/demo.ts` and the smoke test must pass terms. The builder needs a deposit screen, and the family a "builder's deposit held" line. None of that is written.
+- **Deployment.** This is a new contract with a new ID. The old contract stays on Testnet with its transactions, so the links in the submitted form still work. Nothing has been deployed, so the new backend routes and `scripts/demo.ts` have not run against a live contract.
 - **Real money.** A deposit in rupees must be held by a licensed partner, like the family's money.
 - **Disputes.** The admin's settlement of a contested claim is still a trusted step.
 - **Unvalidated numbers.** 5%, 10%, 30 days, 7 days and 60 days are starting points to test with builders.

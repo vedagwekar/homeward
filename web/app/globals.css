@@ -1036,3 +1036,13 @@ nav > a[aria-current="page"] {
   margin: 0.5rem 0.25rem 0;
   text-align: center;
 }
+
+/* A card above a page title needs room before the title. */
+.group + h1 {
+  margin-top: 1.5rem;
+}
+
+/* A status card followed by a list needs a gap between them. */
+.group.pad + .group {
+  margin-top: 0.75rem;
+}

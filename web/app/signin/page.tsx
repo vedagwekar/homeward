@@ -45,8 +45,7 @@ export default function SignIn() {
       </section>
 
       <p className="note">
-        Demo sign-in with sample people. In the real app a family signs in with a phone number and a one-time code. Nobody needs a wallet, a seed
-        phrase or any crypto.
+        Demo sign-in. The real app uses a phone number and a one-time code.
       </p>
     </div>
   );

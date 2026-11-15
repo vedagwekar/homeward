@@ -24,7 +24,7 @@ export default function Proof() {
   return (
     <>
       <h1>Proof on Stellar testnet</h1>
-      <p className="intro">Every payment rule runs in one public contract. Anyone can check each step below without asking us.</p>
+      <p className="intro">Every rule runs in one public contract. Check each step yourself.</p>
 
       <h3>The contract</h3>
       <section className="group">
@@ -52,7 +52,7 @@ export default function Proof() {
       </section>
 
       <h3>Every transaction</h3>
-      {!LIVE && <p className="note">These ran on 13 Nov 2026 during our end-to-end test. Each one opens on Stellar Expert.</p>}
+      {!LIVE && <p className="note">Run on 13 Nov 2026. Each opens on Stellar Expert.</p>}
       <section className="group">
         {failed && <p className="pad">We couldn't load the records. The contract link above still works.</p>}
         {!items && !failed && <p className="pad muted">Loading the records</p>}

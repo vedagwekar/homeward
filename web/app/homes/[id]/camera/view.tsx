@@ -22,7 +22,7 @@ export default function View({ id }: { id: string }) {
     <>
       <Back href={`/homes/${project.id}`} label={project.name} />
       <h1>Site camera</h1>
-      <p className="intro">A fixed camera on the build, so you can check any time without waiting for someone on site.</p>
+      <p className="intro">Watch the build live, any time.</p>
 
       <figure className="live">
         {/* shortcut: a still sample image stands in for the stream; a real launch embeds the camera's feed here */}

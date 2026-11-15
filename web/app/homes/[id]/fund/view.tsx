@@ -3,14 +3,15 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { useState } from "react";
-import { dollars, homewardFee, nextStage, totalFunded } from "@/lib/project.mjs";
+import { dollars, feeAfterCredit, nextStage, totalFunded } from "@/lib/project.mjs";
 import { act, addFunding, useProjects, useSession, useStatus, useMoney } from "@/lib/store";
 import { Back } from "../../../icons";
 
 
 export default function View({ id }: { id: string }) {
   const money = useMoney();
-  const project = useProjects().find((p) => p.id === id);
+  const projects = useProjects();
+  const project = projects.find((p) => p.id === id);
   const [choice, setChoice] = useState(0);
   // Whoever is signed in pays, if they fund this home.
   const me = useSession()?.name;
@@ -20,6 +21,15 @@ export default function View({ id }: { id: string }) {
   const busy = useStatus().state === "loading";
   if (!project) notFound();
 
+  if (project.frozen) {
+    return (
+      <>
+        <Back href={`/homes/${project.id}`} label={project.name} />
+        <h1>This build has ended</h1>
+        <p className="note">Build ended. Homeward sets up a new one.</p>
+      </>
+    );
+  }
   const next = nextStage(project);
   const remaining = project.budget - totalFunded(project);
   const options = [
@@ -27,7 +37,9 @@ export default function View({ id }: { id: string }) {
     { label: "Rest of the build", amount: remaining },
   ];
   const picked = options[Math.min(choice, options.length - 1)];
-  const fee = homewardFee(picked.amount);
+  // Money refunded from a stopped build was already charged a fee once.
+  const credit = projects.reduce((t, p) => t + (p.sponsors.find((s) => s.name === sponsor)?.credit ?? 0), 0);
+  const fee = feeAfterCredit(picked.amount, credit);
   const total = picked.amount + fee;
   const cad = dollars(total, project.rupeesPerCad);
 
@@ -99,7 +111,7 @@ export default function View({ id }: { id: string }) {
           <div className="row">
             <div className="grow">
               <span>Homeward fee, 1.5%</span>
-              <small>Runs the locked account, checks and records</small>
+              <small>{credit > 0 ? `No fee on ${money(Math.min(credit, picked.amount))} refunded` : "Checks and records"}</small>
             </div>
             <span className="muted">{money(fee)}</span>
           </div>
@@ -112,7 +124,7 @@ export default function View({ id }: { id: string }) {
             <strong>{cad} CAD</strong>
           </div>
         </section>
-        <p className="note">Engineer visits are quoted separately at local rates. Transfer partner fees aren't included in this demo.</p>
+        <p className="note">Engineer visits are quoted separately.</p>
 
         <button className="button" type="submit" disabled={busy}>
           Pay {cad} with Interac

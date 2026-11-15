@@ -33,7 +33,7 @@ export default function View({ id }: { id: string }) {
             </div>
           ))}
         </section>
-        <p className="note">Sent back by Interac. It never left the locked account, so nothing has to come back out of India.</p>
+        <p className="note">Sent back by Interac. It never left the locked account.</p>
         <Link className="button" href={`/homes/${project.id}`}>
           Done
         </Link>
@@ -45,10 +45,10 @@ export default function View({ id }: { id: string }) {
     <>
       <Back href={`/homes/${project.id}`} label={project.name} />
       <h1>Money back</h1>
-      <p className="intro">Overcharged, a stage cost less, or the build stopped? Money that hasn't been released comes straight back. Paid stages can't be undone.</p>
+      <p className="intro">Money not yet released comes straight back. Paid stages can't be undone.</p>
 
       {project.frozen ? (
-        <p className="note">This build is stopped and its unspent money has already gone back.</p>
+        <p className="note">Stopped. Unspent money already returned.</p>
       ) : (
         <form
           onSubmit={(e) => {

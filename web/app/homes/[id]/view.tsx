@@ -18,10 +18,11 @@ export default function View({ id }: { id: string }) {
   const session = useSession();
   // Everything that isn't the house, the money or the stages.
   const more = [
-    { href: `/homes/${project.id}/team`, label: "Builder and engineer", detail: "Your team, or find someone checked by Homeward" },
-    { href: `/homes/${project.id}/camera`, label: "Site camera", detail: "Watch the build live" },
-    { href: `/homes/${project.id}/money-back`, label: "Money back", detail: "Overcharged, or the build stopped? Get unspent money back" },
-    { href: "/help", label: "If something goes wrong", detail: "What Homeward does, step by step" },
+    { href: `/homes/${project.id}/team`, label: "Builder and engineer", detail: "Who is on the job" },
+    { href: `/homes/${project.id}/camera`, label: "Site camera", detail: "Watch live" },
+    { href: `/homes/${project.id}/builder-problem`, label: "If the builder stops working", detail: "Report it, get your money back" },
+    { href: `/homes/${project.id}/money-back`, label: "Money back", detail: "Get unspent money back" },
+    { href: "/help", label: "If something goes wrong", detail: "Step by step" },
   ];
   const current = project.frozen ? undefined : project.stages.find(isActive) ?? project.stages.find((s) => s.status === "locked");
 
@@ -30,7 +31,11 @@ export default function View({ id }: { id: string }) {
       {session?.role !== "parent" && <Back href="/" label="Homes" />}
       <h1>{project.name}</h1>
       <p className="intro">{project.place}</p>
-      {project.frozen && <p className="note">This build is stopped. Unspent money has gone back to the family.</p>}
+      {project.security?.defaulted ? (
+        <p className="note">Builder stopped. Your money came back.</p>
+      ) : (
+        project.frozen && <p className="note">Stopped. Unspent money returned.</p>
+      )}
 
       <section className="group hero">
         {hasModel(project.id) && <House3D project={project} />}
@@ -42,7 +47,10 @@ export default function View({ id }: { id: string }) {
             Fund {next.stage.name.toLowerCase()}, {money(next.stillNeeded)}
           </Link>
         )}
-        <p className="held">Held by a Stellar smart contract. Paid one stage at a time, only after an engineer and {project.parent} approve.</p>
+        <p className="held">Held by a Stellar smart contract.</p>
+        {project.security && project.security.depositTarget > 0 && !project.security.defaulted && !project.security.returned && (
+          <p className="held">Builder's own money held: {money(project.security.deposit + project.security.retention)}</p>
+        )}
       </section>
 
       {current && isActive(current) && (
@@ -65,7 +73,7 @@ export default function View({ id }: { id: string }) {
               <Tile name={view.icon} tone={view.tone} />
               <div className="grow">
                 <span>{stage.name}</span>
-                <small>{stage.status === "paid" ? `Paid${stage.paidOn ? ` ${shortDate(stage.paidOn)}` : ""}, certificate recorded` : view.label}</small>
+                <small>{stage.status === "paid" ? `Paid${stage.paidOn ? ` ${shortDate(stage.paidOn)}` : ""}` : view.label}</small>
               </div>
               <span className="muted nowrap">{money(stage.amount)}</span>
               <span className="chevron">
