@@ -309,9 +309,29 @@ export function resetDemo(scenario: "fresh" | "sample" = "fresh") {
   setStatus({ state: "done", text: scenario === "fresh" ? "Back to the start. Nothing funded yet" : "Sample homes restored", link: CONTRACT_URL });
 }
 
-// The one stage being worked on, for the Builder, Engineer and Amma views.
+// Which home the builder, engineer and parent screens work on. The tour and the directory set it, so playing
+// one home never acts on the other. Left unset, the first home with work in progress is used.
+const FOCUS_KEY = "homeward-home";
+let focus: string | null = null;
+try {
+  if (typeof localStorage !== "undefined") focus = localStorage.getItem(FOCUS_KEY);
+} catch {}
+
+export function setHomeFocus(id: string) {
+  focus = id;
+  try {
+    localStorage.setItem(FOCUS_KEY, id);
+  } catch {}
+  listeners.forEach((l) => l());
+}
+
+/** The homes in the order a role screen should look at them: the chosen one first. */
+export const homesInOrder = (projects: Project[]) => (focus ? [...projects.filter((p) => p.id === focus), ...projects.filter((p) => p.id !== focus)] : projects);
+
+// The one stage being worked on, for the Builder and Engineer views.
 export function activeStage(projects: Project[]) {
-  for (const project of projects) {
+  const chosen = focus ? projects.find((p) => p.id === focus) : undefined;
+  for (const project of chosen ? [chosen] : projects) {
     const stage = project.frozen ? undefined : project.stages.find(isActive);
     if (stage) return { project, stage };
   }

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { depositNeeded, nextStage, rupees } from "@/lib/project.mjs";
-import { act, activeStage, LIVE, postDeposit, startStage, submitVideoProof, useProjects, useStatus } from "@/lib/store";
+import { act, activeStage, homesInOrder, LIVE, postDeposit, startStage, submitVideoProof, useProjects, useStatus } from "@/lib/store";
 import GateTrack from "../gate-track";
 import VideoReviewPanel from "../video-review";
 import BuilderSecurity from "./security";
@@ -15,12 +15,12 @@ export default function Builder() {
 
   if (!active) {
     // Nothing open: offer the next locked stage. In a real launch Homeward opens it once the family has funded it.
-    const project = projects.find((p) => !p.frozen && nextStage(p));
+    const project = homesInOrder(projects).find((p) => !p.frozen && nextStage(p));
     const next = project && nextStage(project);
     const waiting = next && next.stillNeeded > 0;
     const needDeposit = Boolean(project && depositNeeded(project));
     // The home whose deposit to show, even when every stage is finished.
-    const secured = project ?? projects.find((p) => p.security);
+    const secured = project ?? homesInOrder(projects).find((p) => p.security);
     return (
       <>
         <h1>No job open</h1>
