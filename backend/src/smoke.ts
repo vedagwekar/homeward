@@ -10,8 +10,8 @@ process.env.DB_PATH = join(temp, "smoke.sqlite");
 process.env.UPLOAD_DIR = join(temp, "uploads");
 
 const { createApp } = await import("./routes");
-const { tokenBalance } = await import("./chain");
-const { addr, unitsToRupees } = await import("./config");
+const { ensureTusdc, tokenBalance } = await import("./chain");
+const { addr, rupeesToUnits, unitsToRupees } = await import("./config");
 
 const server = createApp().listen(0);
 const base = `http://127.0.0.1:${(server.address() as AddressInfo).port}/api`;
@@ -74,6 +74,8 @@ async function main() {
   check("Negative amount refused", (await post("/fund", { project: P, sponsor: "Anil", amount: -5 })).status, 400);
   check("Stranger refused", (await post("/fund", { project: P, sponsor: "Eve", amount: 5 })).status, 400);
   check("Secrets are not a field", (await post("/fund", { project: P, sponsor: "SECRET", amount: 5 })).status, 400);
+  // Top up first, so the balance change measured below is only what this build costs.
+  await ensureTusdc("sponsor1", rupeesToUnits(1_000_000n));
   const before = await tokenBalance(addr.sponsor1);
   await ok("Anil locks the whole budget", "/fund", { project: P, sponsor: "Anil", amount: 500_000 });
   check("Paid-in shows on the build", (await view()).sponsors[0].paidIn, 500_000);
@@ -156,7 +158,8 @@ async function main() {
   const spentRupees = 100_000 + 100_000 + 140_000; // prep, handover, repairs materials
   const fee = 500_000 * 0.015;
   const change = unitsToRupees(before - (await tokenBalance(addr.sponsor1)));
-  check("Family only paid for finished work plus the fee", Math.abs(change - (spentRupees + fee)) <= 1, true);
+  const expected = spentRupees + fee;
+  check("Family only paid for finished work plus the fee (rupees)", Math.abs(change - expected) <= 1 ? expected : change, expected);
 
   console.log(failures ? `\nSMOKE FAILED: ${failures} check(s).` : "\nSMOKE PASSED: every route works on testnet.");
 }
