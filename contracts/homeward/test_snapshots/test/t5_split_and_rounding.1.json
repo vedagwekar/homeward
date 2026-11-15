@@ -194,6 +194,58 @@
                       ]
                     }
                   ]
+                },
+                {
+                  "map": [
+                    {
+                      "key": {
+                        "symbol": "defects_secs"
+                      },
+                      "val": {
+                        "u64": "0"
+                      }
+                    },
+                    {
+                      "key": {
+                        "symbol": "deposit"
+                      },
+                      "val": {
+                        "i128": "0"
+                      }
+                    },
+                    {
+                      "key": {
+                        "symbol": "response_secs"
+                      },
+                      "val": {
+                        "u64": "500"
+                      }
+                    },
+                    {
+                      "key": {
+                        "symbol": "retention_bps"
+                      },
+                      "val": {
+                        "u32": 0
+                      }
+                    },
+                    {
+                      "key": {
+                        "symbol": "stall_secs"
+                      },
+                      "val": {
+                        "u64": "1000"
+                      }
+                    },
+                    {
+                      "key": {
+                        "symbol": "upfront"
+                      },
+                      "val": {
+                        "i128": "0"
+                      }
+                    }
+                  ]
                 }
               ]
             }
@@ -730,6 +782,30 @@
                   },
                   {
                     "key": {
+                      "symbol": "completed_at"
+                    },
+                    "val": {
+                      "u64": "0"
+                    }
+                  },
+                  {
+                    "key": {
+                      "symbol": "defaulted"
+                    },
+                    "val": {
+                      "bool": false
+                    }
+                  },
+                  {
+                    "key": {
+                      "symbol": "deposit_held"
+                    },
+                    "val": {
+                      "i128": "0"
+                    }
+                  },
+                  {
+                    "key": {
                       "symbol": "frozen"
                     },
                     "val": {
@@ -750,6 +826,22 @@
                     },
                     "val": {
                       "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAARQG5"
+                    }
+                  },
+                  {
+                    "key": {
+                      "symbol": "retention_held"
+                    },
+                    "val": {
+                      "i128": "0"
+                    }
+                  },
+                  {
+                    "key": {
+                      "symbol": "security_returned"
+                    },
+                    "val": {
+                      "bool": false
                     }
                   },
                   {
@@ -785,10 +877,75 @@
                   },
                   {
                     "key": {
+                      "symbol": "stages_paid"
+                    },
+                    "val": {
+                      "u32": 1
+                    }
+                  },
+                  {
+                    "key": {
                       "symbol": "supplier"
                     },
                     "val": {
                       "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAVAX5"
+                    }
+                  },
+                  {
+                    "key": {
+                      "symbol": "terms"
+                    },
+                    "val": {
+                      "map": [
+                        {
+                          "key": {
+                            "symbol": "defects_secs"
+                          },
+                          "val": {
+                            "u64": "0"
+                          }
+                        },
+                        {
+                          "key": {
+                            "symbol": "deposit"
+                          },
+                          "val": {
+                            "i128": "0"
+                          }
+                        },
+                        {
+                          "key": {
+                            "symbol": "response_secs"
+                          },
+                          "val": {
+                            "u64": "500"
+                          }
+                        },
+                        {
+                          "key": {
+                            "symbol": "retention_bps"
+                          },
+                          "val": {
+                            "u32": 0
+                          }
+                        },
+                        {
+                          "key": {
+                            "symbol": "stall_secs"
+                          },
+                          "val": {
+                            "u64": "1000"
+                          }
+                        },
+                        {
+                          "key": {
+                            "symbol": "upfront"
+                          },
+                          "val": {
+                            "i128": "0"
+                          }
+                        }
+                      ]
                     }
                   }
                 ]
@@ -977,6 +1134,14 @@
                     },
                     "val": {
                       "bytes": "0303030303030303030303030303030303030303030303030303030303030303"
+                    }
+                  },
+                  {
+                    "key": {
+                      "symbol": "since"
+                    },
+                    "val": {
+                      "u64": "0"
                     }
                   },
                   {
