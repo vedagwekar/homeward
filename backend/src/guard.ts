@@ -6,6 +6,14 @@ import type { NextFunction, Request, RequestHandler, Response } from "express";
 
 type Rule = { limit: number; windowMs: number };
 
+/**
+ * Who is calling. Behind Railway, the server sees several proxy addresses, so the plain request address
+ * splits one caller across several counters. The host's public edge sets X-Real-IP to the real caller and
+ * overwrites any copy the caller sends, so we use it when present. Without a proxy (local work) it is absent
+ * and the connection address is used.
+ */
+export const callerKey = (req: Request) => req.get("x-real-ip")?.trim() || req.ip || "unknown";
+
 /** Set RATE_LIMIT=off for local tests, where one machine makes every request. */
 const off = () => process.env.RATE_LIMIT === "off";
 
@@ -20,7 +28,7 @@ export function limiter(name: string, rule: Rule): RequestHandler {
   return (req: Request, res: Response, next: NextFunction) => {
     if (off()) return next();
     const now = Date.now();
-    const key = req.ip ?? "unknown";
+    const key = callerKey(req);
     let hit = hits.get(key);
     if (!hit || hit.resetAt <= now) {
       hit = { count: 0, resetAt: now + rule.windowMs };
