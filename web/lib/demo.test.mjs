@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { demoStep } from "./demo.mjs";
+import { demoStep, stageOwner } from "./demo.mjs";
 
 const stage = (status, extra = {}) => ({ slug: "s", name: "Roof slab", amount: 100, materials: 0, status, ...extra });
 const project = (stages, paidIn = 0, extra = {}) => ({ id: "p", sponsors: [{ paidIn }], stages, ...extra });
@@ -31,4 +31,20 @@ test("a stopped build and a finished build are handled", () => {
   assert.equal(demoStep(project([stage("locked")], 0, { frozen: true })).id, "stopped");
   assert.equal(demoStep(project([stage("paid")])).id, "finished");
   assert.equal(demoStep(undefined).id, "none");
+});
+
+test("a build that needs its deposit sends the builder there before starting", () => {
+  const p = project([stage("locked")], 100, { security: { upfront: 50, posted: 0 } });
+  assert.equal(demoStep(p).id, "deposit");
+  assert.equal(demoStep({ ...p, security: { upfront: 50, posted: 50 } }).id, "start");
+});
+test("stageOwner says who is holding each stage up", () => {
+  const p = project([stage("paid", { slug: "a" }), stage("locked", { slug: "b" }), stage("locked", { slug: "c" })], 100);
+  assert.equal(stageOwner(p, p.stages[0]).text, "Paid");
+  assert.equal(stageOwner(p, p.stages[1]).who, "sponsor");
+  assert.equal(stageOwner(p, p.stages[2]).text, "Later");
+  assert.equal(stageOwner(project([stage("open")]), stage("open")).who, "builder");
+  assert.equal(stageOwner(project([]), stage("submitted")).who, "engineer");
+  assert.equal(stageOwner(project([]), stage("submitted", { engineerDecision: "approved" })).who, "parent");
+  assert.equal(stageOwner(project([]), stage("submitted", { engineerDecision: "approved", amma: "recheck" })).who, "engineer");
 });

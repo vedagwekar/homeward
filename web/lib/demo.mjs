@@ -1,6 +1,6 @@
 // The guided tour: which step of the story a build is at, and who should do it next.
 // It reads the build's state, so it works the same in the mock and on Stellar Testnet.
-import { isActive, nextStage } from "./project.mjs";
+import { depositNeeded, isActive, nextStage } from "./project.mjs";
 
 /** Steps in order. `who` says which kind of person acts, `href` is where they do it. */
 export function demoStep(project) {
@@ -13,6 +13,9 @@ export function demoStep(project) {
     if (!next) return { id: "finished", who: "sponsor", title: "Every stage is paid", detail: "Look at the certificates and the Stellar record.", href: "/proof" };
     if (next.stillNeeded > 0) {
       return { id: "fund", who: "sponsor", title: `Lock the money for ${next.stage.name}`, detail: "A family member adds the money. The contract holds it.", href: `/homes/${project.id}/fund` };
+    }
+    if (depositNeeded(project)) {
+      return { id: "deposit", who: "builder", title: "The builder puts in the deposit", detail: "The builder's own money, held by the contract. It comes back after handover, or goes to the family if the builder walks off.", href: "/builder" };
     }
     return { id: "start", who: "builder", title: `Start ${next.stage.name}`, detail: "The builder opens the stage. The supplier is paid for materials straight away.", href: "/builder" };
   }
@@ -31,4 +34,24 @@ export function demoStep(project) {
   return { id: "proof", who: "builder", title: "The builder films the stage code", detail: "Send a video showing today's code. A sample clip works for the demo.", href: "/builder" };
 }
 
-export const DEMO_STEPS = ["fund", "start", "proof", "engineer", "parent", "second", "locked"];
+export const DEMO_STEPS = ["fund", "deposit", "start", "proof", "engineer", "parent", "second", "locked"];
+
+/** Who is holding each stage up right now, in words. Used by the directory. `who` is null when nobody needs to act. */
+export function stageOwner(project, stage) {
+  if (project.frozen) return { who: null, text: "Build stopped" };
+  if (stage.status === "paid") return { who: null, text: "Paid" };
+  if (stage.status === "locked") {
+    const next = nextStage(project);
+    if (next && next.stage === stage) {
+      if (next.stillNeeded > 0) return { who: "sponsor", text: "Family locks the money" };
+      if (depositNeeded(project)) return { who: "builder", text: "Builder puts in the deposit" };
+      return { who: "builder", text: "Builder starts the stage" };
+    }
+    return { who: null, text: "Later" };
+  }
+  if (stage.status === "open") return { who: "builder", text: "Builder films today's code" };
+  if (stage.status === "rejected") return { who: "builder", text: stage.secondDecision === "rejected" ? "Money stays locked" : "Builder fixes it and films again" };
+  if (stage.amma === "recheck") return stage.secondDecision ? { who: null, text: "Second check done" } : { who: "engineer", text: "Second engineer checks" };
+  if (stage.engineerDecision === "approved") return { who: "parent", text: "Parent decides" };
+  return { who: "engineer", text: "Engineer checks the work" };
+}

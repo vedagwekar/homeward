@@ -1,14 +1,16 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Link from "next/link";
 import { DEMO_STEPS, demoStep } from "@/lib/demo.mjs";
-import { resetDemo, type Session, signIn, useProjects, useStatus } from "@/lib/store";
+import { LIVE, resetDemo, type Session, signIn, useProjects, useStatus } from "@/lib/store";
 import { Wordmark } from "../logo";
 
 // A guided tour for anyone at the table: it shows where the story is, and who to be next.
 const labels: Record<string, string> = {
   fund: "The family locks the money",
+  deposit: "The builder puts in the deposit",
   start: "The builder starts the stage",
   proof: "The builder films today's code",
   engineer: "The engineer checks the work",
@@ -22,6 +24,16 @@ export default function Tour() {
   const projects = useProjects();
   const [which, setWhich] = useState(0);
   const busy = useStatus().state === "loading";
+  // The first time someone opens the tour on the mock app, begin at the beginning, not part-way through.
+  useEffect(() => {
+    if (LIVE) return;
+    try {
+      if (!sessionStorage.getItem("homeward-tour-started")) {
+        sessionStorage.setItem("homeward-tour-started", "1");
+        resetDemo("fresh");
+      }
+    } catch {}
+  }, []);
   const project = projects[which] ?? projects[0];
   const step = demoStep(project);
   const at = DEMO_STEPS.indexOf(step.id);
@@ -43,7 +55,7 @@ export default function Tour() {
     <div className="tour">
       <Wordmark size={32} />
       <h1>Try the story</h1>
-      <p className="intro">Seven taps. You play everyone.</p>
+      <p className="intro">You play everyone. Each step takes a few seconds.</p>
 
       <div className="segments" role="group" aria-label="Home">
         {projects.map((p, i) => (
@@ -80,9 +92,10 @@ export default function Tour() {
       </ol>
 
       <p className="note">
-        Real transactions on Stellar Testnet. Each step takes a few seconds.{" "}
-        <button className="link-button" type="button" disabled={busy} onClick={resetDemo}>
-          Start over
+        {LIVE ? "Real transactions on Stellar Testnet." : "Practice mode: nothing leaves this browser."}{" "}
+        <Link className="link" href="/directory">Who does what</Link>{" · "}
+        <button className="link-button" type="button" disabled={busy} onClick={() => resetDemo("fresh")}>
+          Start over from step 1
         </button>
       </p>
     </div>

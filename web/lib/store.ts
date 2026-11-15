@@ -95,6 +95,21 @@ const derive = (p: Project): Project => {
 
 const seed = (rawSeed as unknown as Project[]).map(prepare);
 
+// The story from the very beginning, which is also where fresh builds on Testnet start: nothing funded,
+// every stage locked, the builder's deposit not yet in. The sample above is the same homes part-way built.
+const fresh = (rawSeed as unknown as Project[]).map((p) =>
+  prepare({
+    ...p,
+    frozen: false,
+    sponsors: p.sponsors.map((s) => ({ ...s, paidIn: 0 })),
+    security: p.security ? ({ ...p.security, posted: 0 } as Security) : p.security,
+    stages: p.stages.map((s) => ({
+      ...s, status: "locked" as const, paidOn: undefined, code: undefined, since: undefined,
+      engineerDecision: null, secondDecision: null, amma: null, videoUrl: undefined, videoReview: undefined,
+    })),
+  }),
+);
+
 // Ved's Soroban contract on Stellar testnet, with the builder's deposit (deployed 15 Nov 2026).
 export const CONTRACT_URL = "https://stellar.expert/explorer/testnet/contract/CC2NYVUTHJWBRTDG7J4O6VB7TINL5MTNOTTXOMVMHKSCUYZR4W3M6QF2";
 // The first version, from 9 Nov, before the deposit was added. Its transactions stay valid.
@@ -274,12 +289,16 @@ export async function returnMoney(projectId: string, amount: number, stop: boole
   );
 }
 
-export function resetDemo() {
+/** "fresh" starts the story from the very beginning. "sample" puts back the homes part-way built (mock mode only). */
+export function resetDemo(scenario: "fresh" | "sample" = "fresh") {
   if (LIVE) {
-    // Fresh builds on chain: each is one create_project plus two engineers per stage, so about a minute.
-    act({ loading: "Setting up fresh builds on testnet. This takes about a minute", done: "Fresh builds ready" }, async () => {
+    // Fresh builds on chain: each is one create_project plus two engineers per stage, so about a minute each.
+    act({ loading: "Setting up fresh builds on testnet. About a minute each", done: "Fresh builds ready. Start from step 1" }, async () => {
       let last: Receipt | undefined;
-      for (const p of seed) last = await api("/project", { slug: p.id, fresh: true });
+      for (const [i, p] of seed.entries()) {
+        setStatus({ state: "loading", text: `Setting up home ${i + 1} of ${seed.length} on testnet. About a minute each` });
+        last = await api("/project", { slug: p.id, fresh: true });
+      }
       return last;
     });
     return;
@@ -287,7 +306,8 @@ export function resetDemo() {
   try {
     localStorage.removeItem(KEY);
   } catch {}
-  write(seed);
+  write(scenario === "fresh" ? fresh : seed);
+  setStatus({ state: "done", text: scenario === "fresh" ? "Back to the start. Nothing funded yet" : "Sample homes restored", link: CONTRACT_URL });
 }
 
 // The one stage being worked on, for the Builder, Engineer and Amma views.

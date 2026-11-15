@@ -6,9 +6,9 @@ import { signIn, useProjects, useSession } from "@/lib/store";
 import { Wordmark } from "./logo";
 
 // Pages anyone can open without signing in: the sign-in screen, the guided tour, the transaction record and the price tool.
-const open = ["/signin", "/demo", "/proof", "/price"];
+const open = ["/signin", "/demo", "/proof", "/price", "/directory"];
 // These two have their own header.
-const bare = ["/signin", "/demo"];
+const bare = ["/signin", "/demo", "/directory"];
 
 /** The bar at the top of every screen. It also sends anyone who isn't signed in to the sign-in screen. */
 export default function Brand() {
@@ -57,6 +57,9 @@ export function RoleSwitch() {
           {r.label}
         </button>
       ))}
+      <button type="button" aria-pressed={path === "/directory"} onClick={() => router.push("/directory")}>
+        Guide
+      </button>
     </div>
   );
 }

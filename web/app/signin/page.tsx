@@ -36,20 +36,28 @@ export default function SignIn() {
       <button className="tour-link" type="button" onClick={() => router.push("/demo")}>
         <span>
           <strong>Take the guided tour</strong>
-          <small>Play every role in seven taps</small>
+          <small>Play every role, start to finish</small>
         </span>
         <span className="go" aria-hidden="true">→</span>
       </button>
 
-      <div className="divider">or pick who you are</div>
+      <button className="tour-link quiet" type="button" onClick={() => router.push("/directory")}>
+        <span>
+          <strong>Who does what</strong>
+          <small>Every person and every stage, in one place</small>
+        </span>
+        <span className="go" aria-hidden="true">→</span>
+      </button>
 
-      <div className="role-title"><h3>Family abroad</h3><small>pays for the build</small></div>
+      <div className="divider">or log in as someone</div>
+
+      <div className="role-title"><h3>Family abroad</h3><small>locks the money</small></div>
       <section className="group">{sponsors.map((s) => person("sponsor", s.name, `Sending from ${s.city}`))}</section>
 
-      <div className="role-title"><h3>Parent at home</h3><small>approves each stage</small></div>
+      <div className="role-title"><h3>Parent at home</h3><small>says yes, or check again</small></div>
       <section className="group">{projects.map((p) => person("parent", p.parent, `${p.name}, ${p.place}`))}</section>
 
-      <div className="role-title"><h3>On the site</h3><small>builds and checks</small></div>
+      <div className="role-title"><h3>On the site</h3><small>builds, then checks</small></div>
       <section className="group">
         {person("builder", projects[0].builder.name, "Builder")}
         {person("engineer", projects[0].engineer.name, "Independent engineer")}

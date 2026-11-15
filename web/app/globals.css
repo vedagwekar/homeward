@@ -1175,3 +1175,25 @@ nav > a[aria-current="page"] {
 .tour-link { background: var(--action); }
 .role-switch button { flex: 1; padding: 0 0.4rem; }
 @media (max-width: 30rem) { .role-switch small { display: none; } }
+
+/* Directory */
+.tour.wide { max-width: 34rem; }
+.owner-row { align-items: center; }
+.owner-row small { color: var(--secondary); display: block; }
+.owner-row[data-who="none"] { color: var(--secondary); }
+.chip-button { background: var(--action); border: 0; border-radius: 99px; color: #fffdf9; font: inherit; font-size: 0.9rem; font-weight: 600; min-height: 2.5rem; padding: 0 0.9rem; white-space: nowrap; }
+.owner-row[data-who="builder"] .chip-button { background: var(--brass); }
+.owner-row[data-who="engineer"] .chip-button { background: var(--green); }
+.owner-row[data-who="parent"] .chip-button { background: var(--oxide); }
+.owner-row[data-who="sponsor"] .chip-button { background: var(--steel); }
+.role-card { border-left: 0.35rem solid var(--steel); display: grid; gap: 0.6rem; margin-bottom: 0.9rem; }
+.role-card[data-who="builder"] { border-left-color: var(--brass); }
+.role-card[data-who="engineer"] { border-left-color: var(--green); }
+.role-card[data-who="parent"] { border-left-color: var(--oxide); }
+.role-head { align-items: center; display: flex; gap: 0.8rem; }
+.role-head small { color: var(--secondary); display: block; }
+.role-card ul { margin: 0; padding-left: 1.1rem; }
+.role-card li { margin: 0.2rem 0; }
+
+.tour-link.quiet { background: var(--fill); color: var(--text) !important; margin-top: 0.6rem; min-height: 3.5rem; }
+.tour-link.quiet small { color: var(--secondary); }
