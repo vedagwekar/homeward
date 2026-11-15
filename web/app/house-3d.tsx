@@ -221,7 +221,7 @@ export default function House3D({ project }: { project: Project }) {
   return (
     <div className="house3d">
       <canvas ref={canvas} role="img" aria-label={`A 3D model of ${project.name}. Parts that are paid for look real, and the rest is an outline. The stage list below says the same in words.`} />
-      <p>Drag to turn it. Each part turns real when it is paid for.</p>
+      <p>Drag to turn it.</p>
     </div>
   );
 }

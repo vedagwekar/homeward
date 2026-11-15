@@ -20,7 +20,7 @@ export default function View({ id, slug }: { id: string; slug: string }) {
       <Back href={`/homes/${project.id}`} label={project.name} />
       <h1>{stage.name}</h1>
       <p className="intro">
-        {view.label}. {money(stage.amount)} for this stage.
+        {view.label}. {money(stage.amount)}.
       </p>
 
       <section className="group">
@@ -106,19 +106,19 @@ export default function View({ id, slug }: { id: string; slug: string }) {
 
       {isActive(stage) && (
         <>
-          {stage.status === "open" && <p className="note">The builder is working. They film the stage code {stage.code} when they send proof.</p>}
+          {stage.status === "open" && <p className="note">Builder is working. Code {stage.code}.</p>}
           {stage.status === "submitted" && !stage.engineerDecision && (
-            <p className="note">Waiting for {project.engineer.name} to check the work.</p>
+            <p className="note">{project.engineer.name} is checking.</p>
           )}
-          {stage.status === "rejected" && <p className="note">The engineer rejected this proof. The money stays locked until the builder fixes it and sends new proof.</p>}
-          {stage.status === "submitted" && stage.engineerDecision === "approved" && !stage.amma && <p className="note">The engineer approved this stage. Waiting for {project.parent}.</p>}
+          {stage.status === "rejected" && <p className="note">Sent back. Money stays locked.</p>}
+          {stage.status === "submitted" && stage.engineerDecision === "approved" && !stage.amma && <p className="note">Engineer approved. Waiting for {project.parent}.</p>}
           {stage.status === "submitted" && stage.amma === "recheck" && !stage.secondDecision && (
-            <p className="note">Second check requested. {project.engineer.secondName} must approve before any money moves.</p>
+            <p className="note">Second check: {project.engineer.secondName} must approve.</p>
           )}
                   </>
       )}
 
-      {stage.status === "locked" && <p className="note">Proof appears here after this stage opens.</p>}
+      {stage.status === "locked" && <p className="note">Proof shows here once the stage starts.</p>}
     </>
   );
 }

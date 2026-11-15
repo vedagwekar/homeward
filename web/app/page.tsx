@@ -14,7 +14,7 @@ export default function Homes() {
   return (
     <>
       <h1>Homes</h1>
-      <p className="intro">Pay for your parents' house one stage at a time. Each payment is released only after an engineer checks the work.</p>
+      <p className="intro">Pay one checked stage at a time.</p>
       <CurrencySwitch />
 
       <section className="group">

@@ -85,10 +85,24 @@ Payees can never change. That is the strongest promise in the pitch. So a defaul
 - It cannot change terms, payees or stages after `create_project`.
 - `resolve` still lets the admin choose how much unspent family money goes back, as before. It cannot touch the builder's security. That only returns to the builder or goes to the sponsors.
 
+## Backend and app
+
+- **Client.** Regenerated from the wasm (`packages/homeward-client`).
+- **Backend.** `create_project` passes each home's terms (from `web/mock/projects.json`). New routes: deposit, return-deposit, and default claim, confirm, contest, finalize, withdraw and settle (see `backend/README.md`). The project view reports a `security` block and each sponsor's fee `credit`. `scripts/demo.ts` and `backend/src/smoke.ts` are updated. The backend typechecks.
+- **App.** The builder has a deposit step and a deposit card. Families see the builder's held money and a "Builder stopped?" screen. The engineer can confirm a report. The Fund screen waives the fee on refunded money. In mock mode the same rules run with real clocks. 27 unit tests cover the rules.
+- **Copy.** Every screen was cut down to short lines.
+
+## Deployed and verified on Testnet (14 to 15 Nov 2026)
+
+- **New contract:** `CC2NYVUTHJWBRTDG7J4O6VB7TINL5MTNOTTXOMVMHKSCUYZR4W3M6QF2`, deployed with the same admin, token, platform and 1.5% fee. Alias `homeward-v2`.
+- **First contract:** `CC2T4LZMG2UX7TCYX63MSCWSRYZO3XWNP3IACH47WQVM7NSI7XZP3JNO`, untouched. Its transactions stay valid.
+- `sh scripts/demo.sh`: the whole story, 29 checks passed (including the deposit and held-back payments).
+- `sh scripts/security.sh`: the deposit coming back after handover, a stalled builder ending the build with the family paid back, and funding a new build without a second fee, 23 checks passed.
+- `npm run smoke` in `backend`: every route, 88 checks passed.
+
 ## Not done yet
 
-- **Deployment.** This is a new contract with a new ID. The old contract stays on Testnet with its transactions, so the links in the submitted form still work. Nothing has been deployed.
-- **Backend and app.** `create_project` has a new argument, so the generated client must be regenerated, and the backend, `scripts/demo.ts` and the smoke test must pass terms. The builder needs a deposit screen, and the family a "builder's deposit held" line. None of that is written.
+- **Switching the app over.** The app's contract link (`CONTRACT_URL` in `web/lib/store.ts`), the proof page's saved transactions (`web/mock/proof.json`, from the first contract), the README and the Devpost wording still point at the first contract.
 - **Real money.** A deposit in rupees must be held by a licensed partner, like the family's money.
 - **Disputes.** The admin's settlement of a contested claim is still a trusted step.
 - **Unvalidated numbers.** 5%, 10%, 30 days, 7 days and 60 days are starting points to test with builders.

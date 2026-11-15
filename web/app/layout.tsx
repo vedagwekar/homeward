@@ -31,9 +31,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
           <StatusBar />
           <footer>
-            Testnet demo with sample homes and photos. Interac, rupee payouts, SMS and engineer licences are simulated.{" "}
+            Testnet demo. Interac, rupee payouts and SMS are simulated.{" "}
             <Link className="link" href="/proof">
-              See every transaction on Stellar testnet
+              See transactions on Stellar testnet
             </Link>
           </footer>
         </main>

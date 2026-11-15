@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { budgetParts, canPay, gates, refundSplit, dollars, homewardFee, nextStage, rupees, settle, timeline, totalFunded, totalPaid } from "./project.mjs";
+import { budgetParts, canPay, canReturnDeposit, claimStatus, defaultPayback, depositNeeded, duration, feeAfterCredit, gates, isStalled, securityHeld, refundSplit, dollars, homewardFee, nextStage, rupees, settle, timeline, totalFunded, totalPaid } from "./project.mjs";
 
 const stages = [
   { name: "A", amount: 100, materials: 20, status: "paid" },
@@ -115,4 +115,86 @@ test("gates: a second engineer's rejection shows as sent back and leaves the mon
   assert.deepEqual(track.map((g) => g.state), ["done", "done", "failed", "todo"]);
   assert.equal(track[2].label, "Second engineer sent it back");
   assert.equal(track.at(-1).state, "todo");
+});
+
+// ---- the builder's security ----
+const paidStage = (amount, materials, builder) => ({ status: "paid", amount, materials, payouts: [{ to: "Builder", amount: builder }] });
+const amma = (stages, security) => ({ budget: 1500000, sponsors: [{ name: "A", paidIn: 900000 }, { name: "B", paidIn: 300000 }], stages, security: { depositPct: 5, retentionPct: 10, ...security } });
+
+test("security: a deposit posted up front, then 10% of each stage's labour held back", () => {
+  const p = amma([paidStage(300000, 45000, 178500), paidStage(375000, 150000, 157500)], { posted: 75000, upfront: 75000 });
+  assert.deepEqual(securityHeld(p), { target: 75000, deposit: 75000, retention: 25500 + 22500 });
+});
+
+test("security: with no cash up front the first payment fills the deposit, retention starts after", () => {
+  const dad = { budget: 500000, sponsors: [], security: { depositPct: 5, retentionPct: 10 }, stages: [paidStage(100000, 30000, 49000), paidStage(300000, 140000, 112000)] };
+  assert.deepEqual(securityHeld({ ...dad, stages: [dad.stages[0], { ...dad.stages[1], status: "locked" }] }), { target: 25000, deposit: 25000, retention: 0 });
+  assert.deepEqual(securityHeld(dad), { target: 25000, deposit: 25000, retention: 16000 });
+});
+
+test("security: retention can never take more than the builder's share", () => {
+  const p = amma([paidStage(100000, 0, 5000)], { posted: 75000 });
+  assert.equal(securityHeld(p).retention, 5000);
+});
+
+test("security: nothing is held after it was returned or the build was stopped", () => {
+  const stages = [paidStage(300000, 45000, 178500)];
+  assert.deepEqual(securityHeld(amma(stages, { posted: 75000, returned: true })), { target: 75000, deposit: 0, retention: 0 });
+  assert.deepEqual(securityHeld(amma(stages, { posted: 75000, defaulted: true })), { target: 75000, deposit: 0, retention: 0 });
+});
+
+test("security: a stage can't start until the up-front deposit is posted", () => {
+  assert.equal(depositNeeded(amma([], { upfront: 75000, posted: 0 })), true);
+  assert.equal(depositNeeded(amma([], { upfront: 75000, posted: 75000 })), false);
+  assert.equal(depositNeeded(amma([], { upfront: 0, posted: 0 })), false);
+  assert.equal(depositNeeded({ stages: [] }), false);
+});
+
+test("security: the deposit goes back only after the last stage and the defects period", () => {
+  const done = [paidStage(100, 0, 70)];
+  const s = { defectsSecs: 60, completedAt: 1000 };
+  assert.equal(canReturnDeposit(amma(done, s), 1059), false);
+  assert.equal(canReturnDeposit(amma(done, s), 1060), true);
+  assert.equal(canReturnDeposit(amma([...done, { status: "open" }], s), 5000), false);
+  assert.equal(canReturnDeposit(amma(done, { ...s, claim: { stage: "x" } }), 5000), false);
+  assert.equal(canReturnDeposit(amma(done, { ...s, returned: true }), 5000), false);
+});
+
+test("security: a report moves from needing an engineer, to the builder's window, to ready", () => {
+  const s = (claim) => ({ responseSecs: 45, claim });
+  assert.equal(claimStatus(s(undefined), 0).phase, "none");
+  assert.equal(claimStatus(s({ at: 100, confirmed: false }), 110).phase, "needs-engineer");
+  assert.deepEqual(claimStatus(s({ at: 100, confirmed: true }), 130), { phase: "waiting", secsLeft: 15 });
+  assert.equal(claimStatus(s({ at: 100, confirmed: true }), 145).phase, "ready");
+  assert.equal(claimStatus(s({ at: 100, confirmed: true, contested: true }), 500).phase, "contested");
+});
+
+test("security: only a stage waiting on the builder for the stall period counts as stalled", () => {
+  const sec = { stallSecs: 120 };
+  assert.equal(isStalled({ status: "open", since: 100 }, sec, 219), false);
+  assert.equal(isStalled({ status: "open", since: 100 }, sec, 220), true);
+  assert.equal(isStalled({ status: "rejected", since: 100 }, sec, 220), true);
+  assert.equal(isStalled({ status: "submitted", since: 100 }, sec, 9999), false);
+});
+
+test("security: a stopped build gives back what was never paid out plus the builder's deposit and retention", () => {
+  const stages = [paidStage(300000, 45000, 178500), paidStage(375000, 150000, 157500), { status: "open", amount: 450000, materials: 180000, payouts: [] }];
+  const p = amma(stages, { posted: 75000 });
+  assert.deepEqual(defaultPayback(p), { unspent: 1200000 - (300000 + 375000 + 180000), fromBuilder: 75000 + 48000 });
+});
+
+test("fees: money refunded from a stopped build is funded again without a second fee", () => {
+  assert.equal(feeAfterCredit(1000, 0), 15);
+  assert.equal(feeAfterCredit(1000, 1000), 0);
+  assert.equal(feeAfterCredit(1000, 400), 9); // 600 pays 1.5%
+  assert.equal(feeAfterCredit(1000, 5000), 0);
+});
+
+test("duration: demo windows read as seconds and minutes, a launch's as days", () => {
+  assert.equal(duration(1), "1 second");
+  assert.equal(duration(45), "45 seconds");
+  assert.equal(duration(120), "2 minutes");
+  assert.equal(duration(3 * 3600), "3 hours");
+  assert.equal(duration(30 * 86400), "30 days");
+  assert.equal(duration(-5), "0 seconds");
 });

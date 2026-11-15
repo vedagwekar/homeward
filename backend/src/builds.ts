@@ -3,6 +3,7 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { clientFor, explorerTx, read, StageStatus, type StageInput } from "./chain";
+import type { SecurityTerms } from "homeward-client";
 import { addr, root, rupeesToUnits, unitsToRupees } from "./config";
 import { actionsFor, allBuilds, chainIdFor, getMeta } from "./db";
 
@@ -17,6 +18,7 @@ export interface DisplayProject {
   id: string; name: string; budget: number; parent: string;
   sponsors: { name: string; city: string; paidIn: number }[];
   stages: DisplayStage[];
+  security?: { depositPct: number; retentionPct: number; postUpfront: boolean; defectsSecs: number; stallSecs: number; responseSecs: number };
   [key: string]: unknown;
 }
 
@@ -28,6 +30,20 @@ export const sponsorRole = (index: number) => (index === 0 ? "sponsor1" : "spons
 
 const PAYEE_ADDRESS: Record<string, string> = { Builder: addr.builder, Labour: addr.labour };
 const PAYEE_NAME: Record<string, string> = { [addr.builder]: "Builder", [addr.labour]: "Labour" };
+
+/** The builder's security terms, fixed when the build is set up. Zero means none. */
+export function securityTerms(d: DisplayProject): SecurityTerms {
+  const s = d.security ?? { depositPct: 0, retentionPct: 0, postUpfront: false, defectsSecs: 60, stallSecs: 120, responseSecs: 45 };
+  const deposit = rupeesToUnits(BigInt(Math.round((d.budget * s.depositPct) / 100)));
+  return {
+    deposit,
+    upfront: s.postUpfront ? deposit : 0n,
+    retention_bps: Math.round(s.retentionPct * 100),
+    defects_secs: BigInt(s.defectsSecs),
+    stall_secs: BigInt(s.stallSecs),
+    response_secs: BigInt(s.responseSecs),
+  };
+}
 
 /** The app's own split (70/30), with the builder last so they receive any rounding. */
 export function stageInput(s: DisplayStage): StageInput {
@@ -80,10 +96,12 @@ export async function projectView(slug: string) {
 
   const client = clientFor("admin");
   const id = chainId;
-  const [project, stages, contributions] = await Promise.all([
+  const [project, stages, contributions, credits, claim] = await Promise.all([
     read(client.get_project({ id })),
     Promise.all(d.stages.map((_, stage) => read(client.get_stage({ id, stage })))),
     Promise.all(d.sponsors.map((_, i) => read(client.contribution({ id, sponsor: addr[sponsorRole(i)] })))),
+    Promise.all(d.sponsors.map((_, i) => read(client.fee_credit({ sponsor: addr[sponsorRole(i)] })))),
+    read(client.get_claim({ id })),
   ]);
   const paidTx = new Map(actionsFor(id).filter((a) => a.kind === "paid").map((a) => [a.stage, a.hash]));
 
@@ -111,6 +129,7 @@ export async function projectView(slug: string) {
       engineerDecision: st.approvals.includes(addr.inspector1) ? "approved" : meta?.engineer_rejected ? "rejected" : null,
       secondDecision: st.approvals.includes(addr.inspector2) ? "approved" : meta?.second_rejected ? "rejected" : null,
       amma: st.parent_ok ? "ok" : st.approvals_needed === 2 ? "recheck" : null,
+      since: Number(st.since), // when the stage last started waiting on the builder
       holdUntil: st.status === StageStatus.Approved ? Number(st.approved_at + st.hold_secs) : undefined,
       paidOn: cert ? new Date(Number(cert.time) * 1000).toISOString().slice(0, 10) : undefined,
       certificate: cert
@@ -131,7 +150,25 @@ export async function projectView(slug: string) {
     frozen: project.frozen,
     funded: unitsToRupees(project.funded),
     spent: unitsToRupees(project.spent),
-    sponsors: d.sponsors.map((s, i) => ({ ...s, paidIn: unitsToRupees(contributions[i]) })),
+    // What the builder has with the contract, and where a default report stands.
+    security: {
+      ...d.security,
+      depositTarget: unitsToRupees(project.terms.deposit),
+      upfront: unitsToRupees(project.terms.upfront),
+      retentionPct: project.terms.retention_bps / 100,
+      defectsSecs: Number(project.terms.defects_secs),
+      stallSecs: Number(project.terms.stall_secs),
+      responseSecs: Number(project.terms.response_secs),
+      deposit: unitsToRupees(project.deposit_held),
+      retention: unitsToRupees(project.retention_held),
+      returned: project.security_returned,
+      defaulted: project.defaulted,
+      completedAt: project.stages_paid === project.stage_count ? Number(project.completed_at) : undefined,
+      claim: claim
+        ? { stage: d.stages[claim.stage]?.slug, at: Number(claim.at), confirmed: claim.confirmed, contested: claim.contested, stalled: claim.stalled }
+        : undefined,
+    },
+    sponsors: d.sponsors.map((s, i) => ({ ...s, paidIn: unitsToRupees(contributions[i]), credit: unitsToRupees(credits[i]) })),
     stages: views,
   };
 }

@@ -10,8 +10,8 @@ process.env.DB_PATH = join(temp, "smoke.sqlite");
 process.env.UPLOAD_DIR = join(temp, "uploads");
 
 const { createApp } = await import("./routes");
-const { tokenBalance } = await import("./chain");
-const { addr, unitsToRupees } = await import("./config");
+const { ensureTusdc, tokenBalance } = await import("./chain");
+const { addr, rupeesToUnits, unitsToRupees } = await import("./config");
 
 const server = createApp().listen(0);
 const base = `http://127.0.0.1:${(server.address() as AddressInfo).port}/api`;
@@ -74,9 +74,22 @@ async function main() {
   check("Negative amount refused", (await post("/fund", { project: P, sponsor: "Anil", amount: -5 })).status, 400);
   check("Stranger refused", (await post("/fund", { project: P, sponsor: "Eve", amount: 5 })).status, 400);
   check("Secrets are not a field", (await post("/fund", { project: P, sponsor: "SECRET", amount: 5 })).status, 400);
+  // Top up first, so the balance change measured below is only what this build costs.
+  await ensureTusdc("sponsor1", rupeesToUnits(1_000_000n));
   const before = await tokenBalance(addr.sponsor1);
   await ok("Anil locks the whole budget", "/fund", { project: P, sponsor: "Anil", amount: 500_000 });
   check("Paid-in shows on the build", (await view()).sponsors[0].paidIn, 500_000);
+
+  section("Builder's security (Dad's build: the deposit is earned from the first payment)");
+  v = await view();
+  check("Terms are on chain: a 5% deposit", v.security.depositTarget, 25_000);
+  check("Nothing has to be posted up front", v.security.upfront, 0);
+  check("Retention is 10%", v.security.retentionPct, 10);
+  check("Unknown role can't report a default", (await post(`/project/${P}/default/claim`, { as: "builder", stage: "prep" })).status, 400);
+  check("A report needs a real stage", (await post(`/project/${P}/default/claim`, { as: "parent", stage: "nowhere" })).status, 400);
+  check("No report to confirm", (await post(`/project/${P}/default/confirm`, { as: "inspector1" })).body.code, "NoClaim");
+  check("No report to carry out", (await post(`/project/${P}/default/finalize`)).body.code, "NoClaim");
+  check("Nothing to return before handover", (await post(`/project/${P}/return-deposit`)).body.code, "WrongStatus");
 
   section("Stage: approve and pay");
   const opened = await ok("Prep opens", "/stages/prep/open", { project: P });
@@ -94,6 +107,7 @@ async function main() {
   check("Engineer's decision shows", prep.engineerDecision, "approved");
   check("Amma's decision shows", prep.amma, "ok");
   check("Paid date shows", typeof prep.paidOn, "string");
+  check("The first payment filled the deposit", (await view()).security.deposit, 25_000);
   check("Certificate links the payout", String(prep.certificate?.explorer).includes("stellar.expert"), true);
   const video = await fetch(base.replace(/\/api$/, "") + prep.videoUrl);
   check("Video can be watched", await video.text(), "video-one");
@@ -139,10 +153,13 @@ async function main() {
   await ok("Unspent money returned", `/project/${P}/resolve`);
   v = await view();
   check("Everything is accounted for", v.spent, 500_000);
+  check("A stop with no default returns the builder's security", v.security.deposit, 0);
+  check("...and marks it returned", v.security.returned, true);
   const spentRupees = 100_000 + 100_000 + 140_000; // prep, handover, repairs materials
   const fee = 500_000 * 0.015;
   const change = unitsToRupees(before - (await tokenBalance(addr.sponsor1)));
-  check("Family only paid for finished work plus the fee", Math.abs(change - (spentRupees + fee)) <= 1, true);
+  const expected = spentRupees + fee;
+  check("Family only paid for finished work plus the fee (rupees)", Math.abs(change - expected) <= 1 ? expected : change, expected);
 
   console.log(failures ? `\nSMOKE FAILED: ${failures} check(s).` : "\nSMOKE PASSED: every route works on testnet.");
 }

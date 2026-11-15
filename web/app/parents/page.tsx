@@ -47,7 +47,7 @@ export default function Parents() {
   return (
     <>
       <h1>{mine >= 0 ? "My home" : "Parents"}</h1>
-      <p className="intro">{mine >= 0 ? "Nothing to install and nothing to pay." : "What a parent sees. Nothing to install and nothing to pay."}</p>
+      <p className="intro">{mine >= 0 ? "Nothing to install or pay." : "What a parent sees."}</p>
       {mine < 0 && (
         <div className="segments" role="group" aria-label="Parent">
           {projects.map((p, i) => (
