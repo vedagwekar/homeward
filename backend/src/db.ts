@@ -5,7 +5,8 @@ import { dirname, resolve } from "node:path";
 import { DatabaseSync } from "node:sqlite";
 import { root } from "./config";
 
-const path = process.env.DB_PATH ?? resolve(root, "homeward.sqlite");
+// A blank DB_PATH (as in .env.example) counts as unset. An empty path would be a throwaway database, wiped on every restart.
+const path = process.env.DB_PATH || resolve(root, "homeward.sqlite");
 mkdirSync(dirname(path), { recursive: true });
 const db = new DatabaseSync(path);
 
