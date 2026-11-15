@@ -126,6 +126,7 @@ export async function projectView(slug: string) {
       prePour: st.pre_pour,
       code: st.status === StageStatus.Locked ? undefined : meta?.code ?? undefined,
       videoUrl: meta?.video_file ? `/api/videos/${meta.video_file}` : undefined,
+      videoReview: meta?.video_review ? JSON.parse(meta.video_review) : undefined,
       engineerDecision: st.approvals.includes(addr.inspector1) ? "approved" : meta?.engineer_rejected ? "rejected" : null,
       secondDecision: st.approvals.includes(addr.inspector2) ? "approved" : meta?.second_rejected ? "rejected" : null,
       amma: st.parent_ok ? "ok" : st.approvals_needed === 2 ? "recheck" : null,

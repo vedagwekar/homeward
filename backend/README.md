@@ -50,11 +50,17 @@ This takes a minute or two. Pass `"fresh":true` to restart a build from scratch.
 | `POST /api/project/:id/default/withdraw` | `{as}`, the family takes the report back | that role |
 | `POST /api/project/:id/default/settle` | `{forfeit}`, only for a disputed report | admin |
 
-Every write returns `{hash, explorer}`, plus anything listed above. `decide` also returns `paid`.
+Every write returns `{hash, explorer}`, plus anything listed above. `decide` also returns `paid`. Proof uploads return `videoHash` and `videoReview`. Project reads include the current proof video URL and its review when available.
 
 Errors return `{error}` in plain words that are safe to show on screen. Refusals from the contract also include `code`.
 
 A write takes about 10 seconds. Show a loading state, and fetch the project again afterwards.
+
+## AI video review
+
+Set `GEMINI_API_KEY` on the backend or in the repository-root `.env`. `GEMINI_MODEL` defaults to `gemini-3.5-flash-lite`. Homeward sends eligible uploads to Google Gemini with the expected stage code and checklist. Use short MP4, MOV, or WebM clips up to 14 MB.
+
+The submission is recorded on Stellar before the AI review starts. The review checks clarity, code visibility, and whether the work appears relevant. Provider errors, missing configuration, and larger uploads leave the proof available for the engineer. The existing approval and payout rules apply.
 
 ## Good to know
 

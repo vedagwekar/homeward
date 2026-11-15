@@ -6,6 +6,7 @@ import { useState } from "react";
 import { dollars, feeAfterCredit, nextStage, totalFunded } from "@/lib/project.mjs";
 import { act, addFunding, useProjects, useSession, useStatus, useMoney } from "@/lib/store";
 import { Back } from "../../../icons";
+import UsdcQuote from "../../../usdc-quote";
 
 
 export default function View({ id }: { id: string }) {
@@ -116,9 +117,10 @@ export default function View({ id }: { id: string }) {
             <span className="muted">{money(fee)}</span>
           </div>
           <div className="row">
-            <div className="grow">Exchange rate</div>
+            <div className="grow">Demo CAD exchange rate</div>
             <span className="muted">₹{project.rupeesPerCad} per C$1</span>
           </div>
+          <UsdcQuote rupees={total} />
           <div className="row">
             <strong className="grow">You pay</strong>
             <strong>{cad} CAD</strong>

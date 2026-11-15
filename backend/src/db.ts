@@ -4,6 +4,7 @@ import { mkdirSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { DatabaseSync } from "node:sqlite";
 import { root } from "./config";
+import type { VideoReview } from "./video-review";
 
 // A blank DB_PATH (as in .env.example) counts as unset. An empty path would be a throwaway database, wiped on every restart.
 const path = process.env.DB_PATH || resolve(root, "homeward.sqlite");
@@ -14,7 +15,7 @@ db.exec(`
   CREATE TABLE IF NOT EXISTS builds (slug TEXT PRIMARY KEY, chain_id INTEGER NOT NULL);
   CREATE TABLE IF NOT EXISTS stage_meta (
     chain_id INTEGER NOT NULL, stage INTEGER NOT NULL,
-    code TEXT, video_file TEXT, video_mime TEXT,
+    code TEXT, video_file TEXT, video_mime TEXT, video_review TEXT,
     engineer_rejected INTEGER NOT NULL DEFAULT 0,
     second_rejected INTEGER NOT NULL DEFAULT 0,
     PRIMARY KEY (chain_id, stage)
@@ -26,10 +27,16 @@ db.exec(`
   );
 `);
 
+// Existing databases predate AI video reviews.
+if (!db.prepare("PRAGMA table_info(stage_meta)").all().some((column) => column.name === "video_review")) {
+  db.exec("ALTER TABLE stage_meta ADD COLUMN video_review TEXT");
+}
+
 export interface StageMeta {
   code: string | null;
   video_file: string | null;
   video_mime: string | null;
+  video_review: string | null;
   engineer_rejected: number;
   second_rejected: number;
 }
@@ -51,7 +58,7 @@ export const saveBuild = (slug: string, chainId: number) =>
 export const allBuilds = () => db.prepare("SELECT slug FROM builds").all() as unknown as { slug: string }[];
 
 export const getMeta = (chainId: number, stage: number) =>
-  (db.prepare("SELECT code, video_file, video_mime, engineer_rejected, second_rejected FROM stage_meta WHERE chain_id = ? AND stage = ?")
+  (db.prepare("SELECT code, video_file, video_mime, video_review, engineer_rejected, second_rejected FROM stage_meta WHERE chain_id = ? AND stage = ?")
     .get(chainId, stage) as StageMeta | undefined) ?? null;
 
 function ensureMeta(chainId: number, stage: number) {
@@ -66,8 +73,13 @@ export function saveCode(chainId: number, stage: number, code: string) {
 /** New proof starts a fresh review, so earlier rejections no longer apply. */
 export function saveVideo(chainId: number, stage: number, file: string, mime: string) {
   ensureMeta(chainId, stage);
-  db.prepare("UPDATE stage_meta SET video_file = ?, video_mime = ?, engineer_rejected = 0, second_rejected = 0 WHERE chain_id = ? AND stage = ?")
+  db.prepare("UPDATE stage_meta SET video_file = ?, video_mime = ?, video_review = NULL, engineer_rejected = 0, second_rejected = 0 WHERE chain_id = ? AND stage = ?")
     .run(file, mime, chainId, stage);
+}
+
+export function saveVideoReview(chainId: number, stage: number, file: string, review: VideoReview) {
+  db.prepare("UPDATE stage_meta SET video_review = ? WHERE chain_id = ? AND stage = ? AND video_file = ?")
+    .run(JSON.stringify(review), chainId, stage, file);
 }
 
 export function saveRejection(chainId: number, stage: number, engineer: "first" | "second") {

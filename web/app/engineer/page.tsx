@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { act, activeStage, confirmDefault, updateStage, useProjects, useStatus } from "@/lib/store";
+import { act, activeStage, confirmDefault, proofVideoUrl, updateStage, useProjects, useStatus } from "@/lib/store";
+import VideoReviewPanel from "../video-review";
 
 // The engineer's one screen: one check at a time. Look at the proof, tick what you confirmed, then decide.
 export default function Engineer() {
@@ -66,14 +67,18 @@ export default function Engineer() {
 
       <h3>1. Look at the proof</h3>
       <p className="hint">Code {stage.code} must show.</p>
-      <div className="photos">
-        {stage.photos.map((p) => (
-          <figure key={p.src}>
-            <img src={p.src} alt={p.caption} />
-            <figcaption>{p.caption}</figcaption>
-          </figure>
-        ))}
-      </div>
+      {stage.videoUrl && <video className="proof-video" src={proofVideoUrl(stage.videoUrl)} controls playsInline preload="metadata" aria-label="Builder's proof video" />}
+      {stage.videoReview && <VideoReviewPanel review={stage.videoReview} />}
+      {!stage.videoUrl && (
+        <div className="photos">
+          {stage.photos.map((p) => (
+            <figure key={p.src}>
+              <img src={p.src} alt={p.caption} />
+              <figcaption>{p.caption}</figcaption>
+            </figure>
+          ))}
+        </div>
+      )}
 
       <h3>2. Tick what you saw</h3>
       <fieldset className="group">
