@@ -38,8 +38,9 @@ export default function Tour() {
     router.push(step.href);
   };
 
+  const roleLabel: Record<string, string> = { sponsor: "Family abroad", builder: "Builder", engineer: "Independent engineer", parent: "Parent at home" };
   return (
-    <div className="signin">
+    <div className="tour">
       <Wordmark size={32} />
       <h1>Try the story</h1>
       <p className="intro">Seven taps. You play everyone.</p>
@@ -52,24 +53,31 @@ export default function Tour() {
         ))}
       </div>
 
-      <section className="group pad tour-now">
-        <small>Next</small>
-        <strong>{step.title}</strong>
+      <section className="tour-card" data-who={step.who}>
+        <div className="tour-who">
+          <span className="avatar large">{person.name[0]}</span>
+          <div>
+            <small>Next, you are</small>
+            <strong>{person.name}</strong>
+            <small>{roleLabel[step.who]}</small>
+          </div>
+        </div>
+        <h2>{step.title}</h2>
         <p>{step.detail}</p>
         <button className="button" type="button" onClick={go}>
-          Go as {person.name}
+          Go as {person.name} →
         </button>
       </section>
 
       <h3>The story</h3>
-      <section className="group">
+      <ol className="tour-list">
         {DEMO_STEPS.map((id, i) => (
-          <div className="row tour-step" key={id} aria-current={i === at ? "step" : undefined} data-state={at < 0 ? "todo" : i < at ? "done" : i === at ? "now" : "todo"}>
+          <li key={id} aria-current={i === at ? "step" : undefined} data-state={at < 0 ? "todo" : i < at ? "done" : i === at ? "now" : "todo"}>
             <span className="tour-dot" aria-hidden="true">{at >= 0 && i < at ? "✓" : i + 1}</span>
-            <div className="grow">{labels[id]}</div>
-          </div>
+            <span>{labels[id]}</span>
+          </li>
         ))}
-      </section>
+      </ol>
 
       <p className="note">
         Real transactions on Stellar Testnet. Each step takes a few seconds.{" "}

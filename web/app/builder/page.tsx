@@ -100,8 +100,8 @@ function ProofForm({ project, stage, resubmit, busy }: { project: string; stage:
       {LIVE && (
         <>
           <label className="group pad proof-upload">
-            <span>Proof video</span>
-            <input type="file" accept="video/*,.mov" required disabled={busy} onChange={(event) => setVideo(event.target.files?.[0])} />
+            <span>Film the code, then send</span>
+            <input type="file" accept="video/*,.mov" capture="environment" required disabled={busy} onChange={(event) => setVideo(event.target.files?.[0])} />
           </label>
           <p className="hint">For AI review with Google Gemini, use a short MP4, MOV, or WebM clip up to 14 MB. The engineer reviews the submission.</p>
         </>

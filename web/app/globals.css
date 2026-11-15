@@ -1,28 +1,34 @@
-/* Homeward palette, taken from a Kerala house. Lime-washed walls for the page, teak for text and
-   buttons, red oxide (the polished floor) for the logo, brass for certificates. Leaf green means money
-   paid, monsoon slate means money held safe, red is only for something that went wrong.
+/* Homeward palette: warm paper page, deep brown-black text and buttons, terracotta for the logo, brass for
+   certificates. Green means money paid, slate means money held safe, red is only for something that went wrong.
    Light only, so screenshots and the booth look the same. */
 :root {
-  color-scheme: light;
-  --page: #eef1f2;
-  --sidebar: #e5e9eb;
-  --surface: #fbfcfc;
-  --text: #2b211b;
-  --secondary: #665d57;
-  --separator: #d6dcdf;
-  --fill: #e5e9eb;
-  --action: #2b211b;
-  --green: #24613a;
-  --green-soft: #a9cdb3;
-  --steel: #3d5670;
+  color-scheme: only light;
+  --page: #f7f4ee;
+  --sidebar: #eee9df;
+  --surface: #fffdf9;
+  --text: #261d17;
+  --secondary: #6a6158;
+  --separator: #e6dfd4;
+  --fill: #eee8de;
+  --action: #261d17;
+  --green: #2d7a50;
+  --green-soft: #b8d9c4;
+  --steel: #405b78;
   --alarm: #b3261e;
-  --gray: #8c8580;
-  --oxide: #94331f;
+  --gray: #8a8178;
+  --oxide: #b2472a;
   --brass: #a87b24;
 }
 
 * {
   box-sizing: border-box;
+}
+
+button,
+input,
+select,
+textarea {
+  color: var(--text);
 }
 
 html {
@@ -1111,3 +1117,61 @@ nav > a[aria-current="page"] {
 .parent.big-text { font-size: 1.3em; }
 .parent-tools { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.75rem; }
 .parent-tools .button { min-height: 3rem; }
+
+/* ---- Sign in and guided tour: a clearer first screen ---- */
+.signin { max-width: 28rem; padding-top: 1rem; }
+.signin h1 { font-size: 2rem; line-height: 1.1; margin: 0 0 0.5rem; }
+.signin .intro { color: var(--secondary); margin: 0 0 1.25rem; }
+.tour-link {
+  align-items: center; background: var(--action); border: 0; border-radius: 1.1rem; color: #fff !important;
+  display: flex; gap: 0.9rem; min-height: 4.5rem; padding: 0.9rem 1.1rem; text-align: left; width: 100%;
+}
+.tour-link strong { display: block; font-size: 1.15rem; }
+.tour-link small { color: #e9dfd2; display: block; }
+.tour-link .go { font-size: 1.6rem; margin-left: auto; }
+.divider { align-items: center; color: var(--secondary); display: flex; font-size: 0.9rem; gap: 0.75rem; margin: 1.4rem 0 0.2rem; }
+.divider::before, .divider::after { background: var(--separator); content: ""; flex: 1; height: 1px; }
+.role-title { align-items: center; display: flex; gap: 0.6rem; margin: 1.1rem 0 0.4rem; }
+.role-title h3 { margin: 0; }
+.role-title small { color: var(--secondary); }
+.person .grow > span { color: var(--text); display: block; font-size: 1.1rem; font-weight: 600; }
+.person .grow > small { color: var(--secondary); display: block; }
+.person .chev { color: var(--gray); font-size: 1.4rem; }
+
+.tour { margin: 0 auto; max-width: 28rem; padding-top: 1rem; }
+.tour h1 { font-size: 2rem; margin: 0 0 0.25rem; }
+.tour-card { background: var(--surface); border-radius: 1.4rem; display: grid; gap: 0.7rem; padding: 1.2rem; margin: 1rem 0 1.2rem; border-top: 0.45rem solid var(--steel); }
+.tour-card[data-who="builder"] { border-top-color: var(--brass); }
+.tour-card[data-who="engineer"] { border-top-color: var(--green); }
+.tour-card[data-who="parent"] { border-top-color: var(--oxide); }
+.tour-who { align-items: center; display: flex; gap: 0.8rem; }
+.tour-who small { color: var(--secondary); display: block; }
+.tour-who strong { display: block; font-size: 1.15rem; }
+.tour-card h2 { font-size: 1.5rem; line-height: 1.15; margin: 0.2rem 0 0; }
+.tour-card p { color: var(--secondary); margin: 0; }
+.tour-card .button { font-size: 1.15rem; min-height: 3.6rem; }
+.tour-list { list-style: none; margin: 0; padding: 0; }
+.tour-list li { align-items: center; display: flex; gap: 0.8rem; padding: 0.55rem 0; position: relative; }
+.tour-list li + li::before { background: var(--separator); content: ""; height: 1.1rem; left: 0.95rem; position: absolute; top: -0.55rem; width: 2px; }
+.tour-list li[data-state="done"] + li::before, .tour-list li[data-state="now"]::before { background: var(--green); }
+.tour-list li[data-state="todo"] { color: var(--secondary); }
+.tour-list li[data-state="now"] { font-weight: 700; }
+.tour-list .tour-dot { background: var(--fill); }
+.tour-list li[data-state="now"] .tour-dot { background: var(--action); color: #fff; }
+.tour-list li[data-state="done"] .tour-dot { background: var(--green); color: #fff; }
+
+.live-card { align-items: center; display: flex; gap: 0.75rem; margin: 1rem 0 0; padding: 0.9rem 1rem; text-decoration: none; color: inherit; }
+.live-card small { color: var(--secondary); display: block; }
+.live-pill { background: var(--alarm); border-radius: 99px; color: #fff; font-size: 0.75rem; font-weight: 800; letter-spacing: 0.06em; padding: 0.2rem 0.6rem; }
+.role-switch { align-items: center; background: var(--fill); border-radius: 99px; display: flex; gap: 0.25rem; margin: 0 0 0.75rem; padding: 0.25rem; overflow-x: auto; }
+.role-switch small { color: var(--secondary); font-size: 0.72rem; padding: 0 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; white-space: nowrap; }
+.role-switch button { background: none; border: 0; border-radius: 99px; font: inherit; font-size: 0.9rem; font-weight: 600; min-height: 2.25rem; padding: 0 0.85rem; white-space: nowrap; }
+.role-switch button[aria-pressed="true"] { background: var(--action); color: #fff; }
+
+/* Finish: warm and clear, not heavy */
+.group { box-shadow: 0 1px 0 rgba(38, 29, 23, 0.04), 0 8px 24px -16px rgba(38, 29, 23, 0.18); }
+.role-switch { background: var(--fill); }
+.role-switch button[aria-pressed="true"] { background: var(--action); color: #fffdf9; }
+.tour-link { background: var(--action); }
+.role-switch button { flex: 1; padding: 0 0.4rem; }
+@media (max-width: 30rem) { .role-switch small { display: none; } }

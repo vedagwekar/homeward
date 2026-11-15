@@ -1,6 +1,6 @@
 # Homeward: the final pitch, for Monday 16 Nov
 
-Replaces the script in `pitch-update-showcase.md`. Same facts, now with the video inside the three minutes, the trifold as a prop, and a guided tour for judges. Pairs with `docs/showcase/` (the board) and `docs/risk-wall.html`.
+Replaces the script in `pitch-update-showcase.md`. Same facts, now with the video inside the three minutes, the trifold as a prop, and a guided tour for judges. Pairs with `docs/showcase/` (the board).
 
 ## 1. What the showcase requires, and where we stand
 
@@ -25,7 +25,7 @@ One speaker, about 236 words, the video plays from 0:32 to 1:32. The speaker sta
 | 1:32 to 1:50 | "The builder reused old footage. The parent tapped Check again. The second engineer said no, and the money stayed locked. A person caught the problem; the contract made sure nobody could pay around them." | Touch step 5, then step 6 (centre panel) |
 | 1:50 to 2:09 | "The rule lives in a public Soroban contract. One approval pays builder and workers in one transaction. Honest limits: the demo signs on our server, and our admin can settle a disputed claim. Both change before real money." | Touch the contract ID and QR |
 | 2:09 to 2:40 | "Our customer is the son or daughter abroad. We spoke to fifteen engineers and one family: engineers say it saves them hours, none quoted a price, and we haven't tested the fee on families. A family pays about four to seven percent all in. One unchecked stage on a ₹15 lakh build is ₹3.75 lakh. Our fee is ₹22,500." | Touch the right panel's price card, then "What we have learned" |
-| 2:40 to 2:52 | "Which of our ten risks would stop you backing us? Put a dot on it, and try to break the contract at our table." | Gesture to the risk wall and the tablet |
+| 2:40 to 2:52 | "Come play Amma at our table, and try to break the contract." | Hold up the code card, then gesture to the tablet |
 | 2:52 to 3:00 | "Sending money home takes seconds. Homeward makes sure it builds what it paid for." | Stop. Do not add anything |
 
 **If you run long, cut in this order:** the sentence "Both change before real money", then "One unchecked stage…₹3.75 lakh", then the show of hands. **Never cut** "none quoted a price, and we haven't tested the fee on families".
@@ -69,9 +69,22 @@ Silent, with captions. Record the **live app** (https://homeward-ecru.vercel.app
 | **Try to break it** | `sh scripts/attack.sh all` on the laptop. Judge picks an attack from a card | Run `sh scripts/attack.sh prepare` first (about a minute) |
 | **Price your own build** | `/price` on a second screen | None |
 | **WhatsApp vs Homeward** | Printed 40-message family chat (label it "composite"). Judge finds who approved the window change and the price | Print the chat. Rivan writes it from engineer scenarios 1 and 7 |
-| **Risk wall** | `docs/risk-wall.html` printed A3, sticker dots | Buy dots. Print the wall |
 
 **Three questions to ask every judge** (write answers in a notebook, with permission): is 1.5% plus visits fair on a ₹30 lakh build for your parents? What would make you trust the engineer? Who should see this, a builder, an engineer, a payments partner? Record their answers as expert reactions, never as customer demand.
+
+### 4b. The physical kit (about an hour to make, cheap)
+
+The demo is on a screen. These props let judges touch the idea, and each one ties to something the live app does.
+
+| Prop | What it is | How it is used |
+|---|---|---|
+| **Stage blocks** | Five wooden or cardboard blocks, one per stage (foundation, walls, roof slab, finishing, handover), each with a luggage tag reading LOCKED on one side and PAID on the other | In the talk, hold the roof block with its tag still LOCKED while the video shows the rejection. At the table, a judge flips a tag when the tour pays a stage |
+| **Code card and marker** | A blank card. The app shows today's code (like HW-4821-7735) | A judge writes the code on the card, holds it up, and films it with the tablet camera on the builder screen. It uploads, and the video's fingerprint goes on Testnet. That is the real proof step |
+| **Two paddles** | Paper plates on sticks: green YES, red CHECK AGAIN | The judge plays Amma: lifts a paddle, then taps the same button on the phone |
+| **The envelope** | An envelope marked "₹3.75 lakh, one stage" and a single slip marked "₹22,500, our fee" | Held up in the business beat: one unchecked stage against our whole fee |
+| **A padlock and a box** | A small lockbox with a padlock; nobody holds the key | Sits on the table as "the contract". When a judge asks "who can open it?", the answer is "only the approvals" |
+
+If time is short, make only the code card and the stage blocks.
 
 ## 5. What to go get before Monday
 
@@ -81,7 +94,7 @@ Silent, with captions. Record the **live app** (https://homeward-ecru.vercel.app
 | **Two or three builder answers** | No builder has said yes or no | Call two builders: *Would you accept payment tied to an engineer's pass? Would you post a deposit, how much? What response time from the family is workable?* |
 | **Three family sessions** | Our fee is untested on families | Krish's father with the prototype, plus two relatives or Kerala or Punjabi association members in Waterloo. Use `validation-sessions.md`. Report the noes |
 | **Advisor notes** | Partner feedback is a rubric line | Write down what the 9 Nov advisor meetings said, including anything negative |
-| **Props** | The table must work with no help | Tablet and phone charged, hotspot, printed risk wall, printed WhatsApp chat, sticker dots, laminated attack cards, printed QR of the live app, the video as a file on two devices |
+| **Props** | The table must work with no help | Tablet and phone charged, hotspot, the physical kit in section 4b, printed WhatsApp chat, laminated attack cards, printed QR of the live app, the video as a file on two devices |
 | **The trifold** | It is a scoring surface | Print `homeward-trifold.pdf`. Ask the shop to fit it to 36 in if their roll is 36 in. Velocity events (velocity.events@uwaterloo.ca) can confirm the board if yours hasn't arrived |
 | **Devpost** | Judges verify there | Video link, live URL, contract ID, repo link. Use the new URL and contract |
 | **A 90-second Q&A card per teammate** | One person talks, all four answer | Each teammate memorises their section 7 answers |
@@ -121,6 +134,6 @@ The research behind the parent screen is directional. Studies of low-literacy an
 
 - 60 minutes before: press **Start over** on `/demo`, run `sh scripts/attack.sh prepare`, open every page once, set phone and tablet to do-not-disturb and full brightness.
 - Stopwatch rehearsal at least five times. Target finishing at 2:55.
-- If the live site fails: play the video file, show `docs/risk-wall.html` and the printed proof page, and say so plainly.
+- If the live site fails: play the video file, show the printed proof page and the stage blocks, and say so plainly.
 - If a judge asks something you can't answer: "We don't know yet. Here is how we'd find out."
 - Never say: "twenty people", "validated", "secure", "decentralized", "AI verifies the work".
