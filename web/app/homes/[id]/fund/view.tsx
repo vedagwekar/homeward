@@ -1,15 +1,17 @@
 "use client";
 
+import { useFamilyOnly } from "@/app/family-only";
+
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { useState } from "react";
-import { dollars, feeAfterCredit, nextStage, totalFunded } from "@/lib/project.mjs";
+import { feeAfterCredit, nextStage, totalFunded , CURRENCIES, currencyForCity, foreign } from "@/lib/project.mjs";
 import { act, addFunding, useProjects, useSession, useStatus, useMoney } from "@/lib/store";
 import { Back } from "../../../icons";
 import UsdcQuote from "../../../usdc-quote";
 
 
-export default function View({ id }: { id: string }) {
+function Inner({ id }: { id: string }) {
   const money = useMoney();
   const projects = useProjects();
   const project = projects.find((p) => p.id === id);
@@ -42,7 +44,9 @@ export default function View({ id }: { id: string }) {
   const credit = projects.reduce((t, p) => t + (p.sponsors.find((s) => s.name === sponsor)?.credit ?? 0), 0);
   const fee = feeAfterCredit(picked.amount, credit);
   const total = picked.amount + fee;
-  const cad = dollars(total, project.rupeesPerCad);
+  // The sender pays in their own currency: Toronto in Canadian dollars, Dubai in dirhams.
+  const sender = CURRENCIES[currencyForCity(project.sponsors.find((s) => s.name === sponsor)?.city) as keyof typeof CURRENCIES];
+  const cad = foreign(total, sender.code);
 
   if (done !== null) {
     return (
@@ -117,21 +121,26 @@ export default function View({ id }: { id: string }) {
             <span className="muted">{money(fee)}</span>
           </div>
           <div className="row">
-            <div className="grow">Demo CAD exchange rate</div>
-            <span className="muted">₹{project.rupeesPerCad} per C$1</span>
+            <div className="grow">Demo exchange rate</div>
+            <span className="muted">₹{sender.rate} per {sender.perUnit}</span>
           </div>
           <UsdcQuote rupees={total} />
           <div className="row">
             <strong className="grow">You pay</strong>
-            <strong>{cad} CAD</strong>
+            <strong>{cad}</strong>
           </div>
         </section>
         <p className="note">Engineer visits are quoted separately.</p>
 
         <button className="button" type="submit" disabled={busy}>
-          Pay {cad} with Interac
+          Pay {cad} by {sender.method}
         </button>
       </form>
     </>
   );
+}
+
+export default function View({ id }: { id: string }) {
+  const away = useFamilyOnly();
+  return away ? null : <Inner id={id} />;
 }

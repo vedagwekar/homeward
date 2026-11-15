@@ -1,5 +1,7 @@
 "use client";
 
+import { useFamilyOnly } from "@/app/family-only";
+
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { budgetParts, isActive, nextStage, shortDate } from "@/lib/project.mjs";
@@ -9,7 +11,7 @@ import GateTrack from "../../gate-track";
 import House3D, { hasModel } from "../../house-3d";
 import { Back, Glyph, statusView, Tile } from "../../icons";
 
-export default function View({ id }: { id: string }) {
+function Inner({ id }: { id: string }) {
   const money = useMoney();
   const project = useProjects().find((p) => p.id === id);
   if (!project) notFound();
@@ -19,7 +21,6 @@ export default function View({ id }: { id: string }) {
   // Everything that isn't the house, the money or the stages.
   const more = [
     { href: `/homes/${project.id}/team`, label: "Builder and engineer", detail: "Who is on the job" },
-    { href: `/homes/${project.id}/camera`, label: "Site camera", detail: "Watch live" },
     { href: `/homes/${project.id}/builder-problem`, label: "If the builder stops working", detail: "Report it, get your money back" },
     { href: `/homes/${project.id}/money-back`, label: "Money back", detail: "Get unspent money back" },
     { href: "/help", label: "If something goes wrong", detail: "Step by step" },
@@ -63,6 +64,15 @@ export default function View({ id }: { id: string }) {
           </section>
         </>
       )}
+
+      <Link className="group row live-card" href={`/homes/${project.id}/camera`}>
+        <Tile name="home" tone="blue" />
+        <div className="grow">
+          <strong>Watch the site live</strong>
+          <small>Camera 1, facing the house</small>
+        </div>
+        <span className="live-pill">LIVE</span>
+      </Link>
 
       <h3>Stages</h3>
       <section className="group">
@@ -111,4 +121,9 @@ export default function View({ id }: { id: string }) {
       </details>
     </>
   );
+}
+
+export default function View({ id }: { id: string }) {
+  const away = useFamilyOnly();
+  return away ? null : <Inner id={id} />;
 }

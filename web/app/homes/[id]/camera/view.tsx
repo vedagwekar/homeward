@@ -2,7 +2,7 @@
 
 import { notFound } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useProjects } from "@/lib/store";
+import { useProjects, useSession } from "@/lib/store";
 import { Back, Tile } from "../../../icons";
 
 const siteTime = () =>
@@ -10,6 +10,9 @@ const siteTime = () =>
 
 export default function View({ id }: { id: string }) {
   const project = useProjects().find((p) => p.id === id);
+  const session = useSession();
+  // Each person goes back to their own screen, not the family's money page.
+  const back = { href: { parent: "/parents", builder: "/builder", engineer: "/engineer", sponsor: `/homes/${id}` }[session?.role ?? "sponsor"], label: session?.role === "sponsor" || !session ? undefined : "Back" };
   const [time, setTime] = useState(""); // set after load, so server and browser render the same thing
   useEffect(() => {
     setTime(siteTime());
@@ -20,7 +23,7 @@ export default function View({ id }: { id: string }) {
 
   return (
     <>
-      <Back href={`/homes/${project.id}`} label={project.name} />
+      <Back href={back.href} label={back.label ?? project.name} />
       <h1>Site camera</h1>
       <p className="intro">Watch the build live, any time.</p>
 

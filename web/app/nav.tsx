@@ -40,8 +40,8 @@ export default function Nav() {
           {l.label}
         </Link>
       ))}
-      <button className="reset" type="button" onClick={resetDemo}>
-        Reset demo
+      <button className="reset" type="button" onClick={() => resetDemo("sample")}>
+        Reset sample homes
       </button>
     </nav>
   );

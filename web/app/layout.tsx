@@ -4,7 +4,7 @@ import "./globals.css";
 import Nav from "./nav";
 import Link from "next/link";
 import StatusBar from "./status";
-import Brand from "./brand";
+import Brand, { RoleSwitch } from "./brand";
 
 // Both typefaces cover Malayalam as well as Latin, so a parent's screen and a sponsor's screen match.
 const body = Anek_Malayalam({ subsets: ["latin", "malayalam"], variable: "--font-body", display: "swap" });
@@ -18,7 +18,8 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#eef1f2",
+  themeColor: "#f7f4ee",
+  colorScheme: "only light", // phones that darken web pages made the names unreadable
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -28,10 +29,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Nav />
         <main>
           <Brand />
+          <RoleSwitch />
           {children}
           <StatusBar />
           <footer>
-            Testnet demo. Interac, rupee payouts and SMS are simulated.{" "}
+            Testnet demo. Interac, UAE bank transfers, rupee payouts and SMS are simulated.{" "}
             <Link className="link" href="/proof">
               See transactions on Stellar testnet
             </Link>

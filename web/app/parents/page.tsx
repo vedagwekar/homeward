@@ -1,26 +1,30 @@
 "use client";
 
-import { useState } from "react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 import { isActive, rupees, shortDate, timeline, totalFunded } from "@/lib/project.mjs";
+import { LANGUAGES, SPEECH, smsThread, t } from "@/lib/parent-text.mjs";
 import { act, type Project, type Stage, updateStage, useProjects, useSession, useStatus } from "@/lib/store";
 import { statusView, Tile } from "../icons";
 
-// Basic-phone text. The translations need a native speaker's review before the demo.
-const sms = {
-  English: (stage: string) => `${stage} is ready to pay. Reply 1 for OK, or 2 to check again.`,
-  മലയാളം: (stage: string) => `${stage} പണം നൽകാൻ തയ്യാറാണ്. ശരിയെങ്കിൽ 1, വീണ്ടും പരിശോധിക്കാൻ 2 അയയ്ക്കുക.`,
-  ਪੰਜਾਬੀ: (stage: string) => `${stage} ਦਾ ਭੁਗਤਾਨ ਤਿਆਰ ਹੈ। ਠੀਕ ਲਈ 1, ਦੁਬਾਰਾ ਜਾਂਚ ਲਈ 2 ਭੇਜੋ।`,
-};
-type Language = keyof typeof sms;
+type Language = (typeof LANGUAGES)[number];
 
-// The stage in progress, in the words a parent would use.
-function now(project: Project, stage: Stage) {
+// The stage in progress, in the words a parent would use, in the language they chose.
+function now(language: Language, project: Project, stage: Stage) {
   const { name, secondName } = project.engineer;
-  if (stage.amma === "recheck") return stage.secondDecision ? "The second check is done." : `${secondName} will check the work again. Nothing is paid until then.`;
-  if (stage.engineerDecision === "approved") return `${name} checked the work. Is it done the way you want?`;
-  if (stage.status === "rejected") return `${name} found a problem. The builder will fix it first.`;
-  if (stage.status === "submitted") return `${name} is checking the work.`;
-  return "The builder is working on this now.";
+  if (stage.amma === "recheck") return stage.secondDecision ? t(language, "secondDone") : t(language, "second", { name: secondName });
+  if (stage.engineerDecision === "approved") return t(language, "approved", { name });
+  if (stage.status === "rejected") return t(language, "problem", { name });
+  if (stage.status === "submitted") return t(language, "checking", { name });
+  return t(language, "working");
+}
+
+// Reads the card aloud in the phone's own voice, in the chosen language when the phone has one.
+function listen(language: Language, text: string) {
+  const say = new SpeechSynthesisUtterance(text);
+  say.lang = (SPEECH as Record<string, string>)[language];
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(say);
 }
 
 export default function Parents() {
@@ -28,6 +32,9 @@ export default function Parents() {
   const [who, setWho] = useState(0);
   const [phone, setPhone] = useState<"smart" | "basic">("smart");
   const [language, setLanguage] = useState<Language>("English");
+  const [big, setBig] = useState(false);
+  const [canSpeak, setCanSpeak] = useState(false); // known only in the browser, so set after load
+  useEffect(() => setCanSpeak("speechSynthesis" in window), []);
   // A signed-in parent sees their own home. Anyone else can look at either.
   const session = useSession();
   const mine = session?.role === "parent" ? projects.findIndex((p) => p.parent === session.name) : -1;
@@ -35,6 +42,7 @@ export default function Parents() {
   const stage = project.frozen ? undefined : project.stages.find(isActive);
   const ready = stage?.status === "submitted" && stage.engineerDecision === "approved" && !stage.amma;
   const busy = useStatus().state === "loading";
+  const L = (key: string, vars?: Record<string, string | number>) => t(language, key, vars);
   const answer = (amma: "ok" | "recheck") =>
     stage &&
     act(
@@ -43,11 +51,14 @@ export default function Parents() {
     );
   const visit = timeline([project]).find((i) => i.track === "site");
   const done = project.stages.filter((s) => s.status === "paid").length;
+  const thread = smsThread(language, project, stage);
+  const spoken = stage ? `${stage.name}. ${now(language, project, stage)}${ready ? ` ${L("neverPaid")}` : ""}` : L("nothingNow");
 
   return (
-    <>
-      <h1>{mine >= 0 ? "My home" : "Parents"}</h1>
-      <p className="intro">{mine >= 0 ? "Nothing to install or pay." : "What a parent sees."}</p>
+    <div className={big ? "parent big-text" : "parent"} lang={language === "മലയാളം" ? "ml" : language === "ਪੰਜਾਬੀ" ? "pa" : "en"}>
+      <h1>{L("myHome")}</h1>
+      <p className="intro">{L("nothingToPay")}</p>
+
       {mine < 0 && (
         <div className="segments" role="group" aria-label="Parent">
           {projects.map((p, i) => (
@@ -57,83 +68,111 @@ export default function Parents() {
           ))}
         </div>
       )}
+
+      <div className="segments" role="group" aria-label="Language">
+        {LANGUAGES.map((l) => (
+          <button key={l} type="button" aria-pressed={language === l} onClick={() => setLanguage(l)}>
+            {l}
+          </button>
+        ))}
+      </div>
+      {L("draft") && <p className="hint">{L("draft")}</p>}
+
       <div className="segments" role="group" aria-label="Phone">
         <button type="button" aria-pressed={phone === "smart"} onClick={() => setPhone("smart")}>
-          Smartphone
+          {L("smartphone")}
         </button>
         <button type="button" aria-pressed={phone === "basic"} onClick={() => setPhone("basic")}>
-          Basic phone
+          {L("basicPhone")}
         </button>
       </div>
 
       {phone === "basic" ? (
         <>
-          <div className="segments" role="group" aria-label="Language">
-            {(Object.keys(sms) as Language[]).map((l) => (
-              <button key={l} type="button" aria-pressed={language === l} onClick={() => setLanguage(l)}>
-                {l}
-              </button>
-            ))}
-          </div>
+          <h3>{L("messages")}</h3>
           <section className="phone">
-            <p className="bubble">
-              {ready ? sms[language](stage.name) : stage?.amma === "recheck" ? "Second check requested. No money will move until it's done." : "No messages right now."}
-            </p>
+            {thread.length === 0 ? (
+              <p className="bubble">{L("noMessages")}</p>
+            ) : (
+              thread.map((m, i) => (
+                <p className="bubble" key={i}>
+                  {m.text}
+                </p>
+              ))
+            )}
           </section>
           {ready && (
             <div className="keys">
               <button className="button" type="button" disabled={busy} onClick={() => answer("ok")}>
-                1 OK
+                {L("reply1")}
               </button>
               <button className="button quiet" type="button" disabled={busy} onClick={() => answer("recheck")}>
-                2 Check again
+                {L("reply2")}
               </button>
             </div>
           )}
+          <p className="hint">Basic phones get these as text messages and reply with a number. Simulated here.</p>
         </>
       ) : (
-        <div className="parent">
+        <>
           <h3>{project.parent}'s house</h3>
           <section className="group">
             <div className="row">
               <Tile name="home" tone="blue" />
               <div className="grow">
                 <span>{project.place}</span>
-                <small>
-                  {done} of {project.stages.length} parts finished
-                </small>
+                <small>{L("partsDone", { n: done, total: project.stages.length })}</small>
               </div>
             </div>
           </section>
 
-          <h3>Now</h3>
+          <h3>{L("now")}</h3>
           <section className="group pad">
             {stage ? (
               <>
                 <strong>{stage.name}</strong>
-                <p className="now">{now(project, stage)}</p>
+                <p className="now">{now(language, project, stage)}</p>
                 {ready && (
                   <>
                     <div className="keys">
                       <button className="button" type="button" disabled={busy} onClick={() => answer("ok")}>
-                        Yes, it's done
+                        {L("yes")}
                       </button>
                       <button className="button quiet" type="button" disabled={busy} onClick={() => answer("recheck")}>
-                        Check again
+                        {L("again")}
                       </button>
                     </div>
-                    <small>Nothing is paid until you say yes.</small>
+                    <small>{L("neverPaid")}</small>
                   </>
                 )}
               </>
             ) : (
-              <p className="now">Nothing needs you right now.</p>
+              <p className="now">{L("nothingNow")}</p>
             )}
+            <div className="parent-tools">
+              <button className="button quiet" type="button" aria-pressed={big} onClick={() => setBig(!big)}>
+                {big ? L("normal") : L("bigger")}
+              </button>
+              {canSpeak && (
+                <button className="button quiet" type="button" onClick={() => listen(language, spoken)}>
+                  {L("listen")}
+                </button>
+              )}
+            </div>
           </section>
+
+          <Link className="group row live-card" href={`/homes/${project.id}/camera`}>
+            <Tile name="home" tone="blue" />
+            <div className="grow">
+              <strong>{L("watch")}</strong>
+              <small>{project.place}</small>
+            </div>
+            <span className="live-pill">LIVE</span>
+          </Link>
 
           {visit && (
             <>
-              <h3>Next on site</h3>
+              <h3>{L("nextOnSite")}</h3>
               <section className="group">
                 <div className="row">
                   <span className="date">{shortDate(visit.date)}</span>
@@ -143,7 +182,7 @@ export default function Parents() {
             </>
           )}
 
-          <h3>All parts</h3>
+          <h3>{L("allParts")}</h3>
           <section className="group">
             {project.stages.map((s) => {
               const view = statusView[s.status as keyof typeof statusView];
@@ -151,13 +190,13 @@ export default function Parents() {
                 <div className="row" key={s.slug}>
                   <Tile name={view.icon} tone={view.tone} />
                   <div className="grow">{s.name}</div>
-                  <span className="muted">{s.status === "paid" ? "Finished" : isActive(s) ? "Now" : "Later"}</span>
+                  <span className="muted">{s.status === "paid" ? L("finished") : isActive(s) ? L("now") : L("later")}</span>
                 </div>
               );
             })}
           </section>
 
-          <h3>Your family</h3>
+          <h3>{L("yourFamily")}</h3>
           <section className="group">
             <div className="row">
               <span className="avatars" aria-hidden="true">
@@ -173,8 +212,8 @@ export default function Parents() {
               </div>
             </div>
           </section>
-        </div>
+        </>
       )}
-    </>
+    </div>
   );
 }

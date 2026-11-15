@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useSyncExternalStore } from "react";
 import rawSeed from "@/mock/projects.json";
-import { canReturnDeposit, defaultPayback, depositNeeded, dollars, isActive, isStalled, refundSplit, rupees, securityHeld, settle } from "./project.mjs";
+import { CURRENCIES, currencyForCity, foreign, canReturnDeposit, defaultPayback, depositNeeded, isActive, isStalled, refundSplit, rupees, securityHeld, settle } from "./project.mjs";
 
 export type VideoReview =
   | { status: "unavailable"; summary: string }
@@ -45,7 +45,6 @@ export type Project = {
   name: string;
   place: string;
   budget: number;
-  rupeesPerCad: number;
   parent: string;
   sponsors: { name: string; city: string; paidIn: number; credit?: number }[]; // credit: fee-free funding earned back from a stopped build
   engineer: { name: string; licence: string; secondName: string };
@@ -94,6 +93,21 @@ const derive = (p: Project): Project => {
 };
 
 const seed = (rawSeed as unknown as Project[]).map(prepare);
+
+// The story from the very beginning, which is also where fresh builds on Testnet start: nothing funded,
+// every stage locked, the builder's deposit not yet in. The sample above is the same homes part-way built.
+const fresh = (rawSeed as unknown as Project[]).map((p) =>
+  prepare({
+    ...p,
+    frozen: false,
+    sponsors: p.sponsors.map((s) => ({ ...s, paidIn: 0 })),
+    security: p.security ? ({ ...p.security, posted: 0 } as Security) : p.security,
+    stages: p.stages.map((s) => ({
+      ...s, status: "locked" as const, paidOn: undefined, code: undefined, since: undefined,
+      engineerDecision: null, secondDecision: null, amma: null, videoUrl: undefined, videoReview: undefined,
+    })),
+  }),
+);
 
 // Ved's Soroban contract on Stellar testnet, with the builder's deposit (deployed 15 Nov 2026).
 export const CONTRACT_URL = "https://stellar.expert/explorer/testnet/contract/CC2NYVUTHJWBRTDG7J4O6VB7TINL5MTNOTTXOMVMHKSCUYZR4W3M6QF2";
@@ -274,12 +288,16 @@ export async function returnMoney(projectId: string, amount: number, stop: boole
   );
 }
 
-export function resetDemo() {
+/** "fresh" starts the story from the very beginning. "sample" puts back the homes part-way built (mock mode only). */
+export function resetDemo(scenario: "fresh" | "sample" = "fresh") {
   if (LIVE) {
-    // Fresh builds on chain: each is one create_project plus two engineers per stage, so about a minute.
-    act({ loading: "Setting up fresh builds on testnet. This takes about a minute", done: "Fresh builds ready" }, async () => {
+    // Fresh builds on chain: each is one create_project plus two engineers per stage, so about a minute each.
+    act({ loading: "Setting up fresh builds on testnet. About a minute each", done: "Fresh builds ready. Start from step 1" }, async () => {
       let last: Receipt | undefined;
-      for (const p of seed) last = await api("/project", { slug: p.id, fresh: true });
+      for (const [i, p] of seed.entries()) {
+        setStatus({ state: "loading", text: `Setting up home ${i + 1} of ${seed.length} on testnet. About a minute each` });
+        last = await api("/project", { slug: p.id, fresh: true });
+      }
       return last;
     });
     return;
@@ -287,7 +305,8 @@ export function resetDemo() {
   try {
     localStorage.removeItem(KEY);
   } catch {}
-  write(seed);
+  write(scenario === "fresh" ? fresh : seed);
+  setStatus({ state: "done", text: scenario === "fresh" ? "Back to the start. Nothing funded yet" : "Sample homes restored", link: CONTRACT_URL });
 }
 
 // The one stage being worked on, for the Builder, Engineer and Amma views.
@@ -299,14 +318,16 @@ export function activeStage(projects: Project[]) {
   return null;
 }
 
-// Family screens can show money in rupees or Canadian dollars. Builder and parent screens stay in rupees.
+// Family screens can show money in rupees or in what the sender uses: Canadian dollars for Anil in Toronto,
+// dirhams for Meera in Dubai. Builder and parent screens stay in rupees.
 const CURRENCY_KEY = "homeward-currency";
-let currency: "INR" | "CAD" = "INR";
+type Shown = "INR" | "ABROAD";
+let currency: Shown = "INR";
 try {
-  if (typeof localStorage !== "undefined" && localStorage.getItem(CURRENCY_KEY) === "CAD") currency = "CAD";
+  if (typeof localStorage !== "undefined" && ["ABROAD", "CAD", "AED"].includes(localStorage.getItem(CURRENCY_KEY) ?? "")) currency = "ABROAD";
 } catch {}
 
-export function setCurrency(next: "INR" | "CAD") {
+export function setCurrency(next: Shown) {
   currency = next;
   try {
     localStorage.setItem(CURRENCY_KEY, next);
@@ -321,14 +342,23 @@ export function useCurrency() {
       return () => listeners.delete(l);
     },
     () => currency,
-    () => "INR" as const,
+    () => "INR" as Shown,
   );
 }
 
-// shortcut: one demo rate for every home (both use ₹67 per C$1), pass the home's own rate once rates are live
-export function useMoney(rupeesPerCad = seed[0].rupeesPerCad) {
-  const c = useCurrency();
-  return (n: number) => (c === "CAD" ? dollars(n, rupeesPerCad) : rupees(n));
+/** The currency the signed-in sender uses, from the city they send from. Not signed in as a sender: Canadian dollars. */
+export function useHomeCurrency() {
+  const session = useSession();
+  const projects = useProjects();
+  const city = session?.role === "sponsor" ? projects.flatMap((p) => p.sponsors).find((s) => s.name === session.name)?.city : undefined;
+  return CURRENCIES[currencyForCity(city) as keyof typeof CURRENCIES];
+}
+
+// shortcut: one demo rate per currency (see CURRENCIES), the same for every home.
+export function useMoney() {
+  const shown = useCurrency();
+  const home = useHomeCurrency();
+  return (n: number) => (shown === "ABROAD" ? foreign(n, home.code) : rupees(n));
 }
 
 // Every button that changes something shows loading, then success with a receipt link, or an error.

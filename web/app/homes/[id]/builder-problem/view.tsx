@@ -1,5 +1,7 @@
 "use client";
 
+import { useFamilyOnly } from "@/app/family-only";
+
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { useState } from "react";
@@ -7,7 +9,7 @@ import { claimStatus, defaultPayback, duration, isActive, isStalled } from "@/li
 import { act, claimDefault, familyRole, finalizeDefault, useMoney, useNow, useProjects, useSession, useStatus, withdrawClaim } from "@/lib/store";
 import { Back } from "../../../icons";
 
-export default function View({ id }: { id: string }) {
+function Inner({ id }: { id: string }) {
   const money = useMoney();
   const project = useProjects().find((p) => p.id === id);
   const session = useSession();
@@ -108,4 +110,9 @@ export default function View({ id }: { id: string }) {
       )}
     </>
   );
+}
+
+export default function View({ id }: { id: string }) {
+  const away = useFamilyOnly();
+  return away ? null : <Inner id={id} />;
 }
