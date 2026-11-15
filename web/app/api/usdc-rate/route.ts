@@ -12,7 +12,7 @@ async function coingecko(): Promise<Quote> {
   const key = process.env.COINGECKO_DEMO_API_KEY;
   const response = await fetch(COINGECKO, {
     headers: key ? { "x-cg-demo-api-key": key } : undefined,
-    next: { revalidate: 60 },
+    cache: "no-store", // always ask the source; never serve a price saved at build time
     signal: AbortSignal.timeout(5000),
   });
   if (!response.ok) throw new Error(`CoinGecko answered ${response.status}`);
@@ -25,7 +25,7 @@ async function coingecko(): Promise<Quote> {
 }
 
 async function daily(): Promise<Quote> {
-  const response = await fetch(DAILY, { next: { revalidate: 600 }, signal: AbortSignal.timeout(5000) });
+  const response = await fetch(DAILY, { cache: "no-store", signal: AbortSignal.timeout(5000) });
   if (!response.ok) throw new Error(`Daily rate answered ${response.status}`);
   const body = await response.json();
   const inr = body?.rates?.INR;
@@ -35,8 +35,6 @@ async function daily(): Promise<Quote> {
   }
   return { inrPerUsdc: inr, updatedAt, source: "daily" };
 }
-
-export const dynamic = "force-dynamic"; // always ask, never bake a price into the build
 
 export async function GET() {
   const why: string[] = [];
