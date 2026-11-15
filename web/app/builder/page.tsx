@@ -91,6 +91,7 @@ export default function Builder() {
 
 function ProofForm({ project, stage, resubmit, busy }: { project: string; stage: string; resubmit: boolean; busy: boolean }) {
   const [video, setVideo] = useState<File>();
+  const [consent, setConsent] = useState(false);
 
   return (
     <form onSubmit={(event) => {
@@ -103,10 +104,14 @@ function ProofForm({ project, stage, resubmit, busy }: { project: string; stage:
             <span>Film the code, then send</span>
             <input type="file" accept="video/*,.mov" capture="environment" required disabled={busy} onChange={(event) => setVideo(event.target.files?.[0])} />
           </label>
+          <label className="consent">
+            <input type="checkbox" checked={consent} disabled={busy} onChange={(event) => setConsent(event.target.checked)} />
+            <span>Everyone in this clip agreed to be filmed, and to it being uploaded to this demo.</span>
+          </label>
           <p className="hint">For AI review with Google Gemini, use a short MP4, MOV, or WebM clip up to 14 MB. The engineer reviews the submission.</p>
         </>
       )}
-      <button className="button" type="submit" disabled={busy || (LIVE && !video)}>
+      <button className="button" type="submit" disabled={busy || (LIVE && (!video || !consent))}>
         {resubmit ? "Send new video" : "Send video"}
       </button>
       {LIVE && (
