@@ -1,5 +1,7 @@
 "use client";
 
+import { useFamilyOnly } from "@/app/family-only";
+
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { budgetParts, isActive, nextStage, shortDate } from "@/lib/project.mjs";
@@ -9,7 +11,7 @@ import GateTrack from "../../gate-track";
 import House3D, { hasModel } from "../../house-3d";
 import { Back, Glyph, statusView, Tile } from "../../icons";
 
-export default function View({ id }: { id: string }) {
+function Inner({ id }: { id: string }) {
   const money = useMoney();
   const project = useProjects().find((p) => p.id === id);
   if (!project) notFound();
@@ -119,4 +121,9 @@ export default function View({ id }: { id: string }) {
       </details>
     </>
   );
+}
+
+export default function View({ id }: { id: string }) {
+  const away = useFamilyOnly();
+  return away ? null : <Inner id={id} />;
 }

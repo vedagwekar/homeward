@@ -1,5 +1,7 @@
 "use client";
 
+import { useFamilyOnly } from "@/app/family-only";
+
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { useState } from "react";
@@ -9,7 +11,7 @@ import { Back } from "../../../icons";
 import UsdcQuote from "../../../usdc-quote";
 
 
-export default function View({ id }: { id: string }) {
+function Inner({ id }: { id: string }) {
   const money = useMoney();
   const projects = useProjects();
   const project = projects.find((p) => p.id === id);
@@ -134,4 +136,9 @@ export default function View({ id }: { id: string }) {
       </form>
     </>
   );
+}
+
+export default function View({ id }: { id: string }) {
+  const away = useFamilyOnly();
+  return away ? null : <Inner id={id} />;
 }

@@ -1,11 +1,13 @@
 "use client";
 
+import { useFamilyOnly } from "@/app/family-only";
+
 import { notFound } from "next/navigation";
 import directory from "@/mock/directory.json";
 import { act, useProjects, useStatus } from "@/lib/store";
 import { Back, Tile } from "../../../icons";
 
-export default function View({ id }: { id: string }) {
+function Inner({ id }: { id: string }) {
   const project = useProjects().find((p) => p.id === id);
   const busy = useStatus().state === "loading";
   if (!project) notFound();
@@ -67,4 +69,9 @@ export default function View({ id }: { id: string }) {
       </section>
     </>
   );
+}
+
+export default function View({ id }: { id: string }) {
+  const away = useFamilyOnly();
+  return away ? null : <Inner id={id} />;
 }
