@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-type Quote = { inrPerUsdc: number; updatedAt: number };
+type Quote = { inrPerUsdc: number; updatedAt: number; source?: "coingecko" | "daily" };
 const amountFormat = new Intl.NumberFormat("en-IN", { maximumFractionDigits: 2 });
 const rateFormat = new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" });
 
@@ -37,7 +37,11 @@ export default function UsdcQuote({ rupees }: { rupees: number }) {
         {quote && (
           <small>
             {rateFormat.format(quote.inrPerUsdc)} per USDC · {new Date(quote.updatedAt).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })} ·{" "}
-            <a href="https://www.coingecko.com/en/coins/usdc/inr">CoinGecko</a>
+            {quote.source === "daily" ? (
+              <a href="https://www.exchangerate-api.com">daily US dollar rate</a>
+            ) : (
+              <a href="https://www.coingecko.com/en/coins/usdc/inr">CoinGecko</a>
+            )}
           </small>
         )}
       </div>
