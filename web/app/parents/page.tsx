@@ -23,11 +23,20 @@ function now(project: Project, stage: Stage) {
   return "The builder is working on this now.";
 }
 
+// Reads the card aloud in the phone's own voice. Older users often find speaking easier than reading.
+function listen(text: string) {
+  const say = new SpeechSynthesisUtterance(text);
+  say.lang = "en-IN";
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(say);
+}
+
 export default function Parents() {
   const projects = useProjects();
   const [who, setWho] = useState(0);
   const [phone, setPhone] = useState<"smart" | "basic">("smart");
   const [language, setLanguage] = useState<Language>("English");
+  const [big, setBig] = useState(false);
   // A signed-in parent sees their own home. Anyone else can look at either.
   const session = useSession();
   const mine = session?.role === "parent" ? projects.findIndex((p) => p.parent === session.name) : -1;
@@ -92,7 +101,7 @@ export default function Parents() {
           )}
         </>
       ) : (
-        <div className="parent">
+        <div className={big ? "parent big-text" : "parent"}>
           <h3>{project.parent}'s house</h3>
           <section className="group">
             <div className="row">
@@ -129,6 +138,16 @@ export default function Parents() {
             ) : (
               <p className="now">Nothing needs you right now.</p>
             )}
+            <div className="parent-tools">
+              <button className="button quiet" type="button" aria-pressed={big} onClick={() => setBig(!big)}>
+                {big ? "Normal text" : "Bigger text"}
+              </button>
+              {typeof window !== "undefined" && "speechSynthesis" in window && (
+                <button className="button quiet" type="button" onClick={() => listen(stage ? `${stage.name}. ${now(project, stage)}${ready ? " Nothing is paid until you say yes." : ""}` : "Nothing needs you right now.")}>
+                  Listen
+                </button>
+              )}
+            </div>
           </section>
 
           {visit && (

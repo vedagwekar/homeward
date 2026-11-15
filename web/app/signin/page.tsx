@@ -44,6 +44,10 @@ export default function SignIn() {
         {person("engineer", projects[0].engineer.name, "Independent engineer")}
       </section>
 
+      <button className="button quiet" type="button" onClick={() => router.push("/demo")}>
+        Take the guided tour
+      </button>
+
       <p className="note">
         Demo sign-in. The real app uses a phone number and a one-time code.
       </p>

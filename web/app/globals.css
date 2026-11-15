@@ -1095,3 +1095,19 @@ nav > a[aria-current="page"] {
 .price-compare p {
   margin: 0.25rem 0 0;
 }
+
+/* Guided tour for judges */
+.tour-now { display: grid; gap: 0.5rem; }
+.tour-now p { margin: 0; }
+.tour-step { align-items: center; }
+.tour-dot { align-items: center; background: var(--fill); border-radius: 50%; display: inline-flex; flex: none; font-weight: 700; height: 2rem; justify-content: center; width: 2rem; }
+.tour-step[data-state="now"] .tour-dot { background: var(--action); color: #fff; }
+.tour-step[data-state="done"] .tour-dot { background: var(--green); color: #fff; }
+.tour-step[data-state="now"] { font-weight: 700; }
+.tour-step[data-state="todo"] { color: var(--secondary); }
+.link-button { background: none; border: 0; color: inherit; font: inherit; padding: 0; text-decoration: underline; cursor: pointer; }
+
+/* Parent screen: bigger text and listen */
+.parent.big-text { font-size: 1.3em; }
+.parent-tools { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.75rem; }
+.parent-tools .button { min-height: 3rem; }

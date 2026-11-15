@@ -109,6 +109,20 @@ function ProofForm({ project, stage, resubmit, busy }: { project: string; stage:
       <button className="button" type="submit" disabled={busy || (LIVE && !video)}>
         {resubmit ? "Send new video" : "Send video"}
       </button>
+      {LIVE && (
+        <button
+          className="button quiet"
+          type="button"
+          disabled={busy}
+          onClick={() => {
+            // Demo only: a small sample file stands in for a phone video. Its fingerprint goes on chain like a real one.
+            const sample = new File([`Sample proof for ${stage}, ${new Date().toISOString()}`], "sample-proof.mp4", { type: "video/mp4" });
+            act({ loading: "Sending sample clip", done: "Video sent" }, () => submitVideoProof(project, stage, sample));
+          }}
+        >
+          No clip handy? Send a sample
+        </button>
+      )}
       {!LIVE && <p className="hint">Demo: sends sample proof. Connect the backend to upload a video for AI review.</p>}
     </form>
   );
