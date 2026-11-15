@@ -75,6 +75,35 @@ pub fn add_contribution(e: &Env, id: u32, sponsor: &Address, amount: i128) {
     bump(e, &k);
 }
 
+// ---- default claims: at most one open per project ----
+pub fn load_claim(e: &Env, id: u32) -> Option<Claim> {
+    let k = DataKey::Claim(id);
+    let c = e.storage().persistent().get(&k);
+    if c.is_some() {
+        bump(e, &k);
+    }
+    c
+}
+pub fn save_claim(e: &Env, id: u32, c: &Claim) {
+    let k = DataKey::Claim(id);
+    e.storage().persistent().set(&k, c);
+    bump(e, &k);
+}
+pub fn clear_claim(e: &Env, id: u32) {
+    e.storage().persistent().remove(&DataKey::Claim(id));
+}
+
+// ---- fee credit: sponsors get refunded money back fee-free after a default ----
+pub fn credit(e: &Env, sponsor: &Address) -> i128 {
+    let k = DataKey::Credit(sponsor.clone());
+    e.storage().persistent().get(&k).unwrap_or(0)
+}
+pub fn set_credit(e: &Env, sponsor: &Address, amount: i128) {
+    let k = DataKey::Credit(sponsor.clone());
+    e.storage().persistent().set(&k, &amount);
+    bump(e, &k);
+}
+
 // ---- certificates ----
 pub fn load_cert(e: &Env, id: u32, s: u32) -> Option<Certificate> {
     let k = DataKey::Cert(id, s);
