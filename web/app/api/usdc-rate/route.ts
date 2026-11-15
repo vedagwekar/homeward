@@ -36,13 +36,16 @@ async function daily(): Promise<Quote> {
   return { inrPerUsdc: inr, updatedAt, source: "daily" };
 }
 
+export const dynamic = "force-dynamic"; // always ask, never bake a price into the build
+
 export async function GET() {
+  const why: string[] = [];
   for (const source of [coingecko, daily]) {
     try {
       return Response.json(await source(), { headers: { "Cache-Control": "public, max-age=30" } });
-    } catch {
-      // try the next source
+    } catch (e) {
+      why.push(`${source.name}: ${e instanceof Error ? e.message : "failed"}`); // no keys or secrets in these messages
     }
   }
-  return Response.json({ error: "Live USDC rate unavailable" }, { status: 503 });
+  return Response.json({ error: "Live USDC rate unavailable", why }, { status: 503 });
 }
