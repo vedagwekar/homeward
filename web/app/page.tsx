@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { nextStage, shortDate, timeline, totalFunded } from "@/lib/project.mjs";
+import { nextStage, totalFunded } from "@/lib/project.mjs";
 import { useProjects, useMoney } from "@/lib/store";
 import BudgetBar from "./budget-bar";
 import CurrencySwitch from "./currency-switch";
@@ -10,7 +10,6 @@ import { Glyph, Tile } from "./icons";
 export default function Homes() {
   const money = useMoney();
   const projects = useProjects();
-  const due = timeline(projects).slice(0, 3);
 
   return (
     <>
@@ -59,24 +58,6 @@ export default function Homes() {
         })}
       </section>
 
-      <div className="heading-row">
-        <h3>Coming up</h3>
-        <Link href="/timeline">See all</Link>
-      </div>
-      <section className="group">
-        {due.map((d) => (
-          <Link className="row" href={`/homes/${d.projectId}/stages/${d.slug}`} key={d.date + d.title}>
-            <span className="date">
-              <span className={`dot ${d.track === "pay" ? "green" : "orange"}`} />
-              {shortDate(d.date)}
-            </span>
-            <div className="grow">
-              <span>{d.title}</span>
-              <small>{d.project}</small>
-            </div>
-          </Link>
-        ))}
-      </section>
     </>
   );
 }

@@ -307,3 +307,55 @@ if (typeof window !== "undefined" && LIVE) {
   );
   window.addEventListener("focus", () => refresh().catch(() => {}));
 }
+
+// Who is using the app. A demo sign-in: it picks whose screens you see, and the backend signs as that
+// person's demo key. Real sign-in (a phone number and a one-time code) is on the roadmap.
+export type Session = { role: "sponsor" | "parent" | "builder" | "engineer"; name: string };
+const SESSION_KEY = "homeward-session";
+let session: Session | null | undefined; // undefined until this browser's storage has been read
+
+function readSession(): Session | null {
+  if (session !== undefined) return session;
+  try {
+    session = JSON.parse(localStorage.getItem(SESSION_KEY) ?? "null");
+  } catch {
+    session = null;
+  }
+  return session as Session | null;
+}
+
+export function signIn(next: Session | null) {
+  session = next;
+  try {
+    if (next) localStorage.setItem(SESSION_KEY, JSON.stringify(next));
+    else localStorage.removeItem(SESSION_KEY);
+  } catch {}
+  listeners.forEach((l) => l());
+}
+
+/** The signed-in person, null when signed out, undefined while the server is rendering. */
+export function useSession() {
+  return useSyncExternalStore(
+    (l) => {
+      listeners.add(l);
+      return () => listeners.delete(l);
+    },
+    readSession,
+    () => undefined,
+  );
+}
+
+/** One contract call that really happened on Stellar testnet, with the page that proves it. */
+export type ProofItem = { home: string; stage: string | number | null; kind: string; label: string; at: string; hash: string; explorer: string };
+const TX_URL = "https://stellar.expert/explorer/testnet/tx/";
+
+// Live: the backend's record of every transaction it sent. Otherwise: the transactions from our
+// end-to-end run on 13 Nov 2026, saved in mock/proof.json. Both are real and open on Stellar Expert.
+export async function loadProof(): Promise<ProofItem[]> {
+  if (LIVE) {
+    const lists = await Promise.all(read().map(async (p) => ((await api(`/timeline/${p.id}`)) as ProofItem[]).map((i) => ({ ...i, home: p.id }))));
+    return lists.flat().sort((a, b) => b.at.localeCompare(a.at));
+  }
+  const saved = (await import("@/mock/proof.json")).default as Omit<ProofItem, "explorer">[];
+  return saved.map((i) => ({ ...i, explorer: TX_URL + i.hash })).reverse();
+}

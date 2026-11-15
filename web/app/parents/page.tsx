@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { isActive, rupees, shortDate, timeline, totalFunded } from "@/lib/project.mjs";
-import { act, type Project, type Stage, updateStage, useProjects, useStatus } from "@/lib/store";
+import { act, type Project, type Stage, updateStage, useProjects, useSession, useStatus } from "@/lib/store";
 import { statusView, Tile } from "../icons";
 
 // Basic-phone text. The translations need a native speaker's review before the demo.
@@ -28,7 +28,10 @@ export default function Parents() {
   const [who, setWho] = useState(0);
   const [phone, setPhone] = useState<"smart" | "basic">("smart");
   const [language, setLanguage] = useState<Language>("English");
-  const project = projects[who];
+  // A signed-in parent sees their own home. Anyone else can look at either.
+  const session = useSession();
+  const mine = session?.role === "parent" ? projects.findIndex((p) => p.parent === session.name) : -1;
+  const project = projects[mine >= 0 ? mine : who];
   const stage = project.frozen ? undefined : project.stages.find(isActive);
   const ready = stage?.status === "submitted" && stage.engineerDecision === "approved" && !stage.amma;
   const busy = useStatus().state === "loading";
@@ -43,15 +46,17 @@ export default function Parents() {
 
   return (
     <>
-      <h1>Parents</h1>
-      <p className="intro">What a parent sees. Nothing to install and nothing to pay.</p>
-      <div className="segments" role="group" aria-label="Parent">
-        {projects.map((p, i) => (
-          <button key={p.id} type="button" aria-pressed={who === i} onClick={() => setWho(i)}>
-            {p.parent}
-          </button>
-        ))}
-      </div>
+      <h1>{mine >= 0 ? "My home" : "Parents"}</h1>
+      <p className="intro">{mine >= 0 ? "Nothing to install and nothing to pay." : "What a parent sees. Nothing to install and nothing to pay."}</p>
+      {mine < 0 && (
+        <div className="segments" role="group" aria-label="Parent">
+          {projects.map((p, i) => (
+            <button key={p.id} type="button" aria-pressed={who === i} onClick={() => setWho(i)}>
+              {p.parent}
+            </button>
+          ))}
+        </div>
+      )}
       <div className="segments" role="group" aria-label="Phone">
         <button type="button" aria-pressed={phone === "smart"} onClick={() => setPhone("smart")}>
           Smartphone

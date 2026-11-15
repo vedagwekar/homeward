@@ -97,7 +97,13 @@ export function gates(stage, parent) {
   list.push({ key: "engineer", label: "Engineer checks the work", done: paid || stage.engineerDecision === "approved", failed: stage.status === "rejected" });
   if (stage.parentMustApprove) {
     const recheck = stage.amma === "recheck";
-    list.push({ key: "parent", label: recheck ? `${parent} asked for a second engineer` : `${parent} approves`, done: paid || stage.amma === "ok" || (recheck && stage.secondDecision === "approved") });
+    const sentBack = recheck && stage.secondDecision === "rejected"; // the second engineer said no, so nothing is paid
+    list.push({
+      key: "parent",
+      label: sentBack ? "Second engineer sent it back" : recheck ? `${parent} asked for a second engineer` : `${parent} approves`,
+      done: paid || stage.amma === "ok" || (recheck && stage.secondDecision === "approved"),
+      failed: sentBack,
+    });
   }
   list.push({ key: "release", label: "Money released to the builder", amount: stage.amount - stage.materials, done: paid });
   let found = stage.status === "locked";
