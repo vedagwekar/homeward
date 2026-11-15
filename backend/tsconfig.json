@@ -9,5 +9,5 @@
     "noEmit": true,
     "types": ["node"]
   },
-  "include": ["src", "../scripts/demo.ts", "../scripts/security.ts"]
+  "include": ["src", "../scripts/demo.ts", "../scripts/security.ts", "../scripts/attack.ts"]
 }

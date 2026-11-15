@@ -1063,3 +1063,35 @@ nav > a[aria-current="page"] {
   max-height: 25rem;
   width: 100%;
 }
+
+/* Price calculator (showcase table) */
+.price-inputs {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.price-inputs label {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.price-inputs input[type="range"],
+.price-inputs input[type="number"],
+.price-inputs select {
+  font: inherit;
+  width: 100%;
+}
+
+.price-check {
+  align-items: center;
+  display: flex !important;
+  gap: 0.6rem;
+}
+
+.price-total {
+  background: var(--tint, rgba(0, 0, 0, 0.04));
+}
+
+.price-compare p {
+  margin: 0.25rem 0 0;
+}

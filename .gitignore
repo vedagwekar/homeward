@@ -20,3 +20,5 @@ uploads/
 CLAUDE.md
 .vercel
 packages/homeward-client/dist/
+
+scripts/.attack-build.json

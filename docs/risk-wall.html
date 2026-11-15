@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Homeward: ten risks</title>
+<style>
+  /* Print on A3 landscape (or A2 at 141%). Judges put a sticker dot on the card that would stop them backing us. */
+  @page { size: A3 landscape; margin: 10mm; }
+  :root {
+    --ink: #1e2a30; --muted: #5a6a72; --paper: #f7f8f8; --card: #ffffff; --line: #d5dcdf;
+    --red: #b3382c; --red-bg: #fbe9e6; --amber: #9a6200; --amber-bg: #fdf2dc; --green: #27704a; --green-bg: #e4f3ea;
+    --brand: #1f5f7a;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.4 -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+  header { padding: 1.4rem 1.6rem 0.4rem; }
+  h1 { margin: 0; font-size: 2.2rem; color: var(--brand); letter-spacing: -0.01em; }
+  header p { margin: 0.35rem 0 0; font-size: 1.15rem; max-width: 70ch; }
+  header strong { background: #ffe8a3; padding: 0 0.25em; }
+  .key { display: flex; gap: 1rem; flex-wrap: wrap; padding: 0.7rem 1.6rem; font-size: 0.95rem; }
+  .key span { display: inline-flex; align-items: center; gap: 0.4rem; }
+  .swatch { width: 0.9rem; height: 0.9rem; border-radius: 50%; display: inline-block; }
+  .grid { display: grid; gap: 0.9rem; padding: 0.4rem 1.6rem 1rem; grid-template-columns: repeat(5, 1fr); }
+  .card { background: var(--card); border: 1.5px solid var(--line); border-radius: 12px; padding: 0.9rem 1rem 1rem; display: flex; flex-direction: column; gap: 0.5rem; break-inside: avoid; }
+  .top { display: flex; align-items: flex-start; gap: 0.6rem; }
+  .num { flex: none; width: 2.1rem; height: 2.1rem; border-radius: 50%; background: var(--brand); color: #fff; font-weight: 700; display: grid; place-items: center; }
+  h2 { margin: 0; font-size: 1.15rem; line-height: 1.25; }
+  .tag { align-self: flex-start; font-size: 0.8rem; font-weight: 700; padding: 0.15rem 0.55rem; border-radius: 99px; }
+  .red { background: var(--red-bg); color: var(--red); }
+  .amber { background: var(--amber-bg); color: var(--amber); }
+  .green { background: var(--green-bg); color: var(--green); }
+  h3 { margin: 0.2rem 0 0; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+  p { margin: 0; font-size: 0.93rem; }
+  .dots { margin-top: auto; border: 2px dashed var(--line); border-radius: 10px; min-height: 5.2rem; display: grid; place-items: end start; padding: 0.35rem 0.6rem; color: var(--muted); font-size: 0.78rem; }
+  footer { padding: 0.4rem 1.6rem 1.4rem; color: var(--muted); font-size: 0.9rem; max-width: 120ch; }
+  @media (max-width: 1100px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } }
+  @media print { body { background: #fff; font-size: 13px; } .card { border-width: 1px; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>Ten things that could go wrong with Homeward</h1>
+  <p>We would rather you hear them from us. <strong>Put a dot on the one that would stop you backing us.</strong></p>
+</header>
+<div class="key">
+  <span><i class="swatch" style="background:var(--red)"></i> Not tested yet</span>
+  <span><i class="swatch" style="background:var(--amber)"></i> Partly answered</span>
+  <span><i class="swatch" style="background:var(--green)"></i> Answered and checkable</span>
+</div>
+
+<main class="grid">
+
+  <article class="card">
+    <div class="top"><span class="num">1</span><h2>Will families actually pay?</h2></div>
+    <span class="tag red">Not tested yet</span>
+    <h3>What we have</h3>
+    <p>16 conversations: 15 engineers (Mumbai, Delhi, Kerala, Canada) and 1 father who built from Canada. Three consumer-commission cases.</p>
+    <h3>What we don't</h3>
+    <p>Engineers back it, but they would gain clients. We have not yet shown families the fee.</p>
+    <h3>Next</h3>
+    <p>Family sessions this week. We report the noes.</p>
+    <div class="dots">Dots here</div>
+  </article>
+
+  <article class="card">
+    <div class="top"><span class="num">2</span><h2>Is the real price too high?</h2></div>
+    <span class="tag amber">Partly answered</span>
+    <h3>What we have</h3>
+    <p>Moving money costs families 4.4% to 6.5% by bank, 1% to 1.5% by digital service. Adding Homeward and visits: about 4% to 7% all in by digital, 7.5% to 12% by bank.</p>
+    <h3>What we don't</h3>
+    <p>Whether that is worth it to them.</p>
+    <h3>Next</h3>
+    <p>Try the price calculator at this table.</p>
+    <div class="dots">Dots here</div>
+  </article>
+
+  <article class="card">
+    <div class="top"><span class="num">3</span><h2>Can the contract charge for everything?</h2></div>
+    <span class="tag amber">Partly answered</span>
+    <h3>What we have</h3>
+    <p>The contract charges a fixed 1.5%. In the pilot, engineer visits and a minimum fee go through a payment partner, off-chain.</p>
+    <h3>What we don't</h3>
+    <p>Visits on-chain, flat fees and monthly plans. They need a new contract version.</p>
+    <h3>Next</h3>
+    <p>Publish the visit schedule and our margin, so nobody profits from extra visits in secret.</p>
+    <div class="dots">Dots here</div>
+  </article>
+
+  <article class="card">
+    <div class="top"><span class="num">4</span><h2>Does the business add up?</h2></div>
+    <span class="tag amber">Partly answered</span>
+    <h3>What we have</h3>
+    <p>On ₹30 lakh builds with a small team, about 100 builds a year, roughly 1.4% of our base estimate for Kerala.</p>
+    <h3>What we don't</h3>
+    <p>Every input is our assumption. On ₹15 lakh builds with the fee alone, we would need about 27% of the market, so we don't pitch that.</p>
+    <h3>Next</h3>
+    <p>Replace guesses with measured numbers in a pilot.</p>
+    <div class="dots">Dots here</div>
+  </article>
+
+  <article class="card">
+    <div class="top"><span class="num">5</span><h2>What does an engineer visit cost?</h2></div>
+    <span class="tag red">Not tested yet</span>
+    <h3>What we have</h3>
+    <p>Advertised prices: ₹8,000 to ₹15,000 for an inspection, ₹8,000 to ₹20,000 a month for remote oversight.</p>
+    <h3>What we don't</h3>
+    <p>None of the 15 engineers gave us a price. Ours are placeholders.</p>
+    <h3>Next</h3>
+    <p>Ask each engineer for a real quote.</p>
+    <div class="dots">Dots here</div>
+  </article>
+
+  <article class="card">
+    <div class="top"><span class="num">6</span><h2>Will builders accept it?</h2></div>
+    <span class="tag red">Not tested yet</span>
+    <h3>What we have</h3>
+    <p>Terms are set per build: the deposit can be zero or earned from the first payment, and the held-back share is capped at 20%. Engineers told us what builders need: agreed materials advances and fixed response times.</p>
+    <h3>What we don't</h3>
+    <p>No builder has said yes.</p>
+    <h3>Next</h3>
+    <p>Builder calls.</p>
+    <div class="dots">Dots here</div>
+  </article>
+
+  <article class="card">
+    <div class="top"><span class="num">7</span><h2>Who holds the money, legally?</h2></div>
+    <span class="tag red">Not tested yet</span>
+    <h3>What we have</h3>
+    <p>We don't hold rupees. The first pilot is noncustodial: families pay from their own bank after each approval.</p>
+    <h3>What we don't</h3>
+    <p>No partner signed. No legal advice on cross-border rules yet. Holding money needs a licensed partner under RBI rules.</p>
+    <h3>Next</h3>
+    <p>Partner and counsel conversations.</p>
+    <div class="dots">Dots here</div>
+  </article>
+
+  <article class="card">
+    <div class="top"><span class="num">8</span><h2>Who settles a dispute?</h2></div>
+    <span class="tag amber">Partly answered</span>
+    <h3>What we have</h3>
+    <p>Today our admin account settles a contested report. It cannot send money to itself. Try to break it at this table.</p>
+    <h3>What we don't</h3>
+    <p>That is a trusted step. Dispute costs and legal risk are not yet in our numbers.</p>
+    <h3>Next</h3>
+    <p>An independent arbiter, named in each build, before real money.</p>
+    <div class="dots">Dots here</div>
+  </article>
+
+  <article class="card">
+    <div class="top"><span class="num">9</span><h2>How do we find families?</h2></div>
+    <span class="tag amber">Partly answered</span>
+    <h3>What we have</h3>
+    <p>Through engineers, at the moment a family signs a builder's quote. Engineers told us Homeward would save them hours of chasing approvals.</p>
+    <h3>What we don't</h3>
+    <p>Our ₹5,000 cost to win a family is a guess.</p>
+    <h3>Next</h3>
+    <p>Ask engineers whether they would introduce clients, and how many.</p>
+    <div class="dots">Dots here</div>
+  </article>
+
+  <article class="card">
+    <div class="top"><span class="num">10</span><h2>Isn't a relative and WhatsApp enough?</h2></div>
+    <span class="tag amber">Partly answered</span>
+    <h3>What we have</h3>
+    <p>For one owner and a simple build, often yes. Engineers described where it breaks: an approval nobody can find, a change one sibling thought was free, photos that miss the problem.</p>
+    <h3>What we don't</h3>
+    <p>How many families hit that.</p>
+    <h3>Next</h3>
+    <p>Try the WhatsApp challenge at this table.</p>
+    <div class="dots">Dots here</div>
+  </article>
+
+</main>
+
+<footer>
+  Testnet demo. Interac, rupee payouts and SMS are simulated. Numbers are our assumptions, not validated pricing or demand. Engineer scenarios are composites of what several engineers described. Contract: CC2NYVUTHJWBRTDG7J4O6VB7TINL5MTNOTTXOMVMHKSCUYZR4W3M6QF2.
+</footer>
+</body>
+</html>

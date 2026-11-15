@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Homeward trifold board</title>
+<style>
+  /* Studio tri-fold display board: 38 in x 27 in open. Panels: 9.375 in | 19.25 in | 9.375 in.
+     1 in = 96 px here. Print to PDF at exactly 38 x 27 in (Chrome: no margins, background graphics on).
+     Add #left, #center or #right to the address to print one panel at its own size. */
+  @page { size: 38in 27in; margin: 0; }
+  :root {
+    --page: #eef1f2; --surface: #fbfcfc; --text: #2b211b; --secondary: #5c534d; --separator: #d6dcdf;
+    --green: #24613a; --green-soft: #dcebe0; --steel: #3d5670; --steel-soft: #dfe7ee; --alarm: #b3261e; --alarm-soft: #f7e3e0;
+    --oxide: #94331f; --brass: #a87b24; --brass-soft: #f3e9d2;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { width: 38in; height: 27in; background: var(--page); color: var(--text);
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 34px; line-height: 1.32; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .board { display: grid; grid-template-columns: 9.375in 19.25in 9.375in; width: 38in; height: 27in; }
+  .panel { height: 27in; padding: 0.55in 0.5in 0.5in; display: flex; flex-direction: column; gap: 22px; overflow: hidden; position: relative; }
+  .panel + .panel { border-left: 2px dashed #c6cdd1; } /* the folds */
+  .left { background: var(--page); gap: 16px; }
+  .left h1 { font-size: 82px; }
+  .left .card { padding: 24px 30px; }
+  .center { background: #fff; padding-left: 0.6in; padding-right: 0.6in; }
+  .right { background: var(--page); gap: 16px; }
+  .right h1 { font-size: 82px; }
+  .right .card { padding: 24px 30px; }
+
+  .kicker { font-size: 30px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--oxide); }
+  h1 { margin: 0; font-size: 92px; line-height: 1.02; letter-spacing: -0.02em; }
+  h2 { margin: 0; font-size: 52px; line-height: 1.08; letter-spacing: -0.01em; }
+  h3 { margin: 0; font-size: 36px; line-height: 1.15; }
+  p { margin: 0; }
+  small, .small { font-size: 26px; color: var(--secondary); line-height: 1.3; }
+  .card { background: var(--surface); border-radius: 26px; padding: 30px 34px; box-shadow: 0 2px 0 rgba(0,0,0,0.04); }
+  .card.alarm { background: var(--alarm-soft); }
+  .card.green { background: var(--green-soft); }
+  .card.steel { background: var(--steel-soft); }
+  .card.brass { background: var(--brass-soft); }
+  .card.dark { background: var(--text); color: #fff; }
+  .card.dark small { color: #d9d2cc; }
+  .tag { display: inline-block; font-size: 24px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; padding: 4px 14px; border-radius: 99px; background: var(--oxide); color: #fff; }
+  .src { font-size: 22px; color: var(--secondary); margin-top: 10px; }
+  .big { font-size: 120px; font-weight: 800; letter-spacing: -0.03em; line-height: 1; color: var(--green); }
+  .grow { flex: 1; }
+
+  /* centre */
+  .brand { display: flex; align-items: center; gap: 28px; }
+  .brand svg { width: 150px; height: 150px; }
+  .wordmark { font-size: 170px; font-weight: 700; letter-spacing: -0.04em; line-height: 1; }
+  .tagline { font-size: 58px; line-height: 1.12; color: var(--secondary); max-width: 24ch; }
+  .flow { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; }
+  .step { background: var(--surface); border-radius: 24px; padding: 22px 20px 26px; position: relative; border-top: 10px solid var(--steel); }
+  .step b { display: block; font-size: 40px; color: var(--steel); margin-bottom: 6px; }
+  .step.pay { border-top-color: var(--green); } .step.pay b { color: var(--green); }
+  .step.stop { border-top-color: var(--alarm); } .step.stop b { color: var(--alarm); }
+  .step span { font-size: 29px; line-height: 1.25; display: block; }
+  .shots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; }
+  .shot { display: flex; flex-direction: column; gap: 14px; }
+  .phone { border-radius: 38px; overflow: hidden; border: 6px solid var(--text); background: #eef1f2; }
+  .phone img { display: block; width: 100%; height: auto; }
+  .shot h3 { font-size: 38px; }
+  .shot p { font-size: 27px; color: var(--secondary); line-height: 1.25; }
+  .rules { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 26px; }
+  .rule { display: flex; gap: 18px; align-items: flex-start; font-size: 31px; line-height: 1.25; }
+  .rule i { flex: none; width: 46px; height: 46px; border-radius: 50%; background: var(--green); color: #fff; font-style: normal; font-weight: 800; display: grid; place-items: center; font-size: 30px; }
+  .stellar { display: grid; grid-template-columns: 1fr auto auto; gap: 30px; align-items: center; }
+  .qr { width: 235px; text-align: center; font-size: 22px; line-height: 1.15; color: var(--secondary); }
+  .qr svg { display: block; width: 235px; height: 235px; border-radius: 12px; background: #fff; margin-bottom: 6px; }
+  .mono { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 24px; word-break: break-all; color: var(--text); }
+  table { border-collapse: collapse; width: 100%; font-size: 26px; }
+  td { padding: 7px 0; border-bottom: 1px solid var(--separator); vertical-align: top; }
+  td:last-child { text-align: right; font-weight: 700; white-space: nowrap; padding-left: 16px; }
+  tr.total td { border-bottom: 0; font-size: 31px; font-weight: 800; }
+  .realsim { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .realsim h3 { font-size: 30px; margin-bottom: 6px; }
+  .realsim p { font-size: 25px; line-height: 1.28; }
+  ul.tight { margin: 8px 0 0; padding-left: 1.1em; } ul.tight li { margin: 6px 0; }
+  .quote { font-size: 40px; line-height: 1.18; font-weight: 700; }
+  .chips { display: flex; flex-wrap: wrap; gap: 10px; }
+  .chip { font-size: 24px; padding: 5px 16px; border-radius: 99px; background: var(--surface); border: 2px solid var(--separator); }
+  .chip.r::before, .chip.a::before { content: ""; display: inline-block; width: 14px; height: 14px; border-radius: 50%; margin-right: 8px; }
+  .chip.r::before { background: var(--alarm); } .chip.a::before { background: var(--brass); }
+  .foot { margin-top: auto; font-size: 23px; color: var(--secondary); border-top: 2px solid var(--separator); padding-top: 14px; }
+
+  /* one panel at a time for printing (#left #center #right) */
+  body.only-left, body.only-center, body.only-right { width: auto; height: auto; }
+</style>
+</head>
+<body>
+<div class="board">
+
+<!-- ============ LEFT: THE PROBLEM ============ -->
+<section class="panel left" id="left">
+  <div class="kicker">The problem</div>
+  <h1>Money moves in seconds. Proof doesn't.</h1>
+
+  <div class="card alarm">
+    <span class="tag">Wayanad, Kerala · Aug 2026</span>
+    <h3 style="margin-top:14px">An overseas owner's brother oversaw the build.</h3>
+    <p style="margin-top:8px">Most of a ₹37 lakh contract had reportedly been paid. The house was left unfinished and leaking.</p>
+    <p class="src">Indian Express, 10 Aug 2026</p>
+  </div>
+
+  <div class="card alarm">
+    <span class="tag">Telangana · Sep 2026</span>
+    <h3 style="margin-top:14px">Escrow alone wasn't enough.</h3>
+    <p style="margin-top:8px">Milestone money left escrow without proper structural checks. A commission ordered an ₹8.29 lakh refund.</p>
+    <p class="src">Indian Express, 10 Sep 2026</p>
+  </div>
+
+  <div class="card">
+    <h3>Banks check every stage before releasing a home loan.</h3>
+    <p style="margin-top:8px">Families paying from their own savings get no such check.</p>
+  </div>
+
+  <div class="card green">
+    <div class="big">15.8%</div>
+    <p style="margin-top:8px">of Kerala's remittances go to renovating houses and shops, the largest listed use. Kerala received ₹2,16,893 crore in 2023.</p>
+    <p class="src">Kerala Migration Survey 2023</p>
+  </div>
+
+  <div class="card">
+    <h3>Families already pay for oversight.</h3>
+    <p style="margin-top:8px">₹8,000 to ₹20,000 a month for remote site monitoring, as advertised. None of it is tied to the payment.</p>
+  </div>
+
+  <div class="card steel">
+    <div class="kicker" style="color:var(--steel)">Who it is for</div>
+    <h3 style="margin-top:8px">A son or daughter in Canada or the Gulf paying for a parent's build in Kerala.</h3>
+    <p style="margin-top:8px">Parents, builders and engineers use Homeward free.</p>
+  </div>
+
+  <div class="card grow">
+    <h3>Who else does this</h3>
+    <p class="small" style="margin-top:8px;font-size:28px"><b>RECONPRO, NRI Land Check:</b> engineers, no control over payment. <b>Brick &amp; Bolt:</b> a managed builder. <b>DiasporaBuild:</b> African diaspora. Ours: shared family funding, the parent's veto, payment tied to approvals, a builder deposit.</p>
+  </div>
+</section>
+
+<!-- ============ CENTRE: HOW IT WORKS ============ -->
+<section class="panel center" id="center">
+  <div class="brand">
+    <svg viewBox="0 0 64 64" aria-hidden="true"><path d="M5 30 Q13 29 17 25 L32 8 L47 25 Q51 29 59 30" fill="none" stroke="#94331f" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><rect x="14" y="36" width="36" height="8" rx="4" fill="#94331f"/><rect x="14" y="48" width="36" height="8" rx="4" fill="#94331f"/></svg>
+    <div class="wordmark">homeward</div>
+  </div>
+  <div class="tagline">Pay for your parents' house one checked stage at a time.</div>
+
+  <div class="kicker" style="margin-top:6px">How one stage works</div>
+  <div class="flow">
+    <div class="step"><b>1</b><span>The family locks the money in a Stellar contract.</span></div>
+    <div class="step"><b>2</b><span>The stage opens. The supplier is paid for materials.</span></div>
+    <div class="step"><b>3</b><span>The builder films the one-time stage code on site.</span></div>
+    <div class="step"><b>4</b><span>An independent engineer checks the work and decides.</span></div>
+    <div class="step"><b>5</b><span>The parent (Amma) says <i>Yes</i> or taps <i>Check again</i>. A second engineer must then agree.</span></div>
+    <div class="step pay"><b>6</b><span>One payment pays builder and workers, with a certificate. Or the money stays locked.</span></div>
+  </div>
+
+  <div class="shots">
+    <div class="shot">
+      <div class="phone"><img src="trifold-assets/amma.png" alt="Amma's screen: Yes, it's done, or Check again"></div>
+      <h3>Amma decides</h3>
+      <p>Two big buttons, her language. "Nothing is paid until you say yes."</p>
+    </div>
+    <div class="shot">
+      <div class="phone"><img src="trifold-assets/engineer.png" alt="The engineer's checklist"></div>
+      <h3>The engineer looks, ticks, decides</h3>
+      <p>Paid the same fee whether they pass or fail the work.</p>
+    </div>
+    <div class="shot">
+      <div class="phone"><img src="trifold-assets/home.png" alt="The family's view of the house and the locked money"></div>
+      <h3>The family sees every rupee</h3>
+      <p>Paid, in progress, locked, not yet funded. Held by the contract.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="kicker" style="color:var(--green)">What the contract enforces</div>
+    <div class="rules" style="margin-top:14px">
+      <div class="rule"><i>✓</i><span>No stage payment without the engineer and the parent.</span></div>
+      <div class="rule"><i>✓</i><span>Payees are fixed when the build is set up. There is no withdraw function, not even for us.</span></div>
+      <div class="rule"><i>✓</i><span>Nobody who pays, builds or supplies can be the engineer. A second check needs a different person.</span></div>
+      <div class="rule"><i>✓</i><span>If the builder walks off, their deposit and the unspent money go back to the family.</span></div>
+    </div>
+  </div>
+
+  <div class="card dark stellar">
+    <div>
+      <div class="kicker" style="color:#f0b8a8">Live on Stellar Testnet. Check it yourself.</div>
+      <p class="mono" style="margin-top:10px;color:#fff">CC2NYVUTHJWBRTDG7J4O6VB7TINL5MTNOTTXOMVMHKSCUYZR4W3M6QF2</p>
+      <p style="margin-top:12px;font-size:29px">50 contract tests pass. Three recorded Testnet runs: 29, 23 and 88 checks. The contract only checks the rules; a person checks the concrete.</p>
+    </div>
+    <div class="qr" style="color:#d9d2cc"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 31 31" shape-rendering="crispEdges"><path fill="#ffffff" d="M0 0h31v31H0z"/><path stroke="#2a211c" d="M1 1.5h7m1 0h2m2 0h4m3 0h2m1 0h7M1 2.5h1m5 0h1m1 0h2m1 0h3m2 0h1m1 0h1m1 0h1m1 0h1m5 0h1M1 3.5h1m1 0h3m1 0h1m3 0h2m4 0h1m3 0h1m1 0h1m1 0h3m1 0h1M1 4.5h1m1 0h3m1 0h1m1 0h3m3 0h2m1 0h1m1 0h1m2 0h1m1 0h3m1 0h1M1 5.5h1m1 0h3m1 0h1m2 0h3m2 0h1m1 0h2m1 0h2m1 0h1m1 0h3m1 0h1M1 6.5h1m5 0h1m4 0h3m1 0h2m1 0h3m1 0h1m5 0h1M1 7.5h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7M9 8.5h3m4 0h4M1 9.5h1m1 0h2m1 0h3m1 0h5m1 0h1m1 0h4m1 0h1m2 0h1m1 0h2M3 10.5h1m1 0h1m3 0h1m4 0h3m3 0h2m1 0h3m3 0h1M1 11.5h1m4 0h3m3 0h1m1 0h1m2 0h1m3 0h2m4 0h2M1 12.5h2m1 0h2m3 0h5m3 0h1m4 0h1m1 0h1m4 0h1M1 13.5h2m1 0h1m2 0h1m2 0h1m2 0h1m1 0h2m1 0h1m2 0h1m4 0h2M1 14.5h2m3 0h1m3 0h3m2 0h1m1 0h2m1 0h1m2 0h1m3 0h3M1 15.5h3m1 0h1m1 0h1m3 0h1m2 0h1m1 0h3m1 0h2m1 0h2m2 0h3M2 16.5h1m2 0h2m1 0h3m1 0h2m1 0h1m1 0h1m2 0h1m3 0h1m3 0h1M2 17.5h3m1 0h2m3 0h1m1 0h1m1 0h2m2 0h1m1 0h2m1 0h3m1 0h1M4 18.5h1m1 0h1m1 0h1m1 0h1m1 0h2m1 0h1m1 0h1m3 0h2m1 0h1m1 0h3M1 19.5h1m2 0h2m1 0h1m1 0h1m1 0h2m1 0h3m4 0h2m1 0h1m2 0h1M6 20.5h1m1 0h2m3 0h3m2 0h2m3 0h1m1 0h1m1 0h1M2 21.5h1m1 0h1m1 0h2m1 0h1m1 0h1m2 0h2m2 0h10M9 22.5h3m1 0h1m3 0h3m1 0h1m3 0h5M1 23.5h7m1 0h1m1 0h1m1 0h1m1 0h1m2 0h4m1 0h1m1 0h2m1 0h1M1 24.5h1m5 0h1m1 0h2m1 0h4m1 0h1m3 0h1m3 0h2m2 0h1M1 25.5h1m1 0h3m1 0h1m2 0h1m1 0h2m2 0h4m1 0h5m1 0h2M1 26.5h1m1 0h3m1 0h1m1 0h1m1 0h1m1 0h2m1 0h2m2 0h3m1 0h3m2 0h1M1 27.5h1m1 0h3m1 0h1m1 0h1m2 0h1m1 0h1m3 0h2m1 0h1m2 0h1m2 0h1m1 0h1M1 28.5h1m5 0h1m2 0h2m2 0h1m1 0h1m2 0h1m1 0h1m3 0h2m1 0h1M1 29.5h7m1 0h2m2 0h1m5 0h1m1 0h1m2 0h2m2 0h1"/></svg>
+Try the live app</div>
+    <div class="qr" style="color:#d9d2cc"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 43 43" shape-rendering="crispEdges"><path fill="#ffffff" d="M0 0h43v43H0z"/><path stroke="#2a211c" d="M1 1.5h7m1 0h2m1 0h1m1 0h2m1 0h2m2 0h1m2 0h2m1 0h1m3 0h1m3 0h7M1 2.5h1m5 0h1m3 0h2m2 0h1m2 0h1m2 0h1m3 0h1m2 0h2m2 0h1m2 0h1m5 0h1M1 3.5h1m1 0h3m1 0h1m2 0h1m1 0h2m3 0h1m2 0h3m1 0h3m1 0h1m1 0h1m1 0h2m1 0h1m1 0h3m1 0h1M1 4.5h1m1 0h3m1 0h1m1 0h1m2 0h1m2 0h1m1 0h7m3 0h4m2 0h1m1 0h1m1 0h3m1 0h1M1 5.5h1m1 0h3m1 0h1m1 0h1m2 0h2m1 0h1m3 0h3m1 0h2m1 0h4m1 0h1m3 0h1m1 0h3m1 0h1M1 6.5h1m5 0h1m1 0h2m2 0h1m1 0h1m1 0h1m7 0h3m1 0h4m2 0h1m5 0h1M1 7.5h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7M9 8.5h1m2 0h2m1 0h1m2 0h6m3 0h1m2 0h3M1 9.5h1m3 0h1m1 0h3m4 0h2m1 0h2m2 0h3m4 0h1m1 0h1m1 0h1m1 0h5m2 0h1M1 10.5h2m3 0h1m2 0h1m1 0h1m1 0h4m1 0h1m5 0h1m1 0h1m1 0h2m8 0h1m1 0h2M5 11.5h4m1 0h2m4 0h1m4 0h4m1 0h1m1 0h4m1 0h1m1 0h3m2 0h1M1 12.5h2m2 0h1m3 0h3m4 0h1m1 0h5m1 0h1m2 0h2m1 0h1m1 0h4m1 0h2m1 0h1M1 13.5h2m1 0h1m2 0h1m3 0h1m5 0h1m4 0h4m2 0h3m2 0h2m5 0h2M1 14.5h4m3 0h1m1 0h2m4 0h1m1 0h4m4 0h2m2 0h4m1 0h1m1 0h1M1 15.5h4m2 0h2m5 0h1m4 0h1m1 0h1m1 0h1m2 0h3m3 0h1m1 0h6M1 16.5h2m2 0h2m1 0h1m2 0h2m1 0h1m2 0h1m7 0h2m1 0h4m4 0h1m1 0h1m1 0h1M2 17.5h2m1 0h3m1 0h1m1 0h1m3 0h4m1 0h1m1 0h1m1 0h1m1 0h2m1 0h2m1 0h1m3 0h1m3 0h1M1 18.5h4m1 0h1m2 0h1m1 0h1m4 0h2m4 0h1m3 0h2m2 0h1m1 0h1m1 0h5m2 0h1M2 19.5h1m2 0h1m1 0h2m3 0h1m2 0h2m1 0h1m1 0h2m3 0h1m2 0h1m2 0h2m3 0h1m4 0h1M1 20.5h3m1 0h1m2 0h2m1 0h5m1 0h3m1 0h1m1 0h1m1 0h1m1 0h1m4 0h1m3 0h1m1 0h4M1 21.5h3m2 0h3m2 0h1m4 0h2m1 0h3m1 0h2m1 0h3m3 0h1m1 0h1m1 0h1m2 0h3M1 22.5h2m2 0h2m2 0h1m2 0h1m5 0h1m1 0h1m3 0h1m1 0h1m1 0h1m2 0h1m2 0h2m2 0h2m1 0h1M2 23.5h1m3 0h2m3 0h1m1 0h2m1 0h1m1 0h1m1 0h3m1 0h1m1 0h1m1 0h4m1 0h3m1 0h1m3 0h1M3 24.5h1m2 0h1m1 0h1m1 0h1m1 0h3m1 0h1m1 0h1m3 0h1m1 0h2m2 0h1m1 0h1m2 0h2m1 0h1m1 0h4M4 25.5h2m1 0h1m1 0h2m1 0h3m1 0h1m1 0h1m1 0h4m3 0h1m2 0h1m1 0h2m1 0h1m2 0h1M2 26.5h1m1 0h2m3 0h1m1 0h1m1 0h1m1 0h3m3 0h1m1 0h2m2 0h5m1 0h1m1 0h2m2 0h1M5 27.5h3m5 0h3m1 0h1m5 0h7m1 0h1m1 0h1m2 0h2m2 0h1M1 28.5h1m3 0h2m2 0h2m2 0h1m1 0h1m3 0h1m1 0h2m1 0h2m1 0h2m1 0h1m1 0h2m4 0h1m1 0h2M1 29.5h2m1 0h1m1 0h8m2 0h1m3 0h4m4 0h1m1 0h1m4 0h2M1 30.5h2m2 0h1m3 0h3m1 0h1m1 0h3m2 0h1m2 0h1m1 0h3m1 0h1m1 0h2m1 0h1m1 0h6M4 31.5h4m2 0h2m1 0h2m1 0h1m2 0h2m3 0h3m2 0h2m3 0h1m4 0h2M5 32.5h1m2 0h1m2 0h2m2 0h1m2 0h4m1 0h2m1 0h1m5 0h1m1 0h1m3 0h1m1 0h2M1 33.5h4m1 0h4m1 0h1m3 0h3m5 0h1m4 0h3m1 0h7M9 34.5h3m1 0h1m1 0h7m1 0h1m1 0h1m1 0h2m4 0h1m3 0h3m1 0h1M1 35.5h7m1 0h3m2 0h4m1 0h5m1 0h3m1 0h2m1 0h2m1 0h1m1 0h1m1 0h1m1 0h1M1 36.5h1m5 0h1m5 0h1m1 0h2m3 0h3m1 0h3m2 0h3m1 0h1m3 0h1m1 0h3M1 37.5h1m1 0h3m1 0h1m1 0h2m2 0h1m1 0h2m3 0h2m2 0h1m1 0h1m1 0h2m1 0h8M1 38.5h1m1 0h3m1 0h1m4 0h1m2 0h2m2 0h1m1 0h1m1 0h2m2 0h3m3 0h1m2 0h1m3 0h2M1 39.5h1m1 0h3m1 0h1m2 0h3m1 0h2m1 0h1m1 0h1m3 0h2m1 0h3m1 0h2m1 0h2m5 0h2M1 40.5h1m5 0h1m3 0h1m1 0h2m6 0h3m1 0h1m2 0h1m1 0h2m1 0h1m1 0h2m1 0h4M1 41.5h7m1 0h1m3 0h1m2 0h2m2 0h1m1 0h4m4 0h1m2 0h1m2 0h5"/></svg>
+See the contract</div>
+  </div>
+</section>
+
+<!-- ============ RIGHT: THE BUSINESS ============ -->
+<section class="panel right" id="right">
+  <div class="kicker">The business</div>
+  <h1>What it costs, and what we know.</h1>
+
+  <div class="card">
+    <h3>₹15 lakh build</h3>
+    <table style="margin-top:10px">
+      <tr><td>Homeward fee, 1.5%, set in the contract</td><td>₹22,500</td></tr>
+      <tr><td>Engineer visits, quoted separately</td><td>₹30,000 to ₹60,000</td></tr>
+      <tr><td>Moving the money (they pay this anyway)</td><td>1% to 6.5%</td></tr>
+      <tr class="total"><td>All in</td><td>about 4% to 12%</td></tr>
+    </table>
+    <p class="small" style="margin-top:10px">4% to 7% by digital transfer, 7.5% to 12% by bank. Visit prices are placeholders until we get quotes.</p>
+  </div>
+
+  <div class="card green">
+    <h3>One stage paid with no check is about ₹3.75 lakh.</h3>
+    <p style="margin-top:6px">The fee is ₹22,500.</p>
+  </div>
+
+  <div class="card brass">
+    <div class="kicker" style="color:var(--brass)">What we have learned</div>
+    <p style="margin-top:10px"><b>16 conversations:</b> 15 engineers (Mumbai 6, Delhi 5, Kerala 2, Canada 2) and a father who built from Canada.</p>
+    <p class="quote" style="margin-top:12px">"Easy to send money, very, very hard to get money back."</p>
+    <p class="small">Krish's father, quoted with permission</p>
+    <p style="margin-top:12px">Engineers said it would save them hours of chasing approvals. <b>None quoted a price, and we haven't tested the fee on families yet.</b></p>
+  </div>
+
+  <div class="card">
+    <h3>Break-even</h3>
+    <p style="margin-top:6px">About <b>100 builds a year</b> on ₹30 lakh builds with a small team: roughly 1.4% of our Kerala estimate. On ₹15 lakh builds with the fee alone we would need about 27%, so we don't pitch that. Every input is our assumption.</p>
+  </div>
+
+  <div class="card steel">
+    <h3>Next: ten Kerala families</h3>
+    <p style="margin-top:6px">Families pay from their own bank after each approval. We hold no money. A licensed partner comes before we do.</p>
+  </div>
+
+  <div class="card">
+    <h3>Ten risks, on the wall beside this board</h3>
+    <div class="chips" style="margin-top:10px">
+      <span class="chip r">Will families pay?</span><span class="chip r">Engineer quotes</span><span class="chip r">Builders</span>
+      <span class="chip r">Custody and rules</span><span class="chip a">All-in price</span><span class="chip a">Break-even</span>
+      <span class="chip a">Disputes</span><span class="chip a">Finding families</span><span class="chip a">WhatsApp</span>
+    </div>
+    <p class="small" style="margin-top:10px"><b>Put a dot on the one that would stop you backing us.</b></p>
+  </div>
+
+
+  <div class="foot">
+    <b>Ved Agwekar · Youdis Acharya · Krishneet Singh · Rivan Dutta</b><br>
+    Velocity × Stellar Blockchain Innovation Challenge. Testnet demo: Interac, rupee payouts and SMS are simulated. Figures are our assumptions, not validated pricing.
+  </div>
+</section>
+
+</div>
+<script>
+  // #left, #center or #right prints just that panel at its own size.
+  const only = location.hash.slice(1);
+  if (["left", "center", "right"].includes(only)) {
+    const w = { left: 9.375, center: 19.25, right: 9.375 }[only];
+    document.body.className = "only-" + only;
+    const style = document.createElement("style");
+    style.textContent = `@page { size: ${w}in 27in; margin: 0; } .board { display: block; width: ${w}in; height: 27in; } .panel { display: none; border: 0 !important; } #${only} { display: flex; width: ${w}in; }`;
+    document.head.appendChild(style);
+  }
+</script>
+</body>
+</html>
