@@ -173,7 +173,8 @@ function read(): Project[] {
     const parsed = saved ? JSON.parse(saved) : null;
     // Demo data saved by an older version of the app has a different shape and would crash the screens.
     const fits = (p: Project) => p.builder && p.security && p.stages.every((s) => STATUSES.includes(s.status));
-    cache = Array.isArray(parsed) && parsed.length === seed.length && parsed.every(fits) ? parsed : seed;
+    // Saved homes keep only what changed, so work out what the contract would hold again after a reload.
+    cache = Array.isArray(parsed) && parsed.length === seed.length && parsed.every(fits) ? parsed.map(derive) : seed;
   } catch {
     cache = seed;
   }

@@ -156,7 +156,9 @@ export function securityHeld(project) {
 }
 
 // True while the builder still has to post part of the deposit before the first stage can open.
-export const depositNeeded = (project) => Boolean(project.security) && (project.security.upfront ?? 0) > (project.security.posted ?? 0);
+// `deposit` is what the contract holds now, on Testnet and in the mock alike. `posted` is only the mock's starting value
+// (the sample data carries one), so it must not decide this on Testnet.
+export const depositNeeded = (project) => Boolean(project.security) && (project.security.upfront ?? 0) > (project.security.deposit ?? project.security.posted ?? 0);
 
 // After the last stage is paid and the defects period has passed, the builder's security can go back to them.
 export function canReturnDeposit(project, now) {
