@@ -55,7 +55,7 @@ About 320 words, which is tight for two minutes. Time it once; if you pass 2:00,
 
 **1:52 · Close** *(gesture to **Try to break it**, bottom right, then press play)*
 
-> "Sending money home takes seconds. Homeward makes sure it becomes a house. Here is a whole build, in sixty seconds."
+> "That is Homeward. Pay for your parents' house, one checked stage at a time. Here is a whole build, in sixty seconds."
 
 **2:00 to 3:00 · The video.** Say nothing. Stand at the board and touch the layer of the house the video is on.
 
@@ -70,8 +70,8 @@ About 320 words, which is tight for two minutes. Time it once; if you pass 2:00,
 - **If it feels like too much on the day:** tap it yourself and say "I'm Amma, and I'm tapping Yes." It still works.
 
 ### The tagline
-- **Lead with:** "Sending money home takes seconds. Homeward makes sure it becomes a house." It says what the family gets, it is easy to remember, and it doesn't blame builders. It is your closing line and it now opens the video.
-- **The board's title** ("The builder isn't paid until an engineer checks the work and Amma says yes") is not the tagline. It is the rule: how the product works in one sentence. It is accurate, so the printed board is fine as it is. In the speech, say it as "each stage is paid only after it's checked."
+- **The tagline:** "Pay for your parents' house, one checked stage at a time." It is the line on the live site. It says who it is for, what they do and how it is different, and it doesn't blame builders. It is your closing line, it opens the video, and it goes on the board (print `showcase/pieces/tagline-strips.pdf` and tape it over the old title).
+- **The old board title** ("The builder isn't paid until an engineer checks the work and Amma says yes") is the rule, not the tagline. In the speech, say it as "each stage is paid only after it's checked."
 
 ### Your path across the board
 You move once from left to right, which is how the board reads.
@@ -113,7 +113,7 @@ If you learn nothing else, learn this section. A judge can ask about any of it.
 | **200 builds a year** | Break-even, on ₹30 lakh builds. About 3% of the 6,850 Kerala builds a year we estimate fit us |
 
 ### The five sentences that carry the pitch
-1. "Sending money home takes seconds. Homeward makes sure it becomes a house." (the tagline)
+1. "Pay for your parents' house, one checked stage at a time." (the tagline)
 2. "Each stage is paid only after an engineer checks it and the parent says yes." (the rule)
 3. "No engineer and no parent, no payment."
 4. "A public contract, not a database we control."
