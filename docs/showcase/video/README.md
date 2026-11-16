@@ -1,6 +1,6 @@
 # The 60-second demo video
 
-`homeward-demo-v2.mp4` is a screen recording of the live app (https://homeward-ecru.vercel.app) running on Stellar Testnet on 15 Nov 2026, with the waits cut out, subtitles added, and short opening and closing cards. It has no sound.
+`homeward-demo-v2.mp4` is a screen recording of the live app (https://homeward-ecru.vercel.app) running on Stellar Testnet on 15 Nov 2026, with the waits cut out, subtitles added, and short opening and closing cards. It has background music and subtitles, and no voice.
 
 Every step in it is a real Testnet transaction:
 
@@ -41,3 +41,7 @@ The subtitles in the video are this script, word for word. Each line is on scree
 | 0:44 | A Rust smart contract on Stellar holds the money and enforces every rule. |
 | 0:50 | The app is Next.js, the server is Node, and fifty tests check the contract. |
 | 0:56 | Every step was a real transaction. Try it yourself. |
+
+## Music
+
+The background music is the first 60 seconds of "Close Up" by Michael Ramir C., from Mixkit (mixkit.co), used under the Mixkit Stock Music Free License: https://mixkit.co/license/#musicFree
