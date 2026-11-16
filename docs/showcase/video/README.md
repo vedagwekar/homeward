@@ -1,6 +1,6 @@
 # The 60-second demo video
 
-`homeward-demo-v2.mp4` is a screen recording of the live app (https://homeward-ecru.vercel.app) running on Stellar Testnet on 15 Nov 2026, with the waits cut out, subtitles added, and short opening and closing cards. It has no sound.
+`homeward-demo.mp4` is a screen recording of the live app (https://homeward-ecru.vercel.app) running on Stellar Testnet on 15 Nov 2026, with the waits cut out, subtitles added, and short opening and closing cards. It has a voiceover, background music and subtitles.
 
 Every step in it is a real Testnet transaction:
 
@@ -21,22 +21,27 @@ Every step in it is a real Testnet transaction:
 
 The builder's clip in the recording is the app's built-in sample file, so the AI video check shows "could not finish". A person still approves or rejects.
 
-## Voiceover script (optional)
+## Script and subtitles
 
-The video works silent: every scene has a subtitle. If you record a voice over it, read this. It is about 150 words, so keep a steady pace and start each line at its time.
+The subtitles in the video are this script, word for word. Each line is on screen from its time until the next one, and the voiceover reads the same lines. It is about 140 words.
 
-| Time | Say |
+| Time | Subtitle and voiceover line |
 |---|---|
-| 0:00 | Families abroad send billions home to Kerala, much of it to build and renovate houses. |
-| 0:04 | But from thirteen thousand kilometres away, they can't see the work. One family paid thirty-five lakh rupees for a house left unfinished and leaking. |
-| 0:08 | Homeward. Pay for your parents' house, one checked stage at a time. |
-| 0:12 | Anil locks the money for the first stage in a smart contract. |
-| 0:16 | The builder adds his own deposit and starts. The supplier is paid at once. |
-| 0:20 | He films the work, showing today's code. |
-| 0:24 | An independent engineer checks it and approves. |
-| 0:29 | Amma says yes, and one transaction pays the builder and his workers. |
-| 0:34 | The walls run the same way. |
-| 0:36 | But this time Amma isn't sure. She taps Check again, and nothing is paid. |
-| 0:43 | A second engineer says no. The money stays locked. |
-| 0:47 | Underneath is a Rust smart contract on Stellar. It holds the money and enforces every rule. Our app and server only ask it to act. |
+| 0:00 | Families abroad send billions home to Kerala to build houses. |
+| 0:03 | From thirteen thousand kilometres away, they can't check the work. |
+| 0:08 | Pay for your parents' house, one checked stage at a time. |
+| 0:12 | Anil locks the money for the first stage. |
+| 0:15 | The builder adds a deposit. The supplier is paid first. |
+| 0:19 | He films the work, showing today's code. |
+| 0:23 | An independent engineer checks it and approves. |
+| 0:26 | Amma says yes. One transaction pays the builder and workers. |
+| 0:31 | Next stage: the walls. |
+| 0:33 | This time Amma isn't sure. She taps Check again, and nothing is paid. |
+| 0:40 | A second engineer says no. The money stays locked. |
+| 0:44 | A Rust smart contract on Stellar holds the money and enforces every rule. |
+| 0:50 | The app is Next.js, the server is Node, and fifty tests check the contract. |
 | 0:56 | Every step was a real transaction. Try it yourself. |
+
+## Music
+
+The background music is the first 60 seconds of "Close Up" by Michael Ramir C., from Mixkit (mixkit.co), used under the Mixkit Stock Music Free License: https://mixkit.co/license/#musicFree
