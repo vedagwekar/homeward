@@ -229,7 +229,7 @@ A clean white board with gold double rules and a lot of empty space. The gold-on
 
 **Files, in `docs/showcase/`:**
 - **`homeward-board.jpg` and `homeward-board.pdf`:** the whole board at 38 × 27 in. The dashed lines are the folds.
-- **`pieces/`:** the 16 blocks as separate images. Drop each onto a slide, set the width from the table, print at 100% and paste it on. Side-panel blocks are 8.1 in wide and fit letter paper. The centre blocks are 17.6 in wide: print them on tabloid paper in two halves, or at a print shop.
+- **`pieces/`:** the 17 blocks as separate images, and `pieces/cutouts/` with the seven photo cutouts on see-through backgrounds. Drop each onto a slide, set the width from the table, print at 100% and paste it on. Side-panel blocks are 8.1 in wide and fit letter paper. The centre blocks are 17.6 in wide: print them on tabloid paper in two halves, or at a print shop.
 - **`board.html`:** the source.
 
 **What is on it, and why it is less than before.** Each panel answers one question, top to bottom.
@@ -242,23 +242,24 @@ A clean white board with gold double rules and a lot of empty space. The gold-on
 
 Cut from the earlier boards: the builder's deposit box, the "money doesn't stop at the house" chain, the per-stage bars, the "Fool our AI check" box and the second set of QR codes. They are still in the app and in the Q&A (section 9).
 
-**Real parts of a Kerala house, on the board.** The centre shows a Kerala house taken apart from the ground up: stone plinth and steps, walls with a wooden veranda, the concrete roof slab with its steel, the clay tile roof with a carved gable, and the key. Each layer points to its stage, and each stage has a dashed box. Stick the real material for that stage in it. Judges can touch what the engineer is checking.
+**A real Kerala house, taken apart.** The centre shows five photo cutouts stacked like a house, one per stage. They are real photos from Wikimedia Commons, cropped into the shape of each layer.
 
-| Stage | Real thing | Where to get it by tomorrow |
+| Stage | Cutout in `pieces/cutouts/` | What the photo is |
 |---|---|---|
-| 1 · Foundation | A chip of stone or a small lump of concrete (Kerala foundations are laterite or granite rubble) | Garden centre or hardware store: one paver or landscape stone, broken |
-| 2 · Walls | A slice of red clay brick. Kerala walls are laterite block or red brick | Hardware store: one clay brick; ask them to cut a 1 cm slice, or use a thin brick veneer |
-| 3 · Roof slab | 10 cm of steel rebar with binding wire twisted round it. This is the steel the engineer must see before the pour | Hardware store: a short rebar offcut and tie wire |
-| 4 · Finishing | A piece of terracotta roof tile (the Mangalore tile on every Kerala roof) | Garden centre: a terracotta saucer or tile, broken into a hand-sized piece |
-| 5 · Handover | A brass key on a short loop of coir or jute string | Any key cutter; twine from a dollar store |
+| 5 · Handover | `cut-5-brass-door-lock` | A manichitrathazhu, the brass lock on a traditional Kerala door (Kerala Folklore Museum, Kochi) |
+| 4 · Finishing | `cut-4-carved-gable` and `cut-4-clay-tile-roof` | A carved wooden gable in Kerala, and Mangalore clay tiles |
+| 3 · Roof slab | `cut-3-slab-steel` | Slab steel tied and ready for a pour. This one is not from India; it is the clearest free photo of the steel an engineer checks |
+| 2 · Walls | `cut-2-laterite-wall` | A laterite wall in Kottayam, with a doorway cut out |
+| 1 · Foundation | `cut-1-laterite-plinth` | Laterite cut in a Kerala quarry, the stone under most Kerala houses |
+| Left panel | `cut-whole-house` | A family's nalukettu house in Kerala, whole |
 
-Other touches, in order of how much they add:
-1. **A kasavu cloth on the table:** cream cotton with a gold border, from an Indian clothing shop. A cream tablecloth with gold ribbon along the edge does the same job. It matches the gold rules on the board.
-2. **Coir or jute rope** glued along the route from Anil to Meera to Amma, in place of the printed dashed line.
-3. **The LOCKED / PAID tags** on the stage cards as real card tags on Velcro, so the roof slab can flip from LOCKED to PAID when a judge says yes.
-4. **The rebar is your best prop.** At "for stages concrete will hide, the engineer visits the site", pick it off the board and hold it up.
+How to use them on the trifold:
+1. Print the block `09-centre-house-in-five-stages` as the base.
+2. Print the cutouts again on card or photo paper, at 100% or up to 150%, and cut them out along the photo edge. They have see-through backgrounds, so they drop straight onto a slide.
+3. Stick each one over its printed twin with foam tape, the plinth flat and each layer above it one tape thicker. The house then stands off the board in steps, and the layers read as separate.
+4. If a judge asks what something is, the credit line under the stack and `trifold-assets/photos/CREDITS.md` say where each photo came from. Say "a Kerala house", not "Amma's house": the photos are of real buildings, and Amma is our demo family.
 
-Use hot glue or foam tape for the heavy pieces, and keep them in the lower half of the centre panel so the board does not tip.
+Optional, if you have time: tape a real brass key beside the lock cutout and hold up a short piece of rebar at "for stages concrete will hide, the engineer visits the site".
 
 **The blocks.**
 
@@ -266,14 +267,15 @@ Use hot glue or foam tape for the heavy pieces, and keep them in the lower half 
 |---|---|
 | `01-left-route` | 8.1 × 6.3 |
 | `02-left-wayanad-case` ② | 8.1 × 6.0 |
+| `02b-left-real-house` | 8.1 × 4.7 |
 | `03-left-quote` | 8.1 × 2.3 |
 | `04-left-money-sent-home` | 8.1 × 4.3 |
-| `05-centre-title` | 17.6 × 4.1 |
+| `05-centre-title` | 17.6 × 3.6 |
 | `06-centre-todays-code` ① | 4.6 × 2.8 |
 | `07-centre-how-a-stage-gets-paid` ③ | 12.4 × 2.8 |
 | `08-centre-app-screens` ④ | 17.6 × 6.0 |
-| `09-centre-house-in-five-stages` | 17.6 × 8.9 |
-| `10-centre-stellar` ⑤ | 17.6 × 3.4 |
+| `09-centre-house-in-five-stages` | 17.6 × 8.8 |
+| `10-centre-stellar` ⑤ | 17.6 × 2.7 |
 | `11-right-what-they-pay` ⑥ | 8.1 × 5.8 |
 | `12-right-engineer-quotes` | 8.1 × 1.9 |
 | `13-right-break-even` | 8.1 × 5.4 |
@@ -290,12 +292,12 @@ Use hot glue or foam tape for the heavy pieces, and keep them in the lower half 
 | ③ | How each stage gets paid (centre) | 0:33 |
 | ④ | Amma decides: the first app screen (centre) | 0:46 |
 | ⑤ | Live on Stellar Testnet (centre, bottom) | 1:00 |
-| ⑥ | What Anil and Meera pay (right, top). Pick up the rebar on "the engineer visits the site" | 1:25 |
+| ⑥ | What Anil and Meera pay (right, top). Point at the slab steel on "the engineer visits the site" | 1:25 |
 | ⑦ | Try to break it (right, bottom) | 1:50 |
 
 Numbers to keep straight: break-even is **200 builds a year**, because the fee pays for the engineers' reviews. The 23.2% compares money sent home with Kerala's net state income (NSDP); the board says "equals", not "is".
 
-Props: the rebar, five LOCKED / PAID tags on Velcro, YES and CHECK AGAIN paddles, the ₹3.75 lakh envelope and ₹22,500 slip.
+Props: five LOCKED / PAID tags on Velcro, YES and CHECK AGAIN paddles, the ₹3.75 lakh envelope and ₹22,500 slip.
 
 ### The table, after the talk
 | Station | What the judge does |
