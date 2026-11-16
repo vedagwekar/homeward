@@ -33,20 +33,20 @@ Business impact is 37.5% of the score. You have about 30 seconds of speech for i
 |---|---|---|---|
 | 1 | **The problem is real** | "Most of a ₹37 lakh contract had reportedly been paid. The house was unfinished and leaking." | Board, left: Wayanad and Telangana cases, both sourced |
 | 2 | **Who pays** | "The son or daughter abroad pays." | Board, left: "Who it is for". Parents, builders and engineers use it free |
-| 3 | **The price, honestly** | "1.5% plus fixed engineer visits, about four to seven percent all in." | Board, right: the ₹15 lakh table. `/price` at the table. By bank it is 7.5% to 12%, and you say so if asked |
+| 3 | **The price, honestly** | "The son or daughter abroad pays 1.5%, and that covers the engineer's video reviews." | Board, right: the ₹15 lakh table. `/price` at the table. All in is about 3% to 4% by digital transfer and 6% to 9% by bank, including site visits for the stages concrete will hide. Site visit prices are our estimate |
 | 4 | **Why it's worth it** | "One unchecked stage on a ₹15 lakh build is ₹3.75 lakh." (fee: ₹22,500) | The envelope and the slip, held up |
-| 5 | **Validation, exactly** | "Fifteen engineers and one family. Engineers say it saves them hours. None quoted a price, and we haven't tested the fee on families." | Board, right: "What we have learned", with the father's quote |
+| 5 | **Validation, exactly** | "Eight Kerala engineers quoted us ₹500 to ₹1,200 each. … We haven't tested the fee on families." | `docs/engineer-quotes.md`. Board, right: "What we have learned", with the father's quote. Fifteen engineer interviews and one family interview sit behind it |
 | 6 | **What's next** | "Ten families are next." | Families pay from their own bank; we hold no money; a licensed partner comes before we do |
 
 **Numbers to know cold, for questions**
 - Kerala received ₹2,16,893 crore in remittances in 2023; renovating houses and shops is the largest listed use at 15.8% (Kerala Migration Survey 2023).
-- Break-even: about 100 builds a year on ₹30 lakh builds with a small team and a visit margin, roughly 1.4% of our base estimate of Kerala builds. Fee alone on ₹15 lakh builds would need about 27%, so we don't pitch that. Every input is our assumption.
+- Break-even: about 200 builds a year on ₹30 lakh builds with a small team, roughly 3% of our base estimate of Kerala builds. On ₹15 lakh builds the fee barely covers its costs (about ₹500 left per build), so we start with bigger builds. The review prices are quotes; every other input is our assumption.
 - Competitors: RECONPRO and NRI Land Check (engineers, no control over payment), Brick & Bolt (a managed builder), DiasporaBuild (African diaspora).
 - How we reach families: through engineers, at the moment a family signs a builder's quote. The ₹5,000 cost to win a customer is a guess.
 
 **Never say:** "twenty people", "validated", "families will pay", "only 1.5%".
 
-If engineer prices, builder answers or family sessions arrive before Monday, swap them into point 5 with the real counts.
+The engineer prices are in `docs/engineer-quotes.md` (names kept out of the public repo). If builder answers or family sessions arrive before Monday, add them to point 5 with the real counts. Confirm with Krish whether the eight who quoted are among the fifteen interviewed, so the count you say is exact.
 
 ---
 
@@ -61,7 +61,7 @@ Technology is the other 37.5%, and most of the panel is from the Stellar Develop
 | 3 | **Why Stellar** | "One transaction just paid the builder and the workers." | Near-zero fees, a public record anyone can open, anchors as the route to rupee payout (not built) |
 | 4 | **What is on-chain and what isn't** | Only if asked: the people, the stage amounts, approvals, payments and certificates are on-chain. The video stays off-chain; only its fingerprint (hash) goes on. | `docs/technical-limits.md` |
 | 5 | **The honest limits** | "The demo signs on our server, and our admin can settle a disputed claim." | Board, centre: "Demo limits". Before real money: each person signs with their own wallet or passkey, and disputes go to an independent arbiter |
-| 6 | **The contract doesn't judge concrete** | "An AI check helps the engineer see the code. A person decides." | Board: "The contract checks the rules; a person checks the concrete" |
+| 6 | **The contract doesn't judge concrete** | "An AI check helps the engineer see the code. A person decides." | Board: "The contract checks the rules; a person checks the concrete". For stages concrete will hide, the engineer visits the site; the video proves the footage is fresh |
 
 **What our admin account can and can't do** (the most likely hard question): it creates builds, assigns engineers, opens stages, settles a disputed claim, and decides the refund split of a stopped build. It cannot approve a stage, pay itself, or change who gets paid.
 
@@ -96,7 +96,7 @@ Krish hands the YES and CHECK AGAIN paddles to the judge at 1:36. Rivan stands a
 
 ## 5. The script
 
-About 244 spoken words. *Italics are directions.* Speak at a normal pace; the timing has four seconds of slack.
+About 240 spoken words. *Italics are directions.* Speak at a normal pace; the timing has four seconds of slack.
 
 **0:00. Hook** *(point at the code on the screen)*
 
@@ -126,7 +126,7 @@ About 244 spoken words. *Italics are directions.* Speak at a normal pace; the ti
 
 **2:16. Business** *(hold up the envelope, then the slip; touch the right panel)*
 
-> "The son or daughter abroad pays: 1.5% plus fixed engineer visits, about four to seven percent all in. One unchecked stage on a ₹15 lakh build is ₹3.75 lakh. We spoke to fifteen engineers and one family. Engineers say it saves them hours. None quoted a price, and we haven't tested the fee on families. Ten families are next."
+> "The son or daughter abroad pays 1.5%, and that covers the engineer's video reviews: eight Kerala engineers quoted us ₹500 to ₹1,200 each. For stages concrete will hide, the engineer visits the site. One unchecked stage on a ₹15 lakh build is ₹3.75 lakh. We haven't tested the fee on families. Ten families are next."
 
 **2:43. Close** *(gesture to the table)*
 
@@ -134,7 +134,7 @@ About 244 spoken words. *Italics are directions.* Speak at a normal pace; the ti
 
 **If the result hasn't landed by 2:16:** go on to Business, and add "and there's the payment" when it appears.
 
-**If you run long, cut in this order:** "Why does it matter?", then "The limits are on our board…" (the board still shows them), then "Engineers say it saves them hours." Never cut "None quoted a price, and we haven't tested the fee on families."
+**If you run long, cut in this order:** "Why does it matter?", then "The limits are on our board…" (the board still shows them), then "One unchecked stage on a ₹15 lakh build is ₹3.75 lakh" (hold up the envelope without the line). Never cut "For stages concrete will hide, the engineer visits the site" or "We haven't tested the fee on families."
 
 ---
 
@@ -249,11 +249,13 @@ Run `sh scripts/attack.sh prepare` before judges arrive. It uses the same Testne
 | Question | Answer |
 |---|---|
 | Who pays? | The sibling abroad. Parents, builders and engineers use it free |
-| Why 1.5%? | It's a starting price: ₹22,500 on a ₹15 lakh build, against about ₹3.75 lakh for one unchecked stage. The pilot tests it |
-| What does a family really pay? | 4% to 7% with a digital transfer, 7.5% to 12% by bank. Ours is 1.5% plus fixed visits |
-| Have you validated it? | Fifteen engineers and one family. Engineers back it, and they would gain clients, so that isn't proof families will pay. That is what the pilot tests |
+| Why 1.5%? | It covers the engineer's video reviews, which eight Kerala engineers quoted at ₹500 to ₹1,200 each, and our running costs. ₹22,500 on a ₹15 lakh build, against about ₹3.75 lakh for one unchecked stage |
+| What does a family really pay? | About 3% to 4% all in with a digital transfer, 6% to 9% by bank. Ours is 1.5%, which covers the video reviews, plus a site visit for the stages concrete will hide |
+| Have you validated it? | Fifteen engineer interviews, one family, and price quotes from eight Kerala engineers. Engineers would gain clients, so that isn't proof families will pay. That is what the pilot tests |
+| Can an engineer really check from a video? | Not everything. Video reviews are for work that stays visible. For the foundation and the roof slab, where concrete hides the steel, the engineer visits the site. Two of the eight asked for close-ups or a tape measure in shot |
+| Where do the engineers come from? | Independent licensed engineers on a list we keep. We assign one, and the parent can demand a second. Eight have quoted; the network itself isn't built yet |
 | How big is it? | ₹2,16,893 crore reached Kerala in 2023, and house renovation is the largest listed use. We estimate 1,700 to 20,600 builds a year we could serve, and the pilot replaces that guess |
-| What share do you need? | About 100 builds a year with a small team on ₹30 lakh builds. We don't work on ₹15 lakh builds with the fee alone |
+| What share do you need? | About 200 builds a year with a small team on ₹30 lakh builds, roughly 3% of our Kerala estimate. On ₹15 lakh builds the fee barely covers its costs |
 | Why not WhatsApp and a relative? | For one owner and a simple build, that's often fine. It breaks with several siblings: nobody can find who approved what |
 | How do you reach families? | Through engineers, when a family signs a builder's quote. Our acquisition cost is a guess |
 | Will builders accept a deposit? | We haven't asked builders yet. Terms are set per build, and the deposit can be zero |
@@ -294,7 +296,7 @@ If you don't know: "We don't know yet. Here is how we'd find out."
 - Devpost has the video link, the live URL and the contract ID.
 
 ### Still to get, if you can
-- Five engineer prices: WhatsApp the fifteen engineers. Ask what they'd charge for one site visit with a report, and for a 20-minute video review.
+- From the eight engineers who quoted: would they pass a foundation or roof slab from video alone, and what would a site visit cost? Add who collected each quote, and when, to `docs/engineer-quotes.md`.
 - Two builder answers and three family sessions.
 - A native speaker's check of the Malayalam and Punjabi text.
 
