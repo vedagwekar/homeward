@@ -1,6 +1,6 @@
 # The 60-second demo video
 
-`homeward-demo-60s.mp4` is a screen recording of the live app (https://homeward-ecru.vercel.app) running on Stellar Testnet on 15 Nov 2026, with the waits cut out, subtitles added, and short opening and closing cards. It has no sound.
+`homeward-demo-v2.mp4` is a screen recording of the live app (https://homeward-ecru.vercel.app) running on Stellar Testnet on 15 Nov 2026, with the waits cut out, subtitles added, and short opening and closing cards. It has no sound.
 
 Every step in it is a real Testnet transaction:
 
@@ -20,3 +20,23 @@ Every step in it is a real Testnet transaction:
 | 12 | Rejected. Money stays locked | [43c322349188…](https://stellar.expert/explorer/testnet/tx/43c322349188a0342c27d3e428a0544a897b3f6c97a1c0f1fca5c4c8f1164c5f) |
 
 The builder's clip in the recording is the app's built-in sample file, so the AI video check shows "could not finish". A person still approves or rejects.
+
+## Voiceover script (optional)
+
+The video works silent: every scene has a subtitle. If you record a voice over it, read this. It is about 150 words, so keep a steady pace and start each line at its time.
+
+| Time | Say |
+|---|---|
+| 0:00 | Families abroad send billions home to Kerala, much of it to build and renovate houses. |
+| 0:04 | But from thirteen thousand kilometres away, they can't see the work. One family paid thirty-five lakh rupees for a house left unfinished and leaking. |
+| 0:08 | Homeward. Pay for your parents' house, one checked stage at a time. |
+| 0:12 | Anil locks the money for the first stage in a smart contract. |
+| 0:16 | The builder adds his own deposit and starts. The supplier is paid at once. |
+| 0:20 | He films the work, showing today's code. |
+| 0:24 | An independent engineer checks it and approves. |
+| 0:29 | Amma says yes, and one transaction pays the builder and his workers. |
+| 0:34 | The walls run the same way. |
+| 0:36 | But this time Amma isn't sure. She taps Check again, and nothing is paid. |
+| 0:43 | A second engineer says no. The money stays locked. |
+| 0:47 | Underneath is a Rust smart contract on Stellar. It holds the money and enforces every rule. Our app and server only ask it to act. |
+| 0:56 | Every step was a real transaction. Try it yourself. |
