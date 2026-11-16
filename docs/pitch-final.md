@@ -225,7 +225,7 @@ It plays last, with no one talking, so its captions carry the story and the tech
 Upload it to YouTube (unlisted) or Loom and put the link on Devpost, with the live URL and the contract ID.
 
 ### The board
-A clean white board with gold double rules and a lot of empty space. The gold-on-cream is the border of a Kerala kasavu cloth, and the real building materials on the board carry the "house" idea, so the paper itself can stay plain.
+A clean white board with gold double rules and a lot of empty space. The gold-on-cream is the border of a Kerala kasavu cloth. The real photos of a Kerala house carry the \"house\" idea, so the rest of the paper can stay plain.
 
 **Files, in `docs/showcase/`:**
 - **`homeward-board.jpg` and `homeward-board.pdf`:** the whole board at 38 × 27 in. The dashed lines are the folds.
