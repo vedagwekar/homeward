@@ -41,11 +41,3 @@ The subtitles in the video are this script, word for word. Each line is on scree
 | 0:44 | A Rust smart contract on Stellar holds the money and enforces every rule. |
 | 0:50 | The app is Next.js, the server is Node, and fifty tests check the contract. |
 | 0:56 | Every step was a real transaction. Try it yourself. |
-
-## Music credit
-
-The version with background music uses the first 60 seconds of this track, lowered in volume:
-
-"Carefree" by Kevin MacLeod (incompetech.com). Licensed under Creative Commons: By Attribution 4.0. https://creativecommons.org/licenses/by/4.0/
-
-The licence requires this credit wherever the video is published, so paste it into the YouTube description and the Devpost page.
