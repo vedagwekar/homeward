@@ -78,18 +78,18 @@ Krish puts paper and a marker in front of each judge and asks:
 
 > "May we film you holding up a piece of paper for five seconds during the pitch? Hands and paper only. It goes to our demo and we delete it today."
 
-Only people who say yes are filmed. The laptop faces the judges, showing the builder's page with **today's code** in large type. The same code is on the card in the board's "Today's code" pocket.
+Only people who say yes are filmed. The laptop faces the judges, showing the builder's page with **today's code** in large type. The same code is written in the board's "Today's code" box.
 
 ### The three minutes
 
 | Time | Ved says and does | Youdis does (tablet) | Board piece |
 |---|---|---|---|
 | 0:00 to 0:15 | **Hook.** Asks them to write the code and hold it up | Films 4 to 5 seconds, ticks the consent box, taps **Send video** | ① Today's code |
-| 0:15 to 0:33 | **The case** | Waits for "Video sent" (15 to 25 seconds) | ② The Wayanad clipping |
+| 0:15 to 0:33 | **The case** | Waits for "Video sent" (15 to 25 seconds) | ② The Wayanad case |
 | 0:33 to 0:46 | **How a stage gets paid** | Demo role bar: **Engineer**. The clip and AI check appear. Thumbs up to Ved | ③ How each stage gets paid |
 | 0:46 to 1:00 | **Decision.** Asks one judge: Yes, or check again? | Shows the tablet to the judges, ticks the boxes, taps **Approve**. Then role bar: **Parent**, and hands the tablet to the judge | ④ Amma decides |
 | 1:00 to 1:25 | **Stellar and limits**, then the result line | The judge taps their answer. Youdis holds up the result | ⑤ Live on Stellar Testnet |
-| 1:25 to 1:50 | **Business.** Envelope and slip | Taps **View on Stellar Expert**, ready for questions | ⑥ The receipt |
+| 1:25 to 1:50 | **Business.** Envelope and slip | Taps **View on Stellar Expert**, ready for questions | ⑥ What Anil and Meera pay |
 | 1:50 to 2:00 | **Close and handoff** | On the laptop, starts the video on "sixty seconds" | ⑦ Try to break it |
 | 2:00 to 3:00 | **Silent.** Stands beside the screen | Nothing | The video |
 
@@ -159,7 +159,7 @@ About 245 spoken words in two minutes. *Italics are directions.* The video must 
 2. Choose **Amma's house extension**. Press **Go as…** three times and do each step: Anil locks the money, the builder puts in the deposit, the builder starts Foundation.
 3. Stop on the **builder's page**. It shows "Today's code", for example HW-5501-9380. Check the file picker opens the camera.
 4. On the laptop, open the same site, choose Amma's house on `/demo`, press **Go as** the builder, and zoom until the code is readable from two metres.
-5. Write the code on the card and slide it into the "Today's code" pocket on the board.
+5. Write the code in the "Today's code" box on the board (on a sticky strip, so it can change).
 6. Test the hotspot. Put both devices on do-not-disturb.
 
 ### Youdis's cue sheet (all on the tablet)
@@ -225,71 +225,77 @@ It plays last, with no one talking, so its captions carry the story and the tech
 Upload it to YouTube (unlisted) or Loom and put the link on Devpost, with the live URL and the contract ID.
 
 ### The board
-It is a scrapbook on a kraft-brown board: every fact is its own paper object (a torn clipping, a till receipt, a luggage tag, a taped photo), stuck on by hand. Nothing is printed at poster size.
+A clean white board with gold double rules and a lot of empty space. The gold-on-cream is the border of a Kerala kasavu cloth, and the real building materials on the board carry the "house" idea, so the paper itself can stay plain.
 
 **Files, in `docs/showcase/`:**
-- **`homeward-board.jpg` and `homeward-board.pdf`:** the whole board at 38 × 27 in, with the fold lines. Use it as the map for where each piece goes.
-- **`pieces/`:** all 25 pieces as separate images with see-through backgrounds. Drop each one onto a letter-size slide (Google Slides or PowerPoint), set it to the size in the table below, print at 100%, and cut it out. Or use them as a guide and make the piece by hand.
-- **`board.html`:** the source. The same design is editable in Claude Design (Ved has the link).
+- **`homeward-board.jpg` and `homeward-board.pdf`:** the whole board at 38 × 27 in. The dashed lines are the folds.
+- **`pieces/`:** the 16 blocks as separate images. Drop each onto a slide, set the width from the table, print at 100% and paste it on. Side-panel blocks are 8.1 in wide and fit letter paper. The centre blocks are 17.6 in wide: print them on tabloid paper in two halves, or at a print shop.
+- **`board.html`:** the source.
 
-**How to make it not look printed.** These are the things real boards do that a flat poster can't:
-1. **Cover the board first.** Kraft paper or brown wrapping paper over all three panels. White foam board showing through is what makes a board look unfinished.
-2. **Mat the big sheets.** Glue the route sheet onto rust-red card, the ₹342,690,000,000 sheet onto green, and the 200-builds sheet onto mustard, with about 5 mm of colour showing all round. Three mat colours, no more.
-3. **Raise four pieces** on foam tape so they cast real shadows: the title, the house sheet, the receipt and the Stellar card.
-4. **Use real things where the design draws them:** washi or masking tape on the photos, two red push pins on the house sheet, red string from Anil to Meera to Amma, a paperclip on the comparison card, real sticky notes for the two notes, twine on the two tags.
-5. **Tear the clippings.** Print the two newspaper pieces, then tear the edges by hand instead of cutting. Go over the ₹3,452,000 with a real yellow highlighter.
-6. **Tilt everything a little,** as in the map. Nothing sits exactly square.
-7. **Leave the reading order alone.** Each panel reads top to bottom, and the green circled numbers follow the talk.
+**What is on it, and why it is less than before.** Each panel answers one question, top to bottom.
 
-**The pieces.** Sizes are for a 38 × 27 in board. The title and the house sheet are wider than letter paper: print each across two pages and join them behind a mat, or print them on tabloid paper.
-
-| File in `pieces/` | Size (in) | Made as |
+| Panel | Blocks | Question it answers |
 |---|---|---|
-| `01-left-label-the-problem` | 4.3 × 0.9 | Black strip, typewriter letters |
-| `02-left-route-13500-km` | 8.5 × 6.4 | Cream sheet on a rust mat, three pins and string |
-| `03-left-clipping-wayanad` ② | 8.3 × 5.3 | Torn newsprint, highlighter on the figure |
-| `04-left-clipping-telangana` | 7.7 × 3.3 | Torn newsprint |
-| `05-left-note-holding-money` | 5.9 × 1.1 | Write it straight on the board in red marker |
-| `06-left-sticky-fathers-words` | 6.1 × 4.5 | Yellow sticky note, handwritten |
-| `07-left-sticker-23-percent` | 3.0 × 3.0 | Mustard circle |
-| `08-left-money-sent-home` | 8.4 × 4.5 | Cream sheet on a green mat |
-| `09-centre-title` | 18.1 × 3.6 | Airmail-striped border, raised |
-| `10-centre-code-card` ① | 4.7 × 2.2 | Blank card. Write today's code on it before the pitch |
-| `11-centre-code-pocket` | 5.5 × 2.7 | Kraft pocket, glued on three sides so the card slides in |
-| `12-centre-how-a-stage-gets-paid` ③ | 5.6 × 5.7 | Lined notebook page, five coloured dots |
-| `13-centre-house-and-stages` | 12.1 × 9.7 | Graph paper, cut-paper house, five tags, raised |
-| `14-centre-photo-amma` ④ | 5.7 × 6.5 | App screenshot on white card, taped like a photo |
-| `15-centre-photo-engineer` | 5.6 × 6.4 | Same |
-| `16-centre-photo-anil` | 5.6 × 6.4 | Same |
-| `17-centre-where-every-rupee-goes` | 10.6 × 5.5 | Ledger page. Print at 95% to fit letter paper sideways |
-| `18-centre-stellar-card` ⑤ | 7.1 × 5.5 | Black card, two QR codes, raised |
-| `19-right-label-the-business` | 4.6 × 0.9 | Black strip |
-| `20-right-receipt` ⑥ | 5.7 × 10.0 | Till receipt, zigzag cut at the bottom, fee circled in red pen, raised |
-| `21-right-tag-engineer-quotes` | 3.2 × 5.2 | Kraft luggage tag on red twine |
-| `22-right-break-even` | 8.4 × 5.4 | Cream sheet on a mustard mat |
-| `23-right-why-not-escrow` | 8.3 × 4.6 | Index card with a paperclip |
-| `24-right-sticky-not-real-yet` | 5.1 × 4.0 | Pink sticky note |
-| `25-right-tag-try-to-break-it` ⑦ | 3.3 × 4.2 | Kraft tag with the team's names |
+| Left: the problem | 13,500 km route · ② the Wayanad case and the Telangana refund · the father's quote · ₹342,690,000,000 sent home | Why does this need to exist? |
+| Centre: how it works | Title · ① today's code · ③ five steps · ④ three screens from the working app · the five stages with where the money goes · ⑤ live on Stellar Testnet | What does it do, and is it real? |
+| Right: the business | ⑥ what Anil and Meera pay · eight engineers' quotes · 200 builds to break even · why not escrow · what isn't real yet · ⑦ try to break it | Does it pay, and what's unproven? |
 
-The stamps on the house sheet show Foundation and Walls PAID and the roof slab LOCKED. Make the five tags real, on Velcro, so one can be flipped at the table.
+Cut from the earlier boards: the builder's deposit box, the "money doesn't stop at the house" chain, the per-stage bars, the "Fool our AI check" box and the second set of QR codes. They are still in the app and in the Q&A (section 9).
+
+**Real parts of a Kerala house, on the board.** The five stage cards in the centre each have a dashed box. Stick the real material for that stage in it. Judges can touch what the engineer is checking.
+
+| Stage | Real thing | Where to get it by tomorrow |
+|---|---|---|
+| 1 · Foundation | A chip of stone or a small lump of concrete (Kerala foundations are laterite or granite rubble) | Garden centre or hardware store: one paver or landscape stone, broken |
+| 2 · Walls | A slice of red clay brick. Kerala walls are laterite block or red brick | Hardware store: one clay brick; ask them to cut a 1 cm slice, or use a thin brick veneer |
+| 3 · Roof slab | 10 cm of steel rebar with binding wire twisted round it. This is the steel the engineer must see before the pour | Hardware store: a short rebar offcut and tie wire |
+| 4 · Finishing | A piece of terracotta roof tile (the Mangalore tile on every Kerala roof) | Garden centre: a terracotta saucer or tile, broken into a hand-sized piece |
+| 5 · Handover | A brass key on a short loop of coir or jute string | Any key cutter; twine from a dollar store |
+
+Other touches, in order of how much they add:
+1. **A kasavu cloth on the table:** cream cotton with a gold border, from an Indian clothing shop. A cream tablecloth with gold ribbon along the edge does the same job. It matches the gold rules on the board.
+2. **Coir or jute rope** glued along the route from Anil to Meera to Amma, in place of the printed dashed line.
+3. **The LOCKED / PAID tags** on the stage cards as real card tags on Velcro, so the roof slab can flip from LOCKED to PAID when a judge says yes.
+4. **The rebar is your best prop.** At "for stages concrete will hide, the engineer visits the site", pick it off the board and hold it up.
+
+Use hot glue or foam tape for the heavy pieces, and keep them in the lower half of the centre panel so the board does not tip.
+
+**The blocks.**
+
+| File in `pieces/` | Size (in) |
+|---|---|
+| `01-left-route` | 8.1 × 6.3 |
+| `02-left-wayanad-case` ② | 8.1 × 6.0 |
+| `03-left-quote` | 8.1 × 2.3 |
+| `04-left-money-sent-home` | 8.1 × 4.3 |
+| `05-centre-title` | 17.6 × 4.1 |
+| `06-centre-todays-code` ① | 4.6 × 2.8 |
+| `07-centre-how-a-stage-gets-paid` ③ | 12.4 × 2.8 |
+| `08-centre-app-screens` ④ | 17.6 × 7.3 |
+| `09-centre-five-stages` | 17.6 × 6.3 |
+| `10-centre-stellar` ⑤ | 17.6 × 3.4 |
+| `11-right-what-they-pay` ⑥ | 8.1 × 5.8 |
+| `12-right-engineer-quotes` | 8.1 × 1.9 |
+| `13-right-break-even` | 8.1 × 5.4 |
+| `14-right-why-not-escrow` | 8.1 × 4.1 |
+| `15-right-not-real-yet` | 8.1 × 1.4 |
+| `16-right-try-to-break-it` ⑦ | 8.1 × 2.4 |
 
 **Where your hand goes during the talk:**
 
-| Circle | Piece | You touch it at |
+| Circle | Block | You touch it at |
 |---|---|---|
-| ① | Today's code: the card in the kraft pocket (centre, top left) | 0:00 |
-| ② | The Wayanad clipping, ₹3,452,000 (left) | 0:15 |
+| ① | Today's code (centre, top left). Write the code in the box before the pitch | 0:00 |
+| ② | The Wayanad case, ₹3,452,000 (left) | 0:15 |
 | ③ | How each stage gets paid (centre) | 0:33 |
-| ④ | Amma decides (centre, the first photo) | 0:46 |
-| ⑤ | Live on Stellar Testnet (centre, bottom right) | 1:00 |
-| ⑥ | The receipt: what Anil and Meera pay (right, top) | 1:25 |
+| ④ | Amma decides: the first app screen (centre) | 0:46 |
+| ⑤ | Live on Stellar Testnet (centre, bottom) | 1:00 |
+| ⑥ | What Anil and Meera pay (right, top). Pick up the rebar on "the engineer visits the site" | 1:25 |
 | ⑦ | Try to break it (right, bottom) | 1:50 |
 
-The other pieces are for reading at the table: the 13,500 km route, the father's quote, the ₹342,690,000,000 sent home, the house and its five stages, where every rupee goes, the engineers' quotes, the break-even, the comparison card and "What isn't real yet".
+Numbers to keep straight: break-even is **200 builds a year**, because the fee pays for the engineers' reviews. The 23.2% compares money sent home with Kerala's net state income (NSDP); the board says "equals", not "is".
 
-Numbers to keep straight: break-even is **200 builds a year**, because the fee pays for the engineers' reviews. The 23.2% compares money sent home with Kerala's net state income (NSDP), as the survey states it; the sticker says "equals", not "is".
-
-Props: the code card, five LOCKED / PAID tags on Velcro, YES and CHECK AGAIN paddles, the ₹3.75 lakh envelope and ₹22,500 slip.
+Props: the rebar, five LOCKED / PAID tags on Velcro, YES and CHECK AGAIN paddles, the ₹3.75 lakh envelope and ₹22,500 slip.
 
 ### The table, after the talk
 | Station | What the judge does |
@@ -348,7 +354,7 @@ If you don't know: "We don't know yet. Here is how we'd find out."
 4. **Go or no-go for the live decision:** if "Video sent" takes longer than 30 seconds in both full runs, make Version B your plan (Business first, then the decision).
 
 ### Before judges arrive
-- Start over, then set up the state (section 6). Code card in the pocket.
+- Start over, then set up the state (section 6). Code written in the box.
 - Video paused on its first frame. Volume off.
 - Tablet signed in as the builder. Hotspot ready. Do-not-disturb on.
 - Paper, markers, paddles, envelope, slip, tags.
