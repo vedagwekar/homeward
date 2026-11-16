@@ -8,31 +8,31 @@ One presenter, three minutes: you talk for two, then the 60-second video plays. 
 
 ## 1. The speech
 
-About 270 words. Aim to finish at 1:55. *Italics are what your hands do.* The circled numbers are the pieces on the board.
+About 270 words. Aim to finish at 1:55. *Italics are what your hands do.* The board has no cue numbers on it, so each cue names the piece and where it is.
 
-**0:00 · The code** *(point at ① on the board; a judge has paper and a marker)*
+**0:00 · The code** *(point at the **Today's code** box, centre panel, top left; a judge has paper and a marker)*
 
 > "HW, 5501, 9380. Could you write that down and hold it up for me?
 > Thank you. You've just done what a builder in Kerala has to do before he gets paid: show today's code, in today's video. Yesterday's footage doesn't have it."
 
 *Read out whatever code is on the board that day.*
 
-**0:15 · Why it matters** *(touch ②)*
+**0:15 · Why it matters** *(left panel: touch **13,500 km**, then the red **₹3,452,000**)*
 
 > "Here is why that matters. Anil lives in Toronto. He is paying for his mother's house, thirteen thousand kilometres away.
 > This August, a Kerala consumer commission ruled on a house just like it. Nearly thirty-five lakh rupees paid. The house was unfinished, and leaking. The money went out before anyone independent had looked."
 
-**0:35 · How it works** *(touch ③, then the house)*
+**0:35 · How it works** *(centre: run a finger along **Lock, Film, Check, Yes, Pay**, then rest your hand on the house)*
 
 > "Homeward flips the order. The family locks the money, stage by stage. The builder films the work with that code. An engineer with no stake checks it. And the parent, standing in the house, has the last word."
 
-**0:50 · You decide** *(hand the judge your phone; touch ④)*
+**0:50 · You decide** *(hand the judge your phone; point at the **Amma decides** phone screen, left of the house)*
 
 > "So you are the parent now. This is Amma's phone. The engineer has passed the foundation. Yes, or check again?"
 
 *Wait. Repeat their answer out loud. Take the phone back.*
 
-**1:05 · What just happened** *(touch ⑤)*
+**1:05 · What just happened** *(touch the black **Live on Stellar Testnet** block at the bottom)*
 
 > "What you just tapped is a real transaction on Stellar. Not a database we control. A public contract with one rule: no engineer and no parent, no payment."
 
@@ -43,19 +43,42 @@ About 270 words. Aim to finish at 1:55. *Italics are what your hands do.* The ci
 
 > "This is a testnet demo. Our server signs for each role, and the bank side is simulated. That is on the board."
 
-**1:30 · What it costs** *(touch ⑥)*
+**1:30 · What it costs** *(right panel, top: touch the red **₹22,500**, then the pink **8 engineers** box)*
 
 > "What does this cost Anil? One and a half percent. On a fifteen lakh build that is twenty-two thousand five hundred rupees, and it pays the engineer. Eight Kerala engineers quoted us five hundred to twelve hundred rupees a review.
 > One unchecked stage costs three lakh seventy-five thousand.
 > What we haven't done yet is charge a real family. Ten families are next."
 
-**1:52 · Close** *(gesture to ⑦, press play)*
+**1:52 · Close** *(gesture to **Try to break it**, bottom right, then press play)*
 
 > "Sending money home takes seconds. Homeward makes sure it becomes a house. Here is a whole build, in sixty seconds."
 
 **2:00 to 3:00 · The video.** Say nothing. Stand at the board and touch the layer of the house the video is on.
 
 **If you are running late,** cut in this order: the testnet line (the board says it), then "One unchecked stage costs…", then "Eight Kerala engineers quoted us…". Never cut "What we haven't done yet is charge a real family." At 1:58, stop wherever you are and press play.
+
+### Your path across the board
+You move once from left to right, which is how the board reads.
+
+| Beat | Panel | Piece |
+|---|---|---|
+| The code | Centre, top left | Today's code box |
+| Why it matters | Left | 13,500 km, then ₹3,452,000 |
+| How it works | Centre | The five steps, then the house |
+| You decide | Centre | Amma's phone screen, left of the house |
+| What just happened | Centre, bottom | The black Stellar block |
+| What it costs | Right, top | ₹22,500, then the 8 engineers box |
+| Close | Right, bottom | Try to break it |
+
+During the video, stay at the house: plinth for Foundation, the wall for Walls, the black block when the tech stack comes up.
+
+### Fix on the board before judges arrive
+- **Write today's code in the box.** It is empty in the photo. Use a sticky strip so you can change it for each group.
+- **The house has circles 1 to 5 and so do the five steps.** They mean different things. Say "steps" for the row and "stages" for the house, and don't call out a number.
+- **The escrow table's ticks and dashes printed faint.** Go over the Homeward column's ticks with a green marker.
+- **The board's tags show Walls as PAID.** Your live demo decides the Foundation. If asked: "The board shows a later point in the same build."
+- **The quote on the board says "an engineer in Canada who built a house in India".** Use those words if you quote him.
+- There is empty space under "Try to break it". Tape the ₹3.75 lakh envelope and the ₹22,500 slip there, or leave it clear.
 
 ---
 
@@ -149,7 +172,7 @@ On the laptop: the video full screen, paused at 0:00. On the table: paper, a mar
 |---|---|---|
 | Business impact and relevance | 37.5% | Why it matters · What it costs · "we haven't charged a real family" |
 | Technology and implementation | 37.5% | How it works · You decide · What just happened · the video |
-| Presentation and deliverables | 25% | The code · the phone in a judge's hand · touching the board in order · finishing on time |
+| Presentation and deliverables | 25% | The code · the phone in a judge's hand · moving left, centre, right across the board · finishing on time |
 
 ---
 
