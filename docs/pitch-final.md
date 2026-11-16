@@ -1,218 +1,303 @@
-# Homeward: the showcase pitch, start to finish
+# Homeward: the pitch, in one document
 
-For Monday 16 Nov. Read this top to bottom once, then use sections 3 and 4 on the day. It replaces the earlier script and goes with the new board in `docs/showcase/` (PDFs for print, `trifold.html` to edit).
+Version 3, for the Project Showcase on Monday 16 Nov. This replaces every earlier pitch doc. Read sections 1 to 3 to understand it, rehearse from sections 4 to 6, and keep sections 7 to 9 for the day.
 
-## 1. The pitch in one paragraph
+**The three minutes in one line:** the judges make the proof themselves, watch the money refuse to move, then one of them decides whether real Testnet money is paid.
 
-Families abroad can send money home in seconds, but they cannot see what it turns into. Homeward locks a family's build money in a public Stellar contract and releases it one stage at a time, only after an independent engineer passes the work and the parent says yes. The parent can ask for a second engineer. If the builder walks off, the deposit and the unspent money go back to the family. Everything runs on Stellar Testnet. We say plainly what is simulated, what is demo-only, and what we have not yet proven.
+---
 
-**What a judge should walk away with**
-1. The payment cannot leave without the approvals, and they watched it refuse.
-2. The proof step is real: they held up a code, we filmed it, and it went on the record.
-3. We know our weak spots and named them before they did.
+## 1. Why this pitch works
 
-**What we never claim:** twenty people validated it; families will pay; the contract knows if the concrete is good; the demo keys are secure. Say "sixteen conversations", "untested", "the contract checks rules, a person checks the work", and "demo signing on our server".
+Most teams will describe a product. You will make the judges use it. There are three moments, and each one carries part of the argument.
 
-## 2. The three minutes at a glance
-
-One speaker, about 236 live words, a 60-second silent video in the middle. The interactive hook is inside the three minutes, not before it.
-
-| Time | Beat | Length |
+| Moment | What happens | What it proves |
 |---|---|---|
-| 0:00 to 0:22 | **Hook: write today's code, hold it up, we film it** | 22 s |
-| 0:22 to 0:38 | The real case (Wayanad) | 16 s |
-| 0:38 to 0:46 | Bridge to the video | 8 s |
-| **0:46 to 1:46** | **Video, you stay silent** | **60 s** |
-| 1:46 to 2:08 | **Circle back: here is your clip** | 22 s |
-| 2:08 to 2:26 | Why Stellar, and the honest limits | 18 s |
-| 2:26 to 2:50 | The business, with the real numbers | 24 s |
-| 2:50 to 3:00 | Ask and close | 10 s |
+| **1. They make the proof** (0:00) | Judges write today's stage code on paper and hold it up. Youdis films five seconds and uploads it. | The proof step is real, and old footage can't be reused, because the code is new for each stage. |
+| **2. They watch the money refuse** (0:36) | The 60-second video: one stage is paid in a single transaction; on the roof, the parent taps Check again, a second engineer says no, and the money stays locked. | The rule is enforced by the contract, not by a promise. |
+| **3. One of them decides** (1:36) | Their clip is on the engineer's screen with the AI check. The engineer passes it. One judge plays the parent: Yes, or Check again. Youdis taps their answer and a real transaction lands while you talk. | The parent's say is real, and a single approval pays several people at once, live. |
 
-## 3. The script, line by line
+Everything else you say (the case, the price, the limits) hangs on those three moments. If the live part fails, section 7 gives you two safer versions with the same words.
 
-Stage directions are in *italics*. "Board" means the trifold. "Screen" means the laptop facing the judges.
+**What a judge should remember afterwards**
+1. "I held up the code, and my clip went on the record."
+2. "The builder couldn't be paid around the second engineer."
+3. "They told us what they haven't proven before we asked."
 
-**0:00 to 0:22. The hook** *(the screen already shows the builder's page with today's code in big type; Krish has put paper and markers in front of each judge)*
+---
 
-> "Before I say anything: may we film you holding up a piece of paper for five seconds? It goes to our demo only, nothing else, and we delete it after today."
+## 2. The business side: what you must land
 
-*Wait for a yes from each person who will be in the shot. If anyone says no, they simply don't hold it up.*
+Business impact is 37.5% of the score. You have about 30 seconds of speech for it, so the board and the Q&A carry the rest. These are the six points, the sentence for each, and where the backup is.
 
-> "This is today's code, made fresh for this stage. Please write it on your paper and hold it up."
+| # | Point | Say | Backup |
+|---|---|---|---|
+| 1 | **The problem is real** | "Most of a ₹37 lakh contract had reportedly been paid. The house was unfinished and leaking." | Board, left: Wayanad and Telangana cases, both sourced |
+| 2 | **Who pays** | "The son or daughter abroad pays." | Board, left: "Who it is for". Parents, builders and engineers use it free |
+| 3 | **The price, honestly** | "1.5% plus fixed engineer visits, about four to seven percent all in." | Board, right: the ₹15 lakh table. `/price` at the table. By bank it is 7.5% to 12%, and you say so if asked |
+| 4 | **Why it's worth it** | "One unchecked stage on a ₹15 lakh build is ₹3.75 lakh." (fee: ₹22,500) | The envelope and the slip, held up |
+| 5 | **Validation, exactly** | "Fifteen engineers and one family. Engineers say it saves them hours. None quoted a price, and we haven't tested the fee on families." | Board, right: "What we have learned", with the father's quote |
+| 6 | **What's next** | "Ten families are next." | Families pay from their own bank; we hold no money; a licensed partner comes before we do |
 
-*Youdis films about five seconds with the tablet's camera, ticks the consent box on the builder screen and taps Send. The upload runs in the background and you keep talking.*
+**Numbers to know cold, for questions**
+- Kerala received ₹2,16,893 crore in remittances in 2023; renovating houses and shops is the largest listed use at 15.8% (Kerala Migration Survey 2023).
+- Break-even: about 100 builds a year on ₹30 lakh builds with a small team and a visit margin, roughly 1.4% of our base estimate of Kerala builds. Fee alone on ₹15 lakh builds would need about 27%, so we don't pitch that. Every input is our assumption.
+- Competitors: RECONPRO and NRI Land Check (engineers, no control over payment), Brick & Bolt (a managed builder), DiasporaBuild (African diaspora).
+- How we reach families: through engineers, at the moment a family signs a builder's quote. The ₹5,000 cost to win a customer is a guess.
 
-**0:22 to 0:38. The case**
+**Never say:** "twenty people", "validated", "families will pay", "only 1.5%".
 
-> "This August, a Kerala commission ruled on a house a US-based owner's brother was overseeing. Most of a ₹37 lakh contract had reportedly been paid. The house was unfinished and leaking."
+If engineer prices, builder answers or family sessions arrive before Monday, swap them into point 5 with the real counts.
 
-*Touch the Wayanad card, left panel.*
+---
 
-**0:38 to 0:46. Bridge**
+## 3. The tech side: what you must land
 
-> "Homeward holds the next payment until the work is checked. Here is one stage, live on Stellar Testnet."
+Technology is the other 37.5%, and most of the panel is from the Stellar Development Foundation. They will check whether Stellar is doing real work and whether you know your limits.
 
-*Turn to the screen. Press play on the last word.*
+| # | Point | Say or show | Backup |
+|---|---|---|---|
+| 1 | **It runs** | The live decision at 1:36. "This is live." | Contract ID and QR on the board; Stellar Expert link on screen after each action |
+| 2 | **The rule is on-chain** | "The rule is a public contract: no engineer and no parent, no payment." | 50 contract tests; three recorded Testnet runs (29, 23 and 88 checks); `sh scripts/attack.sh all` at the table |
+| 3 | **Why Stellar** | "One transaction just paid the builder and the workers." | Near-zero fees, a public record anyone can open, anchors as the route to rupee payout (not built) |
+| 4 | **What is on-chain and what isn't** | Only if asked: the people, the stage amounts, approvals, payments and certificates are on-chain. The video stays off-chain; only its fingerprint (hash) goes on. | `docs/technical-limits.md` |
+| 5 | **The honest limits** | "The demo signs on our server, and our admin can settle a disputed claim." | Board, centre: "Demo limits". Before real money: each person signs with their own wallet or passkey, and disputes go to an independent arbiter |
+| 6 | **The contract doesn't judge concrete** | "An AI check helps the engineer see the code. A person decides." | Board: "The contract checks the rules; a person checks the concrete" |
 
-**0:46 to 1:46. The video.** *Say nothing. Stand still and point to the matching hand on the board's "one stage, five hands" strip as each caption appears.*
+**What our admin account can and can't do** (the most likely hard question): it creates builds, assigns engineers, opens stages, settles a disputed claim, and decides the refund split of a stopped build. It cannot approve a stage, pay itself, or change who gets paid.
 
-**1:46 to 2:08. Circle back** *(Youdis switches the screen to the engineer's page: your clip is playing, with the AI check beside it)*
+**Never say:** "secure", "decentralized", "AI verifies the work", "nobody can move the money".
 
-> "And here is your clip. The engineer's screen shows your code on your paper. The code changes every stage, so old footage cannot be reused. An AI check helps the engineer see it. A person decides. That is why the builder in our video could not be paid around the second engineer."
+---
 
-*Touch step 3 on the board ("films today's code"), then the Engineer hand.*
+## 4. Run of show
 
-**2:08 to 2:26. Stellar and the limits**
+### Before the clock (as judges arrive)
+Krish puts paper and a marker in front of each judge and asks:
 
-> "The rule lives in a public contract. One approval pays builder and workers in one transaction. The honest limits: the demo signs on our server, and our admin can settle a disputed claim. Both change before real money."
+> "May we film you holding up a piece of paper for five seconds during the pitch? Hands and paper only. It goes to our demo and we delete it today."
 
-*Touch the contract ID and the QR.*
+Only people who say yes are filmed. The laptop faces the judges, showing the builder's page with **today's code** in large type.
 
-**2:26 to 2:50. The business**
+### The three minutes
 
-> "Our customer is the son or daughter abroad. We spoke to fifteen engineers and one family. Engineers say it saves them hours. None quoted a price, and we haven't tested the fee on families. A family pays about four to seven percent all in. One unchecked stage on a ₹15 lakh build is ₹3.75 lakh. Our fee is ₹22,500."
+| Time | Ved says and does | Youdis does | Screen |
+|---|---|---|---|
+| 0:00 to 0:16 | **Hook.** Asks them to write the code and hold it up | Films 4 to 5 seconds on the tablet, ticks the consent box, taps **Send video** | Builder's page, code in big type |
+| 0:16 to 0:36 | **The case.** Touches the Wayanad card | Switches the laptop to **Engineer** with the Demo role bar. Starts the video on "checked" | Engineer's page, then the video |
+| 0:36 to 1:36 | **Silent.** Points at the five hands on the board as captions appear | Watches the tablet: upload done? Gives Ved a thumbs up or down by 1:30 | The 60-second video |
+| 1:36 to 1:52 | **Circle back and decision.** "This is live." Asks one judge: Yes, or check again? | Brings the browser forward (the clip and AI check appear), ticks the boxes, clicks **Approve** | Engineer's page with their clip |
+| 1:52 to 2:16 | **Stellar and limits**, then the result line | Switches to **Parent**, clicks the judge's answer. The transaction lands in about ten seconds | Parent's page, then "paid" or "nothing paid", with the Stellar Expert link |
+| 2:16 to 2:43 | **Business.** Envelope and slip. Touches the right panel | Opens the Stellar Expert link in a new tab, ready for questions | The transaction on Stellar Expert |
+| 2:43 to 2:56 | **Close.** Gestures to the table | Nothing | Same |
 
-*Hold up the envelope marked ₹3.75 lakh, then the slip marked ₹22,500.*
+Krish hands the YES and CHECK AGAIN paddles to the judge at 1:36. Rivan stands at the table, ready for the stations.
 
-**2:50 to 3:00. Ask and close**
+---
 
-> "Come play the parent at our table, and try to break the contract. Sending money home takes seconds. Homeward makes sure it builds what it paid for."
+## 5. The script
 
-**If you run long, cut in this order:** the sentence "Both change before real money", then "One unchecked stage…₹3.75 lakh", then the Wayanad line down to its first sentence. Never cut "none quoted a price, and we haven't tested the fee on families".
+About 244 spoken words. *Italics are directions.* Speak at a normal pace; the timing has four seconds of slack.
 
-**Use real counts only.** If engineer quotes, builder answers or family sessions come in before Monday, replace the validation sentence with them.
+**0:00. Hook** *(point at the code on the screen)*
 
-## 4. The hook, step by step
+> "This code was made minutes ago, for one stage of one house in Kerala. Please write it on your paper and hold it up. You are now a builder proving today's work."
 
-### Setup (15 minutes before judges arrive)
-1. Open https://homeward-ecru.vercel.app/demo on the laptop and press **Start over from step 1** (about 90 seconds on Testnet).
-2. Pick **Amma's house extension**. Tap **Go as…** and do three steps: Anil locks the money, the builder puts in the deposit, the builder starts the stage.
-3. Leave the laptop on the **builder's page**. It shows "Today's code" in large type, for example HW-4821-7735. That code is random and made by the backend when the stage starts.
-4. Charge the tablet. Make sure its camera works with the app: open the builder page on it, tap the file picker and confirm the camera opens.
-5. Put a sheet of paper, a marker and a small printed card in front of each judge seat.
-6. Have the engineer's page ready in a second tab ("Go as" the engineer from the tour).
+**0:16. The case** *(touch the Wayanad card)*
 
-### The consent (say this before you film)
-> "May we film you holding up a piece of paper for five seconds? It stays in our demo, and we delete it after the showcase."
+> "Why does it matter? This August, a Kerala commission ruled on a house an overseas owner's brother was overseeing. Most of a ₹37 lakh contract had reportedly been paid. The house was unfinished and leaking. Homeward holds each payment until the work is checked."
 
-Only film people who say yes. The upload form also has a consent box ("Everyone in this clip agreed to be filmed, and to it being uploaded to this demo") that must be ticked before Send works. Never film anyone's badge or screen in the shot.
+**0:36. The video.** *Silent. Point at Family, Builder, Engineer, Parent, Second engineer on the board as each appears.*
 
-### Filming and uploading
-- Youdis holds the tablet at the table, with the paper and the judge's hands in frame, not faces.
-- On the builder page: choose the camera clip, tick the consent box, tap **Send video**. The upload runs in the background and the status bar says when it is done.
-- A clip over 14 MB or a long one will not get the AI check. Five seconds is fine.
+**1:36. Circle back and decision** *(turn to the screen, then to one judge; Krish hands over the paddles)*
 
-### The circle-back
-- At 1:46 switch to the engineer's page. The clip plays and the AI panel shows what it found (clear footage, code visible or not).
-- Do not press Approve on stage. Leave it. You are showing that the proof step is real, not finishing the stage.
+> "That was a recording. This is live. Here is your clip, with your code, and our engineer has passed it. You are Amma, the parent. Yes, or check again?"
 
-### If something goes wrong
-| Problem | What to do |
-|---|---|
-| No judge takes part | Krish plays a judge from the audience side and holds up the paper. Say "our teammate will show you". |
-| Someone says no to filming | Skip them. Never ask twice. |
-| Upload fails or is slow | Press **No clip handy? Send a sample** and say so: "Here is a sample clip." Or play the clip you recorded in rehearsal and say it is from rehearsal. |
-| The AI says "code not visible" | Say it is a helper and the engineer decides. That is exactly the point. |
-| Someone writes the wrong code | Better: say "and the engineer would send this back, because the code doesn't match." |
-| Wi-Fi is down | Play the saved 60-second video and the saved clip from your phone. Say plainly that the live part is offline. |
+*Wait for the answer. Repeat it aloud: "Yes." or "Check again."*
 
-### After the showcase
-The uploaded clips sit in the backend's uploads folder (on the Railway volume), kept until someone removes them. We told judges we delete them, so **delete them the same day**. I can add a delete route if you want it automated.
+**1:52. Stellar and limits** *(touch the contract ID on the board)*
 
-## 5. The 60-second video
+> "Your answer is now a transaction on Stellar Testnet. The rule is a public contract: no engineer and no parent, no payment. The limits are on our board: the demo signs on our server, and our admin can settle a disputed claim."
 
-Silent, with captions, recorded from the live app. Record it by following the guided tour at `/demo` with a screen recorder over a phone-width browser window. Trim waits in iMovie to 60 seconds.
+*Glance at the screen for the result, then say one of these:*
+
+> **If Yes:** "And there: one transaction just paid the builder and the workers."
+>
+> **If Check again:** "And nothing moved. It can't, until a second engineer agrees."
+
+**2:16. Business** *(hold up the envelope, then the slip; touch the right panel)*
+
+> "The son or daughter abroad pays: 1.5% plus fixed engineer visits, about four to seven percent all in. One unchecked stage on a ₹15 lakh build is ₹3.75 lakh. We spoke to fifteen engineers and one family. Engineers say it saves them hours. None quoted a price, and we haven't tested the fee on families. Ten families are next."
+
+**2:43. Close** *(gesture to the table)*
+
+> "Come play any role at our table, and try to break the contract. Sending money home takes seconds. Homeward makes sure it builds what it paid for."
+
+**If the result hasn't landed by 2:16:** go on to Business, and add "and there's the payment" when it appears.
+
+**If you run long, cut in this order:** "Why does it matter?", then "The limits are on our board…" (the board still shows them), then "Engineers say it saves them hours." Never cut "None quoted a price, and we haven't tested the fee on families."
+
+---
+
+## 6. The demo, tap by tap
+
+### Devices
+- **Laptop**, facing the judges: the app in one browser window, and the 60-second video open in a separate video player (not a browser tab), paused on its first frame.
+- **Tablet or phone**, in Youdis's hands: the app, signed in as the builder, for filming and uploading only.
+- A phone hotspot as backup for Wi-Fi.
+
+### Set up the state (20 minutes before)
+1. On the laptop open https://homeward-ecru.vercel.app/demo and press **Start over from step 1**. Wait for "Fresh builds ready" (about 95 seconds).
+2. Choose **Amma's house extension**. Press **Go as…** three times and do each step: Anil locks the money, the builder puts in the deposit, the builder starts Foundation.
+3. Stop on the **builder's page**. It shows "Today's code", for example HW-5501-9380. Zoom the browser so the code is readable from two metres.
+4. On the tablet, open `/demo`, choose Amma's house, press **Go as** the builder. Check the file picker opens the camera.
+5. Write the code on the card and slide it into the slot on the board.
+6. Test the hotspot. Put both devices on do-not-disturb.
+
+### Youdis's cue sheet
+| When | Do | Expect |
+|---|---|---|
+| 0:08 | Film hands and paper for 4 to 5 seconds. Choose the clip, tick the consent box, tap **Send video** | "Uploading video and checking proof", then "Video sent" within about 25 seconds |
+| 0:20 | On the laptop, Demo role bar: **Engineer** | "No checks waiting" for now. That is fine |
+| 0:36 | Start the video on the word "checked" | Video plays for 60 seconds |
+| 1:30 | Check the tablet says "Video sent". Thumbs up to Ved. If not, thumbs down (see section 7) | |
+| 1:36 | Bring the browser forward. It refreshes itself. If the clip isn't there in two seconds, press Cmd+R | The clip and the "AI video review" panel appear |
+| 1:38 | Tick the four boxes, click **Approve** | "Approved" in about ten seconds |
+| 1:52 | Demo role bar: **Parent**. Click the judge's answer: **Yes, it's done** or **Check again** | "Foundation and plinth paid" or "Second check requested. Nothing paid", with a Stellar Expert link |
+| 2:16 | Click **View on Stellar Expert** | The transaction opens in a new tab |
+
+Don't touch the app during the video except to check the tablet.
+
+### What I measured on the live site (15 Nov)
+- **Start over:** about 95 seconds.
+- **Each step** (lock money, deposit, start, approve, parent's answer): 6 to 13 seconds.
+- **A five-second clip showing the code:** upload and AI check together took 15 seconds. The AI answered "Footage clear. Code visible. Work unclear", with the note that the code card is clearly shown but no construction work is visible. That is a good line to read out: the AI saw the code and still left the decision to a person.
+- **A 33-second clip:** the upload took 23 seconds and the AI check did not finish ("AI review could not finish"). Keep the clip to five seconds.
+- **Parent says yes:** paid in one transaction, with a certificate.
+
+Not measured: a clip from a real phone camera. My test clip was a clean generated image of the code. Handwriting and a larger phone file may be slower or read as "code unclear". Rehearse with a real phone.
+
+---
+
+## 7. If something goes wrong
+
+Decide at 1:30, from Youdis's thumbs up or down. All three versions use the same script up to 1:36.
+
+| Version | When | What changes at 1:36 |
+|---|---|---|
+| **A. Full live** (the plan) | The clip uploaded | As scripted |
+| **B. Sample clip** | The camera upload failed or is still running | Youdis taps **No clip handy? Send a sample** on the tablet, then carries on. You say: "The connection dropped your clip, so this is a sample one. The rest is live." The decision still happens |
+| **C. No live** | The site or Wi-Fi is down | You say: "The venue's network has dropped, so I'll show you what you would have seen." Show the saved screenshot of the engineer's page from rehearsal, skip the decision, and go to "The rule is a public contract…" |
+
+Other cases:
+- **A judge won't be filmed:** don't film them. Never ask twice.
+- **Nobody volunteers to decide:** Krish decides, as "the parent".
+- **The AI says "code not visible":** "The AI is only a helper, and the engineer decides. That is the point."
+- **The approval is slow:** keep talking. Youdis clicks the judge's answer when "Approved" shows.
+- **Someone writes the wrong code:** "And an engineer would send that back, because the code doesn't match."
+
+After the showcase, delete the judges' clips from the backend's uploads folder on Railway the same day. That is what we promise them.
+
+---
+
+## 8. The video, the board and the table
+
+### The 60-second video
+Silent with captions, recorded from the live app by following `/demo` with a screen recorder. It must show the real prototype. Trim waits so it runs exactly 60 seconds.
 
 | Seconds | On screen | Caption |
 |---|---|---|
-| 0 to 6 | Anil locks money for the walls stage; Meera adds hers (in dirhams) | "Two siblings lock the money. A Stellar contract holds it." |
+| 0 to 6 | Anil locks money in dollars; Meera adds hers in dirhams | "Two siblings lock the money. A Stellar contract holds it." |
 | 6 to 12 | Builder starts the stage; supplier paid | "The stage opens. The supplier is paid for materials." |
 | 12 to 19 | Builder sends a video showing today's code | "The builder films today's code." |
-| 19 to 28 | Engineer ticks the checks and approves; the certificate appears | "An independent engineer checks. One payment pays builder and workers." |
-| 28 to 36 | Next stage (roof): builder sends a clip; the engineer approves | "The roof slab. The parent can ask for a second check." |
-| 36 to 43 | The parent's screen, in Malayalam: she taps **Check again** | "Amma taps Check again." |
-| 43 to 51 | Second engineer rejects ("no code in this footage") | "The second engineer says no. The money stays locked." |
+| 19 to 28 | Engineer approves; the certificate appears | "An engineer checks. One payment pays builder and workers." |
+| 28 to 36 | The roof stage: builder sends a clip; engineer approves | "The roof slab. The parent has the last word." |
+| 36 to 43 | The parent's screen in Malayalam: she taps Check again | "Amma taps Check again." |
+| 43 to 51 | Second engineer rejects | "The second engineer says no. The money stays locked." |
 | 51 to 57 | Timeline, then a Stellar Expert transaction | "Every step is a public Stellar transaction." |
 | 57 to 60 | End card | "homeward · live on Stellar Testnet" |
 
-Upload it to YouTube (unlisted is fine) or Loom, test the link in a private window, and add it to Devpost with the live URL and the contract ID.
+Upload it to YouTube (unlisted) or Loom and put the link on Devpost, with the live URL and the contract ID.
 
-## 6. The board, and how to use it
+### The board
+It is built like a house: roof, three walls, brick plinth. PDFs are in `docs/showcase/` (the full board at 38 × 27 in, and one per panel).
 
-The new board is built like a house: a roof across the top, a wall for each panel, a brick plinth at the bottom.
+| You touch | When |
+|---|---|
+| The code-card slot, centre top | 0:00 |
+| The Wayanad card, left | 0:16 |
+| The five hands, centre | During the video |
+| The contract ID and "Demo limits", centre bottom | 1:52 |
+| The price table and "What we have learned", right | 2:16 |
 
-| Where | What | When you touch it |
-|---|---|---|
-| Left panel | The problem: Wayanad, Telangana, 15.8%, who it is for, who else does this | 0:22 |
-| Centre, top | **Try it now**: write today's code, hold it up. A dashed slot for the code card | The hook, 0:00 |
-| Centre, stage rail | Five stage bricks, each with a LOCKED / PAID tag slot, and the five hands | During the video, and 1:46 |
-| Centre, screens | The parent, engineer and family views from the real app | While the video plays |
-| Centre, bottom | The rules the contract enforces, the contract ID and two QR codes (play the story, see the contract) | 2:08 |
-| Right panel | Price, what we learned, break-even, still to prove | 2:26 |
+Props: the code card, five LOCKED / PAID tags on Velcro, YES and CHECK AGAIN paddles, the ₹3.75 lakh envelope and ₹22,500 slip, and a small lockbox as "the contract". If time is short, make the code card and the paddles.
 
-**Physical touches to make (about an hour, cheap)**
-- **Tag slots:** make five luggage tags reading LOCKED on one side and PAID on the other. Fix them on the board with Velcro. At the table, a judge flips a tag when the tour pays a stage.
-- **Code card:** write the code from the builder's screen on a card and slide it into the dashed slot, so judges can read it from the board.
-- **Envelope and slip:** an envelope marked "₹3.75 lakh, one stage" and a small slip marked "₹22,500, our fee", held up at 2:26.
-- **Paddles:** two paper plates on sticks, green YES and red CHECK AGAIN, for the judge who plays the parent.
-- **Lockbox:** a small box with a padlock and nobody holding the key. It sits on the table as "the contract".
-- **Print the board:** print `docs/showcase/homeward-trifold.pdf`. Most large-format rolls are 36 in wide, so ask the shop to "fit to 36 in", or print the three panel PDFs and mount each on a panel. If you can only use letter or tabloid, print each panel PDF at "fit to page" and glue them on.
-
-## 7. At the table after the talk
-
+### The table, after the talk
 | Station | What the judge does |
 |---|---|
-| **Guided tour** | A tablet at `/demo`: they play every role, start to finish, in a few taps. QR on the board |
-| **Try to break it** | `sh scripts/attack.sh all` on the laptop, after `prepare`: four forbidden payments, all refused |
-| **Price your own build** | `/price` on a second screen: fee, visits and transfer cost added up, plus break-even |
-| **WhatsApp vs Homeward** | A printed 40-message family chat (a labelled composite from the engineer scenarios). The judge finds who approved the window change and the price, timed |
+| Guided tour | Plays every role on a tablet at `/demo`. The QR on the board opens it |
+| Try to break it | Picks one of four forbidden payments; `sh scripts/attack.sh all` shows the contract refusing each |
+| Price your own build | `/price`: fee, visits and transfer cost added up, and the break-even |
+| WhatsApp vs Homeward | Finds who approved a change in a printed 40-message family chat (a labelled composite), then in our timeline |
 
-Ask each judge three questions and note the answers, with permission: is 1.5% plus visits fair on a ₹30 lakh build for your parents? What would make you trust the engineer? Who should see this, a builder, an engineer, a payments partner? Record them as expert reactions, not customer demand.
+Run `sh scripts/attack.sh prepare` before judges arrive. It uses the same Testnet accounts as the live demo, so **never run it during the pitch**.
 
-## 8. The roles on the day
+---
 
-| Person | Does |
-|---|---|
-| **Ved** | Presents. Holds the clicker, touches the board, owns the pace |
-| **Youdis** | Runs the laptop and tablet: films the clip, ticks consent, taps Send, switches to the engineer's page at 1:46, handles the live fallback |
-| **Krish** | Hands out paper and markers, asks for consent, flips tags, answers questions about the family interview |
-| **Rivan** | Runs the table: the tour, the price tool, the WhatsApp chat, takes notes on judges' answers |
+## 9. Questions and answers
 
-## 9. Questions, with 15-second answers
-
+### Business
 | Question | Answer |
 |---|---|
 | Who pays? | The sibling abroad. Parents, builders and engineers use it free |
-| Why 1.5%? | A starting price. ₹22,500 on a ₹15 lakh build, against about ₹3.75 lakh for one unchecked stage. The pilot tests it |
-| What's the all-in cost? | 4% to 7% with a digital transfer, 7.5% to 12% by bank. Our part is 1.5% plus fixed visits |
-| Have you validated it? | Fifteen engineers and one family. Engineers back it. Families paying is untested, and here is the test |
-| Why not WhatsApp and a relative? | Often fine for one owner and a simple build. It breaks with several siblings: one record, an independent check, the parent's say |
-| Who holds the money? | Nobody real yet. The pilot is noncustodial; a licensed partner comes before we hold anything |
-| What can your admin do? | Open stages, assign engineers, settle a disputed claim, and steer a stopped build's refund. It cannot approve a stage or pay itself. It's on the board |
-| What if the engineer lies? | The contract checks rules, not concrete. A second engineer, the parent's veto and a public record limit it |
-| Is the code check real? | Yes: the code is random per stage, on chain as a hash, and an AI check only helps the engineer. A person decides |
-| What happened to our clips? | They go to our demo only, and we delete them today |
-| Why Stellar? | A public rule anyone can check, one transaction paying several people at near-zero cost, anchors as the route to rupee payout |
-| Will builders accept a deposit? | Untested. Terms are set per build: the deposit can be zero or earned from the first payment |
-| What would a win fund? | Ten Kerala families, real engineer quotes, a licensed partner conversation |
-| What do you know least? | How many families fit, what they will pay, what builders accept. The pilot measures all three |
+| Why 1.5%? | It's a starting price: ₹22,500 on a ₹15 lakh build, against about ₹3.75 lakh for one unchecked stage. The pilot tests it |
+| What does a family really pay? | 4% to 7% with a digital transfer, 7.5% to 12% by bank. Ours is 1.5% plus fixed visits |
+| Have you validated it? | Fifteen engineers and one family. Engineers back it, and they would gain clients, so that isn't proof families will pay. That is what the pilot tests |
+| How big is it? | ₹2,16,893 crore reached Kerala in 2023, and house renovation is the largest listed use. We estimate 1,700 to 20,600 builds a year we could serve, and the pilot replaces that guess |
+| What share do you need? | About 100 builds a year with a small team on ₹30 lakh builds. We don't work on ₹15 lakh builds with the fee alone |
+| Why not WhatsApp and a relative? | For one owner and a simple build, that's often fine. It breaks with several siblings: nobody can find who approved what |
+| How do you reach families? | Through engineers, when a family signs a builder's quote. Our acquisition cost is a guess |
+| Will builders accept a deposit? | We haven't asked builders yet. Terms are set per build, and the deposit can be zero |
+| What would you do with a win? | Ten Kerala families, real engineer quotes, a first conversation with a licensed payment partner |
 
-## 10. How this scores
-
-| Rubric area | Where it shows |
+### Technology
+| Question | Answer |
 |---|---|
-| Problem and impact (business) | Wayanad and Telangana cases, 15.8%, the cost of one unchecked stage |
-| Solution and differentiation | The hook (proof you can touch), five hands, competitors on the board |
-| Customer and monetization | The sibling abroad; fee and visits; the all-in price; break-even with the weak case named |
-| User validation | Sixteen conversations, stated exactly, with what we do not know |
-| Working Stellar build | A live contract, a real video clip put on the record during the talk, 50 tests, three recorded runs |
-| Honest limits and custody | The limits sentence at 2:08, the "still to prove" card, no custody claim |
-| Presentation and display | The roof-and-brick board, the physical props, the hook |
+| Why Stellar, not a database? | The family can read the rule and every payment themselves. One transaction pays several people for a fraction of a cent. Anchors are the route to rupee payout |
+| What's on-chain? | People, stage amounts, approvals, payments, certificates, and fingerprints of the videos and reports. No video, ID or bank detail |
+| Who holds the keys? | In this demo our server does, for every role, and the board says so. A real launch needs each person's own wallet or passkey |
+| What can your admin do? | Open stages, assign engineers, settle a disputed claim and split the refund of a stopped build. It can't approve a stage, pay itself or change a payee |
+| What if the engineer lies? | The contract can't tell. It limits who can sign, the parent can demand a second engineer, and every approval is public |
+| Is the AI deciding? | No. It tells the engineer whether the footage is clear and the code is visible. A person decides |
+| What happens to our clip? | It stays in our demo, only its fingerprint is on Testnet, and we delete the clip today |
+| Can you hold real money? | Not yet. The pilot is noncustodial, and a licensed partner comes before we hold anything |
+| What breaks at scale? | One server signs transactions one at a time; history comes from our own log, not a chain indexer; stored data needs a keep-alive job. All are in `docs/technical-limits.md` |
+| Is it tested? | 50 contract tests, 52 app tests, and a full live run on Testnet on 15 Nov: both the paid path and the refused path |
 
-## 11. Before Monday
+If you don't know: "We don't know yet. Here is how we'd find out."
 
-**Get:** five engineer prices (WhatsApp the fifteen), two builder answers, three family sessions, the 9 Nov advisor notes, a printed board, paper and markers, luggage tags, an envelope, a lockbox, paddles, a charged tablet and hotspot. Email velocity.events@uwaterloo.ca if your board hasn't arrived.
+---
 
-**Do:** rehearse at least five times with a stopwatch, including the hook with a real stranger. Target finishing at 2:55. Set Railway to one replica. Test one real phone clip with the code on paper. Put the video link, the live URL and the contract ID on Devpost.
+## 10. Rehearsal and checklists
 
-**Never say:** "twenty people", "validated", "secure", "decentralized", "AI verifies the work".
+### Tonight
+1. **Words only**, three times with a stopwatch. Target 2:56.
+2. **Full run with the team**, twice, using a real phone for the clip and a friend as the judge. Time the upload and the two transactions.
+3. **Failure run**, once: turn the Wi-Fi off at 1:20 and do Version C.
+4. **Go or no-go for the live decision:** if the full run fails twice in a row, use Version B's opening (a sample clip) as your plan, or drop the decision and end the circle-back at "A person decides."
+
+### Before judges arrive
+- Start over, then set up the state (section 6). Code card in the slot.
+- Video paused on its first frame. Volume off.
+- Tablet signed in as the builder. Hotspot ready. Do-not-disturb on.
+- Paper, markers, paddles, envelope, slip, tags.
+- `attack.sh prepare` done. Railway set to one replica.
+- Devpost has the video link, the live URL and the contract ID.
+
+### Still to get, if you can
+- Five engineer prices: WhatsApp the fifteen engineers. Ask what they'd charge for one site visit with a report, and for a 20-minute video review.
+- Two builder answers and three family sessions.
+- A native speaker's check of the Malayalam and Punjabi text.
+
+### What is and isn't verified
+- **Verified live on Testnet (15 Nov):** the full reject path, the full paid path with certificate, the deposit step, a five-second clip with the AI check, the parent's Yes paying in one transaction, dirham and dollar display, the live USDC rate.
+- **Not verified:** a clip from a real phone camera through the consent box; the AI check on handwriting; this exact choreography on stage timing; the venue's Wi-Fi.

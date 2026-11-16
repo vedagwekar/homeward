@@ -2,7 +2,7 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { setHomeFocus, signIn, useProjects, useSession } from "@/lib/store";
+import { homesInOrder, setHomeFocus, signIn, useProjects, useSession } from "@/lib/store";
 import { Wordmark } from "./logo";
 
 // Pages anyone can open without signing in: the sign-in screen, the guided tour, the transaction record and the price tool.
@@ -42,7 +42,9 @@ export function RoleSwitch() {
   const router = useRouter();
   const projects = useProjects();
   if (!session || bare.includes(path) || !projects[0]) return null;
-  const p = projects.find((x) => x.parent === session.name || x.sponsors.some((s) => s.name === session.name)) ?? projects[0];
+  // Stay on the home already chosen (in the tour, the directory or an earlier switch). A parent keeps their own home.
+  const chosen = homesInOrder(projects)[0];
+  const p = (session.role === "parent" ? projects.find((x) => x.parent === session.name) : undefined) ?? chosen;
   const roles = [
     { label: "Family", to: { role: "sponsor", name: p.sponsors[0].name } as const, href: "/" },
     { label: "Parent", to: { role: "parent", name: p.parent } as const, href: "/parents" },
