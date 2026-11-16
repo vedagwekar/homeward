@@ -17,7 +17,7 @@ Built for the Blockchain Innovation Challenge powered by Stellar (UWaterloo Velo
 ## Links
 
 - Live app: https://homeward-ecru.vercel.app
-- 60-second demo video: [docs/showcase/video/homeward-demo-v2.mp4](docs/showcase/video/homeward-demo-v2.mp4) ([the 12 Testnet transactions in it](docs/showcase/video/README.md))
+- 60-second demo video: [docs/showcase/video/homeward-demo.mp4](docs/showcase/video/homeward-demo.mp4) ([the 12 Testnet transactions in it](docs/showcase/video/README.md))
 - One-pager: [docs/homeward-one-pager-v1.pdf](docs/homeward-one-pager-v1.pdf) · Demo limits: [docs/technical-limits.md](docs/technical-limits.md)
 - Contract on Stellar Testnet: `CC2NYVUTHJWBRTDG7J4O6VB7TINL5MTNOTTXOMVMHKSCUYZR4W3M6QF2`
   ([Stellar Expert](https://stellar.expert/explorer/testnet/contract/CC2NYVUTHJWBRTDG7J4O6VB7TINL5MTNOTTXOMVMHKSCUYZR4W3M6QF2))

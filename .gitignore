@@ -33,5 +33,5 @@ docs/showcase/*
 !docs/showcase/homeward-board.jpg
 !docs/showcase/video/
 docs/showcase/video/*
-!docs/showcase/video/homeward-demo-v2.mp4
+!docs/showcase/video/homeward-demo.mp4
 !docs/showcase/video/README.md

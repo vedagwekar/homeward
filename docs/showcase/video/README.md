@@ -1,6 +1,6 @@
 # The 60-second demo video
 
-`homeward-demo-v2.mp4` is a screen recording of the live app (https://homeward-ecru.vercel.app) running on Stellar Testnet on 15 Nov 2026, with the waits cut out, subtitles added, and short opening and closing cards. It has background music and subtitles, and no voice.
+`homeward-demo.mp4` is a screen recording of the live app (https://homeward-ecru.vercel.app) running on Stellar Testnet on 15 Nov 2026, with the waits cut out, subtitles added, and short opening and closing cards. It has a voiceover, background music and subtitles.
 
 Every step in it is a real Testnet transaction:
 
@@ -23,7 +23,7 @@ The builder's clip in the recording is the app's built-in sample file, so the AI
 
 ## Script and subtitles
 
-The subtitles in the video are this script, word for word. Each line is on screen from its time until the next one, so if you record a voice over it, start each line when its subtitle appears. It is about 140 words.
+The subtitles in the video are this script, word for word. Each line is on screen from its time until the next one, and the voiceover reads the same lines. It is about 140 words.
 
 | Time | Subtitle and voiceover line |
 |---|---|
