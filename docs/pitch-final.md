@@ -137,7 +137,7 @@ About 245 spoken words in two minutes. *Italics are directions.* The video must 
 
 > "Sending money home takes seconds. Homeward makes sure it builds what it paid for. Here is a whole build, in sixty seconds."
 
-**2:00. The video.** *It has its own voiceover. Say nothing. Stand at the board and touch the layer of the house the video is on (table in section 8). Its last line is "Come and play any role at our table."*
+**2:00. The video.** *It is silent, with subtitles. Say nothing. Stand at the board and touch the layer of the house the video is on (table in section 8). Its last subtitle is "Play any role yourself."*
 
 **If Youdis hasn't given a thumbs up by 0:46:** do the Business beat first, then come back to the Decision and Stellar beats.
 
@@ -208,35 +208,29 @@ After the showcase, delete the judges' clips from the backend's uploads folder o
 ## 8. The video, the board and the table
 
 ### The 60-second video
-**Format: speak for two minutes, then play the video with a recorded voiceover and captions.** Do not talk over it live.
+**Made: `docs/showcase/video/homeward-demo-60s.mp4`.** It is a screen recording of the live app on Stellar Testnet with the waits cut out, built-in subtitles and no sound. It is written to stand alone, because on Devpost it is the first thing people see. `docs/showcase/video/README.md` lists the 12 real transactions in it.
 
-Why this one:
-- The organisers allow both. Talking live over a video means matching your words to its cuts, second by second, with one day to learn it. If you fall half a beat behind, you are describing the wrong screen.
-- A recorded voiceover is rehearsed once and is then right every time. It can carry the technical detail (the contract, the one transaction, the fingerprint on-chain) that the live talk has no room for.
-- You get your two minutes for the hook, the judge's decision and the business, which only a live person can do.
-- The same file goes on Devpost, where nobody is there to narrate. A silent video explains much less to a judge watching alone.
+**Format on the day: speak for two minutes, then play it.** Do not talk over it. The subtitles carry the story, so it works in a loud hall with no speaker.
 
-What makes it safe:
-- **Burn the captions in.** A showcase hall is loud. The video has to work with the sound off.
-- **Bring a small speaker** and test the volume at the table before judges arrive.
-- **If the sound fails, read the voiceover yourself.** It is printed below, timed to the same shots. That is your version B.
-- Record the voiceover on a phone in a quiet room, in your own voice, at the pace of the script: about 140 words in 60 seconds.
-
-Record the screen from the live app by following `/demo`. It must show the real prototype. Trim waits so it runs exactly 60 seconds.
-
-| Seconds | On screen | Voiceover (also the caption) | Touch on the board |
+| Seconds | On screen | Subtitle | Touch on the board |
 |---|---|---|---|
-| 0 to 6 | Anil locks money in dollars; Meera adds hers in dirhams | "Anil in Toronto and Meera in Dubai lock the money in a contract on Stellar." | The route, left panel |
-| 6 to 12 | Builder puts in the deposit and starts the stage | "The builder puts in a deposit. The stage opens, and the supplier is paid for materials." | Layer 1, the plinth |
-| 12 to 19 | Builder sends a video showing today's code | "The builder films the work with today's code. Only the video's fingerprint is stored on-chain." | ① Today's code |
-| 19 to 28 | Engineer approves, the parent says yes, the certificate appears | "An independent engineer checks it. Amma says yes. One transaction pays the builder and the workers, and a certificate is recorded." | Layer 1, then the PAID tag |
-| 28 to 36 | The roof stage: builder sends a clip; engineer approves | "Next, the roof slab. The engineer approves, but the parent still has the last word." | Layer 3, the slab steel |
-| 36 to 43 | The parent's screen in Malayalam: she taps Check again | "Amma isn't sure. On her screen, in Malayalam, she taps Check again." | The Amma screen beside the house |
-| 43 to 51 | Second engineer rejects | "A second engineer looks, and says no. The contract won't pay. The money stays locked." | The LOCKED tag on the roof slab |
-| 51 to 56 | A Stellar Expert transaction page | "Every step is a public transaction anyone can look up." | ⑤ Live on Stellar Testnet |
-| 56 to 60 | End card | "Homeward. Come and play any role at our table." | ⑦ Try to break it |
+| 0 to 4 | ₹342,690,000,000 sent home to Kerala in 2023 | "Families abroad send billions home to Kerala to build and renovate houses." | The bigger picture, left panel |
+| 4 to 9 | 13,500 km; the Wayanad case, ₹3,452,000 | "They can't check the work. Money goes out before anyone independent has looked." | ② The Wayanad case |
+| 9 to 12 | Title card | "Homeward locks the money by stage, and releases it only after the checks." | The title |
+| 12 to 16 | Live app: Anil locks ₹3,00,000 | "Anil locks the money for the first stage. It sits in a smart contract, not with the builder." | Layer 1, the plinth |
+| 16 to 20 | Builder's deposit, then the stage starts | "The builder puts in his own deposit and starts the stage. The supplier is paid for materials at once." | Layer 1 |
+| 20 to 24 | Today's code; the clip is sent | "The builder films the work showing today's code. Only the video's fingerprint goes on-chain." | ① Today's code |
+| 24 to 29 | The engineer ticks and approves | "An independent engineer ticks what they saw and approves. Same fee for yes or no." | The engineer's screen beside the house |
+| 29 to 34 | Amma taps Yes; "Foundation and plinth paid" | "Amma says yes. One transaction pays the builder and the workers." | The PAID tag on Foundation |
+| 34 to 36 | Walls: a new code | "The next stage runs the same way, with a new code." | Layer 2, the wall |
+| 36 to 43 | Engineer approves; Amma taps Check again | "The engineer approves the walls, but Amma isn't sure. She taps Check again, and nothing is paid." | ④ Amma's screen |
+| 43 to 47 | Second engineer rejects | "A second engineer says no. The contract won't pay. The money stays locked." | Layer 2 |
+| 47 to 56 | How it's built: Next.js app, Node and Express API, Soroban contract in Rust, Stellar Testnet; 50 tests; demo limits | "A Rust smart contract on Stellar holds the money and enforces the rules. The app and server only ask it to act." | ⑤ Live on Stellar Testnet |
+| 56 to 60 | End card with the site, contract ID and repo | "Every step you saw is a public transaction. Play any role yourself." | ⑦ Try to break it |
 
-During the video you say nothing. Stand at the board, not at the screen, and put a hand on the layer of the house the video is talking about. The judges then see the same story in two places, and the board is doing work during the minute you are silent.
+In this recording the money stays locked on the **walls**, not the roof slab, because that is the second stage of a real run. If a judge notices that the board's tags say the walls are PAID and the roof slab LOCKED, say the board shows a later point in the same build.
+
+During the video you say nothing. Stand at the board, not at the screen, and put a hand on the piece the video is on.
 
 Upload it to YouTube (unlisted) or Loom and put the link on Devpost, with the live URL and the contract ID.
 
