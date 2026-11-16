@@ -237,12 +237,12 @@ A clean white board with gold double rules and a lot of empty space. The gold-on
 | Panel | Blocks | Question it answers |
 |---|---|---|
 | Left: the problem | 13,500 km route · ② the Wayanad case and the Telangana refund · the father's quote · ₹342,690,000,000 sent home | Why does this need to exist? |
-| Centre: how it works | Title · ① today's code · ③ five steps · ④ three screens from the working app · the five stages with where the money goes · ⑤ live on Stellar Testnet | What does it do, and is it real? |
+| Centre: how it works | Title · ① today's code · ③ five steps · ④ three screens from the working app · a Kerala house taken apart into its five stages, with where the money goes · ⑤ live on Stellar Testnet | What does it do, and is it real? |
 | Right: the business | ⑥ what Anil and Meera pay · eight engineers' quotes · 200 builds to break even · why not escrow · what isn't real yet · ⑦ try to break it | Does it pay, and what's unproven? |
 
 Cut from the earlier boards: the builder's deposit box, the "money doesn't stop at the house" chain, the per-stage bars, the "Fool our AI check" box and the second set of QR codes. They are still in the app and in the Q&A (section 9).
 
-**Real parts of a Kerala house, on the board.** The five stage cards in the centre each have a dashed box. Stick the real material for that stage in it. Judges can touch what the engineer is checking.
+**Real parts of a Kerala house, on the board.** The centre shows a Kerala house taken apart from the ground up: stone plinth and steps, walls with a wooden veranda, the concrete roof slab with its steel, the clay tile roof with a carved gable, and the key. Each layer points to its stage, and each stage has a dashed box. Stick the real material for that stage in it. Judges can touch what the engineer is checking.
 
 | Stage | Real thing | Where to get it by tomorrow |
 |---|---|---|
@@ -271,8 +271,8 @@ Use hot glue or foam tape for the heavy pieces, and keep them in the lower half 
 | `05-centre-title` | 17.6 × 4.1 |
 | `06-centre-todays-code` ① | 4.6 × 2.8 |
 | `07-centre-how-a-stage-gets-paid` ③ | 12.4 × 2.8 |
-| `08-centre-app-screens` ④ | 17.6 × 7.3 |
-| `09-centre-five-stages` | 17.6 × 6.3 |
+| `08-centre-app-screens` ④ | 17.6 × 6.0 |
+| `09-centre-house-in-five-stages` | 17.6 × 8.9 |
 | `10-centre-stellar` ⑤ | 17.6 × 3.4 |
 | `11-right-what-they-pay` ⑥ | 8.1 × 5.8 |
 | `12-right-engineer-quotes` | 8.1 × 1.9 |
