@@ -24,12 +24,14 @@ About 320 words, which is tight for two minutes. Time it once; if you pass 2:00,
 
 **0:35 · How it works** *(centre: run a finger along **Lock, Film, Check, Yes, Pay**, then rest your hand on the house)*
 
-> "Homeward flips the order. The family locks the money, stage by stage. The builder films the work with that code. An engineer with no stake checks it. And the parent, standing in the house, has the last word.
-> Most builders are honest. This lets them prove it, and get paid the moment the checks pass."
+> "Homeward flips the order. The family locks the money, stage by stage. The builder films the work with that code. An engineer with no stake checks it.
+> Most builders are honest. This lets them prove it."
 
-**0:50 · You decide** *(hand the judge your phone; point at the **Amma decides** phone screen, left of the house)*
+**0:50 · You decide** *(hold your phone out to a judge; point at the **Amma decides** phone screen, left of the house)*
 
-> "So you are the parent now. This is Amma's phone. The engineer has passed the foundation. Yes, or check again?"
+> "One person is left: Amma, Anil's mother. She lives in the house, so she has the last word.
+> This is her phone, live. The engineer has approved the foundation. The money is still locked.
+> You be Amma. Tap Yes, and the builder is paid. Tap Check again, and a second engineer has to look first."
 
 *Wait. Repeat their answer out loud. Take the phone back.*
 
@@ -57,7 +59,19 @@ About 320 words, which is tight for two minutes. Time it once; if you pass 2:00,
 
 **2:00 to 3:00 · The video.** Say nothing. Stand at the board and touch the layer of the house the video is on.
 
-**If you are running late,** cut in this order: "This is a testnet demo…" (the board says it), then "and get paid the moment the checks pass", then "One unchecked stage costs…", then "That is cheap because…", then "Eight Kerala engineers quoted us…". Never cut "What we haven't done yet is charge a real family." At 1:58, stop wherever you are and press play.
+**If you are running late,** cut in this order: "This is a testnet demo…" (the board says it), then "One unchecked stage costs…", then "That is cheap because…", then "Eight Kerala engineers quoted us…". Never cut "What we haven't done yet is charge a real family." At 1:58, stop wherever you are and press play.
+
+### What the Amma part is (read this once)
+- **Who Amma is:** the parent in Kerala. In our story she is Anil's mother. Anil pays from Toronto; she lives in the house being built.
+- **Why she matters:** she is the only person in the family who can walk outside and look at the wall. So after the engineer approves, the app asks her one question.
+- **Her two buttons:** **Yes** pays the builder and his workers straight away. **Check again** pays nobody and calls in a second engineer. If that engineer says no, the money stays locked.
+- **What you do in the pitch:** before the judges arrive you run the build up to that question (section 4). Your phone is then sitting on Amma's screen with the foundation waiting. You hold it out and a judge taps one of the two buttons.
+- **Why it's in the pitch:** it is the live demo. The judge's tap is a real transaction, and they feel the one thing Homeward adds: someone who is there decides before the money moves.
+- **If it feels like too much on the day:** tap it yourself and say "I'm Amma, and I'm tapping Yes." It still works.
+
+### The tagline
+- **Lead with:** "Sending money home takes seconds. Homeward makes sure it becomes a house." It says what the family gets, it is easy to remember, and it doesn't blame builders. It is your closing line and it now opens the video.
+- **The board's title** ("The builder isn't paid until an engineer checks the work and Amma says yes") is not the tagline. It is the rule: how the product works in one sentence. It is accurate, so the printed board is fine as it is. In the speech, say it as "each stage is paid only after it's checked."
 
 ### Your path across the board
 You move once from left to right, which is how the board reads.
@@ -99,11 +113,11 @@ If you learn nothing else, learn this section. A judge can ask about any of it.
 | **200 builds a year** | Break-even, on ₹30 lakh builds. About 3% of the 6,850 Kerala builds a year we estimate fit us |
 
 ### The five sentences that carry the pitch
-1. "The builder isn't paid until an engineer checks the work and the parent says yes."
-2. "No engineer and no parent, no payment."
-3. "A public contract, not a database we control."
-4. "What we haven't done yet is charge a real family."
-5. "Sending money home takes seconds. Homeward makes sure it becomes a house."
+1. "Sending money home takes seconds. Homeward makes sure it becomes a house." (the tagline)
+2. "Each stage is paid only after an engineer checks it and the parent says yes." (the rule)
+3. "No engineer and no parent, no payment."
+4. "A public contract, not a database we control."
+5. "What we haven't done yet is charge a real family."
 
 ### How it is built (say it in this order)
 - **The contract:** written in Rust for Soroban, running on Stellar Testnet. It holds the money, checks every rule and pays everyone for a stage in one transaction. 50 tests.
