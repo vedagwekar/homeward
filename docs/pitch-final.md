@@ -8,58 +8,58 @@ One presenter, three minutes: you talk for two, then the 60-second video plays. 
 
 ## 1. The speech
 
-About 320 words, which is tight for two minutes. Time it once; if you pass 2:00, use the cut list below. *Italics are what your hands do.* The board has no cue numbers on it, so each cue names the piece and where it is.
+About 285 words. Aim to finish at 1:55. *Italics are what your hands do.* The board has no cue numbers on it, so each cue names the piece and where it is.
 
 **0:00 · The code** *(point at the **Today's code** box, centre panel, top left; a judge has paper and a marker)*
 
-> "HW, 5501, 9380. Could you write that down and hold it up for me?
-> Thank you. You've just done what a builder in Kerala has to do before he gets paid: show today's code, in today's video. Yesterday's footage doesn't have it."
+> "HW, 5501, 9380. Could you write that down and hold it up?
+> Thank you. A builder in Kerala has to show today's code, in today's video, before he is paid. Old footage doesn't have it."
 
 *Read out whatever code is on the board that day.*
 
-**0:15 · Why it matters** *(left panel: touch **13,500 km**, then the red **₹3,452,000**)*
+**0:12 · Why it matters** *(left panel: touch **13,500 km**, then the red **₹3,452,000**, then the big **₹342,690,000,000** at the bottom)*
 
-> "Here is why that matters. Anil lives in Toronto. He is paying for his mother's house, thirteen thousand kilometres away.
-> This August, a Kerala consumer commission ruled on a house just like it. Nearly thirty-five lakh rupees paid. The house was unfinished, and leaking. The money went out before anyone independent had looked."
+> "Anil lives in Toronto. He is paying for his mother's house, thirteen thousand kilometres away.
+> This August a Kerala commission ruled on a house like it: nearly thirty-five lakh rupees paid, left unfinished and leaking.
+> And families sent three hundred and forty billion rupees home to Kerala in one year."
 
 **0:35 · How it works** *(centre: run a finger along **Lock, Film, Check, Yes, Pay**, then rest your hand on the house)*
 
 > "Homeward flips the order. The family locks the money, stage by stage. The builder films the work with that code. An engineer with no stake checks it.
 > Most builders are honest. This lets them prove it."
 
-**0:50 · You decide** *(hold your phone out to a judge; point at the **Amma decides** phone screen, left of the house)*
+**0:48 · You decide** *(hold your phone out to a judge; point at the **Amma decides** phone screen, left of the house)*
 
 > "One person is left: Amma, Anil's mother. She lives in the house, so she has the last word.
-> This is her phone, live. The engineer has approved the foundation. The money is still locked.
-> You be Amma. Tap Yes, and the builder is paid. Tap Check again, and a second engineer has to look first."
+> This is her phone, live. The engineer has approved the foundation.
+> Tap Yes, and the builder is paid. Tap Check again, and a second engineer has to look first."
 
 *Wait. Repeat their answer out loud. Take the phone back.*
 
-**1:05 · What just happened** *(touch the black **Live on Stellar Testnet** block at the bottom)*
+**1:03 · What just happened** *(touch the black **Live on Stellar Testnet** block at the bottom)*
 
-> "What you just tapped is a real transaction on Stellar. Not a database we control. A public contract with one rule: no engineer and no parent, no payment."
+> "That was a real transaction on Stellar: a public contract, not a database we control."
 
 *Look at the phone, then say one of these and show them the screen:*
 
 > **If they said yes:** "And there: one transaction just paid the builder and his workers."
 > **If they said check again:** "And nothing moved. It can't, until a second engineer agrees."
 
-> "And nobody here touches crypto. Anil pays from his bank, the builder gets rupees.
-> This is a testnet demo. Our server signs for each role, and that bank side is simulated. That is on the board."
+**1:18 · The business** *(right panel, top to bottom: the red **₹22,500**, the pink **8 engineers** box, then the big **200**)*
 
-**1:30 · What it costs** *(right panel, top: touch the red **₹22,500**, then the pink **8 engineers** box)*
-
-> "What does this cost Anil? One and a half percent. On a fifteen lakh build that is twenty-two thousand five hundred rupees, and it pays the engineer. Eight Kerala engineers quoted us five hundred to twelve hundred rupees a review. That is cheap because it's a short video check from their desk, not a full site inspection.
-> One unchecked stage costs three lakh seventy-five thousand.
+> "What does it cost? One and a half percent. On a fifteen lakh build that is twenty-two thousand five hundred rupees, and it pays the engineer. Eight Kerala engineers quoted us five hundred to twelve hundred rupees a review.
+> We break even at two hundred builds a year. That is about three percent of the Kerala builds we estimate fit us.
 > What we haven't done yet is charge a real family. Ten families are next."
 
-**1:52 · Close** *(gesture to **Try to break it**, bottom right, then press play)*
+**1:50 · Close** *(gesture to **Try to break it**, bottom right, then press play)*
 
 > "That is Homeward. Pay for your parents' house, one checked stage at a time. Here is a whole build, in sixty seconds."
 
 **2:00 to 3:00 · The video.** Say nothing. Stand at the board and touch the layer of the house the video is on.
 
-**If you are running late,** cut in this order: "This is a testnet demo…" (the board says it), then "One unchecked stage costs…", then "That is cheap because…", then "Eight Kerala engineers quoted us…". Never cut "What we haven't done yet is charge a real family." At 1:58, stop wherever you are and press play.
+**If you are running late,** cut in this order: "Most builders are honest…", then "Eight Kerala engineers quoted us…", then "And families sent…". Never cut "What we haven't done yet is charge a real family." At 1:58, stop wherever you are and press play.
+
+**If a judge asks about the market or break-even numbers:** break-even assumes ₹30 lakh builds and a small team. The 6,850 builds a year is our estimate, and only the review prices are real quotes. Say so. If they ask about crypto or the bank side, use the crypto answers in section 3.
 
 ### What the Amma part is (read this once)
 - **Who Amma is:** the parent in Kerala. In our story she is Anil's mother. Anil pays from Toronto; she lives in the house being built.
@@ -79,11 +79,11 @@ You move once from left to right, which is how the board reads.
 | Beat | Panel | Piece |
 |---|---|---|
 | The code | Centre, top left | Today's code box |
-| Why it matters | Left | 13,500 km, then ₹3,452,000 |
+| Why it matters | Left | 13,500 km, then ₹3,452,000, then ₹342,690,000,000 |
 | How it works | Centre | The five steps, then the house |
 | You decide | Centre | Amma's phone screen, left of the house |
 | What just happened | Centre, bottom | The black Stellar block |
-| What it costs | Right, top | ₹22,500, then the 8 engineers box |
+| The business | Right, top to middle | ₹22,500, the 8 engineers box, then the 200 builds box |
 | Close | Right, bottom | Try to break it |
 
 During the video, stay at the house: plinth for Foundation, the wall for Walls, the black block when the tech stack comes up.
@@ -268,7 +268,7 @@ On the laptop: the video full screen, paused at 0:00. On the table: paper, a mar
 
 | What | Do |
 |---|---|
-| The phone locked or reloaded | Do "What it costs" first. Reopen `/demo`, **Go as Amma**, then come back to "You decide" |
+| The phone locked or reloaded | Do "The business" first. Reopen `/demo`, **Go as Amma**, then come back to "You decide" |
 | The result is slow | Keep going with the phone in your hand. When it lands: "and there's the payment" or "and nothing moved" |
 | No network | "The network has dropped, so the video will show you this exact moment." The judge still answers out loud |
 | Nobody will take the paper or the phone | Do it yourself and say which you chose and why |
@@ -279,7 +279,7 @@ On the laptop: the video full screen, paused at 0:00. On the table: paper, a mar
 
 | What the judges mark | Weight | The parts of the speech that earn it |
 |---|---|---|
-| Business impact and relevance | 37.5% | Why it matters · What it costs · "we haven't charged a real family" |
+| Business impact and relevance | 37.5% | Why it matters (the case and the market) · The business (fee, quotes, break-even) · "we haven't charged a real family" |
 | Technology and implementation | 37.5% | How it works · You decide · What just happened · the video |
 | Presentation and deliverables | 25% | The code · the phone in a judge's hand · moving left, centre, right across the board · finishing on time |
 
