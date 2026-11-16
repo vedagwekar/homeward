@@ -1,10 +1,10 @@
 # Homeward: the pitch, in one document
 
-Version 4, for the Project Showcase on Monday 16 Nov. This replaces every earlier pitch doc. Read sections 1 to 3 to understand it, rehearse from sections 4 to 6, and keep sections 7 to 9 for the day.
+Version 5, for one presenter (Ved alone), for the Project Showcase on Monday 16 Nov. This replaces every earlier pitch doc. Read sections 1 to 3 to understand it, rehearse from sections 4 to 6, and keep sections 7 to 9 for the day.
 
-**The format.** The organisers allow two ways: speak over the video, or speak for two minutes and then play it. **We speak for two minutes, then play the 60-second video.** It is the easier one to learn in a day: nothing has to be timed against a moving picture, and the live part with the judges gets your full attention. The video then shows the whole build and carries the tech in its captions.
+**The format.** The organisers allow two ways: speak over the video, or speak for two minutes and then play it. **You speak for two minutes, then play the 60-second video.** It is the easier one to learn in a day: nothing has to be timed against a moving picture, and the live part with the judges gets your full attention. The video then shows the whole build and carries the tech in its captions.
 
-**The three minutes in one line:** the judges make the proof themselves, one of them decides whether real Testnet money is paid, and the video shows the whole build.
+**The three minutes in one line:** a judge holds up today's code, a judge decides whether real Testnet money is paid, and the video shows the whole build. You present alone: one phone, one laptop, the board.
 
 ---
 
@@ -14,16 +14,27 @@ Most teams will describe a product. You will make the judges use it. There are t
 
 | Moment | What happens | What it proves |
 |---|---|---|
-| **1. They make the proof** (0:00) | Judges write today's stage code on paper and hold it up. Youdis films five seconds and uploads it. | The proof step is real, and old footage can't be reused, because the code is new for each stage. |
-| **2. One of them decides** (0:46) | Their clip is on the engineer's screen with the AI check. The engineer passes it. One judge plays the parent and taps Yes or Check again on the tablet. A real transaction lands while you talk. | The parent's say is real, and a single approval pays several people at once, live. |
+| **1. They hold the proof** (0:00) | A judge writes today's stage code on paper and holds it up. Nothing is filmed. | The proof step is concrete, and old footage can't be reused, because the code is new for each stage. |
+| **2. One of them decides** (0:46) | You hand a judge your phone, already on the parent's screen. They tap Yes or Check again. A real transaction lands while you talk. | The parent's say is real, and the contract acts on it, not you. |
 | **3. They watch the whole build** (2:00) | The 60-second video: money locked, a stage paid in one transaction, and on the roof a second engineer says no and the money stays locked. | The rule is enforced by the contract, including when the answer is no. |
 
 Everything else you say (the case, the price, the limits) hangs on those moments. If the live part fails, section 7 gives you two safer versions with the same words.
 
 **What a judge should remember afterwards**
-1. "I held up the code, and my clip went on the record."
+1. "I held up the code a builder has to film."
 2. "I pressed the parent's button and real money moved."
 3. "They told us what they haven't proven before we asked."
+
+### How each beat scores on the rubric
+The judges mark three things. Every beat is there to earn one of them, so if you have to cut, you know what you are giving up.
+
+| Rubric | Weight | Where you earn it | The line that earns it |
+|---|---|---|---|
+| **Business impact and relevance** | 37.5% | 0:15 The case, 1:25 Business, and the right panel of the board | "Most of a ₹37 lakh contract had reportedly been paid." · "The son or daughter abroad pays 1.5%." · "We haven't tested the fee on families." |
+| **Technology and implementation** | 37.5% | 0:33 How a stage gets paid, 0:46 the judge's decision, 1:00 Stellar and limits, and the video | "Your answer is now a transaction on Stellar Testnet." · "No engineer and no parent, no payment." · "The demo signs on our server." |
+| **Presentation and deliverables** | 25% | The code hook, the phone in a judge's hand, the board you touch in order, finishing by 1:58 | "You are Amma, the parent. Yes, or check again?" |
+
+One thread ties it together: **the house in the middle of the board.** You open on the code a builder films there, the judge decides whether one layer of it gets paid, the price is the cost of checking it, and the video builds it layer by layer.
 
 ---
 
@@ -48,7 +59,7 @@ Business impact is 37.5% of the score. You have about 30 seconds of speech for i
 
 **Never say:** "twenty people", "validated", "families will pay", "only 1.5%".
 
-The engineer prices are in `docs/engineer-quotes.md` (names kept out of the public repo). If builder answers or family sessions arrive before Monday, add them to point 5 with the real counts. Confirm with Krish whether the eight who quoted are among the fifteen interviewed, so the count you say is exact.
+The engineer prices are in `docs/engineer-quotes.md` (names kept out of the public repo). If builder answers or family sessions arrive before Monday, add them to point 5 with the real counts.
 
 ---
 
@@ -73,27 +84,23 @@ Technology is the other 37.5%, and most of the panel is from the Stellar Develop
 
 ## 4. Run of show
 
+You present alone. Your hands only ever do three things: touch the board, hand over the phone, press play.
+
 ### Before the clock (as judges arrive)
-Krish puts paper and a marker in front of each judge and asks:
-
-> "May we film you holding up a piece of paper for five seconds during the pitch? Hands and paper only. It goes to our demo and we delete it today."
-
-Only people who say yes are filmed. The laptop faces the judges, showing the builder's page with **today's code** in large type. The same code is written in the board's "Today's code" box.
+Put a sheet of paper and a marker in front of one judge, and the YES and CHECK AGAIN paddles beside them. Your phone is in your pocket, unlocked, on the parent's screen (section 6). The laptop faces the judges with the video paused on its first frame. Today's code is written in the "Today's code" box on the board.
 
 ### The three minutes
 
-| Time | Ved says and does | Youdis does (tablet) | Board piece |
+| Time | You say | You do | Board piece |
 |---|---|---|---|
-| 0:00 to 0:15 | **Hook.** Asks them to write the code and hold it up | Films 4 to 5 seconds, ticks the consent box, taps **Send video** | ① Today's code |
-| 0:15 to 0:33 | **The case** | Waits for "Video sent" (15 to 25 seconds) | ② The Wayanad case |
-| 0:33 to 0:46 | **How a stage gets paid** | Demo role bar: **Engineer**. The clip and AI check appear. Thumbs up to Ved | ③ How each stage gets paid |
-| 0:46 to 1:00 | **Decision.** Asks one judge: Yes, or check again? | Shows the tablet to the judges, ticks the boxes, taps **Approve**. Then role bar: **Parent**, and hands the tablet to the judge | ④ Amma decides |
-| 1:00 to 1:25 | **Stellar and limits**, then the result line | The judge taps their answer. Youdis holds up the result | ⑤ Live on Stellar Testnet |
-| 1:25 to 1:50 | **Business.** Envelope and slip | Taps **View on Stellar Expert**, ready for questions | ⑥ What Anil and Meera pay |
-| 1:50 to 2:00 | **Close and handoff** | On the laptop, starts the video on "sixty seconds" | ⑦ Try to break it |
-| 2:00 to 3:00 | **Silent.** Stands at the board and touches the layer of the house the video is on | Nothing | The house, layer by layer |
-
-Krish hands the YES and CHECK AGAIN paddles to the judge at 0:46. Rivan stands at the table, ready for the stations. The circled numbers are on the board map (`docs/showcase/homeward-board.pdf`).
+| 0:00 to 0:15 | **Hook.** Ask a judge to write the code and hold it up | Point at ① | ① Today's code |
+| 0:15 to 0:33 | **The case** | Touch ② | ② The Wayanad case |
+| 0:33 to 0:46 | **How a stage gets paid** | Touch the five steps, then the house | ③ How each stage gets paid |
+| 0:46 to 1:00 | **Decision.** "You are Amma. Yes, or check again?" | Hand the judge your phone. They tap | ④ Amma's screen |
+| 1:00 to 1:25 | **Stellar and limits**, then the result line | Take the phone back, read the result aloud, show it | ⑤ Live on Stellar Testnet |
+| 1:25 to 1:50 | **Business** | Hold up the envelope, then the slip; touch ⑥ | ⑥ What Anil and Meera pay |
+| 1:50 to 2:00 | **Close and handoff** | Gesture to ⑦, press play on "sixty seconds" | ⑦ Try to break it |
+| 2:00 to 3:00 | **Nothing** | Stand at the board and touch the piece the video is on | The house, layer by layer |
 
 ---
 
@@ -111,19 +118,19 @@ About 245 spoken words in two minutes. *Italics are directions.* The video must 
 
 **0:33. How a stage gets paid** *(touch each step on ③)*
 
-> "The family locks the money. The builder films today's code, which you just did. An engineer with no stake checks it. Then the parent has the last word."
+> "The family locks the money. The builder films today's code, the one you are holding. An engineer with no stake checks it. Then the parent has the last word."
 
-**0:46. Decision** *(Youdis holds the tablet towards the judges; Krish hands one judge the paddles)*
+**0:46. Decision** *(take out your phone, already on the parent's screen, and hand it to the judge with the paper)*
 
-> "Here is your clip, with your code, and our engineer has just passed it. You are Amma, the parent. Yes, or check again?"
+> "A builder has sent a video with that code, and our engineer has passed it. This is the parent's phone. You are Amma. Yes, or check again?"
 
-*Wait for the answer. Repeat it aloud: "Yes." or "Check again." The judge taps it on the tablet.*
+*Wait for the answer. Repeat it aloud: "Yes." or "Check again." The judge taps it on the phone. Take the phone back.*
 
 **1:00. Stellar and limits** *(touch ⑤)*
 
 > "Your answer is now a transaction on Stellar Testnet. The rule is a public contract: no engineer and no parent, no payment. The limits are on our board: the demo signs on our server, and our admin can settle a disputed claim."
 
-*Glance at the tablet for the result, then say one of these:*
+*Glance at the phone for the result, then say one of these and turn the screen to the judges:*
 
 > **If Yes:** "And there: one transaction just paid the builder and the workers."
 >
@@ -139,7 +146,7 @@ About 245 spoken words in two minutes. *Italics are directions.* The video must 
 
 **2:00. The video.** *It is silent, with subtitles. Say nothing. Stand at the board and touch the layer of the house the video is on (table in section 8). Its last subtitle is "Play any role yourself."*
 
-**If Youdis hasn't given a thumbs up by 0:46:** do the Business beat first, then come back to the Decision and Stellar beats.
+**If the phone isn't on the parent's screen at 0:46** (it locked, or the page reloaded): do the Business beat first while you reopen it, then come back to the Decision and Stellar beats.
 
 **If the result hasn't landed by 1:25:** go on to Business, and add "and there's the payment" when it appears.
 
@@ -150,58 +157,55 @@ About 245 spoken words in two minutes. *Italics are directions.* The video must 
 ## 6. The demo, tap by tap
 
 ### Devices
-- **Laptop**, facing the judges: the builder's page with today's code at the start, and the 60-second video open in a video player, paused on its first frame. Nobody touches the app on the laptop during the talk.
-- **Tablet or phone**, in Youdis's hands: the app, signed in as the builder. Everything live happens here: filming, uploading, the engineer's approval, the parent's answer.
-- A phone hotspot as backup for Wi-Fi.
+- **Your phone:** the app, parked on the parent's screen, waiting for Yes or Check again. This is the only live device.
+- **Laptop**, facing the judges: the 60-second video open full screen in a video player, paused on its first frame. Space bar plays it.
+- A second phone as a hotspot, if you have one. Otherwise turn mobile data on.
 
-### Set up the state (20 minutes before)
-1. On the tablet open https://homeward-ecru.vercel.app/demo and press **Start over from step 1**. Wait for "Fresh builds ready" (about 95 seconds).
-2. Choose **Amma's house extension**. Press **Go as…** three times and do each step: Anil locks the money, the builder puts in the deposit, the builder starts Foundation.
-3. Stop on the **builder's page**. It shows "Today's code", for example HW-5501-9380. Check the file picker opens the camera.
-4. On the laptop, open the same site, choose Amma's house on `/demo`, press **Go as** the builder, and zoom until the code is readable from two metres.
-5. Write the code in the "Today's code" box on the board (on a sticky strip, so it can change).
-6. Test the hotspot. Put both devices on do-not-disturb.
+### Set up the state (20 minutes before, on your phone)
+1. Open https://homeward-ecru.vercel.app/demo and press **Start over from step 1**. Wait for "Fresh builds ready" (about 95 seconds).
+2. Choose **Amma's house extension**. Press **Go as…** and do each step in turn: Anil locks the money, the builder puts in the deposit, the builder starts Foundation, the builder taps **No clip handy? Send a sample**, the engineer ticks the boxes and taps **Approve**.
+3. Press **Go as Amma**. Stop here. The screen shows **Yes, it's done** and **Check again**. Do not tap either.
+4. Before step 2's sample clip, note today's code from the builder's page and write it in the "Today's code" box on the board.
+5. Set the phone's auto-lock to **Never**, turn on do-not-disturb, and turn the brightness up.
+6. Start the video once on the laptop to check it plays, then pause it at 0:00.
 
-### Youdis's cue sheet (all on the tablet)
+Each step takes 6 to 13 seconds, so the set-up takes about three minutes after the reset.
+
+### Your cue sheet
 | When | Do | Expect |
 |---|---|---|
-| 0:07 | Film hands and paper for 4 to 5 seconds. Choose the clip, tick the consent box, tap **Send video** | "Uploading video and checking proof", then "Video sent" within about 25 seconds |
-| about 0:35 | Demo role bar: **Engineer** | The clip and the "AI video review" panel. Thumbs up to Ved |
-| 0:46 | Turn the tablet to the judges. Tick the boxes, tap **Approve** | "Approved" in about ten seconds |
-| about 0:58 | Demo role bar: **Parent**. Hand the tablet to the judge | The judge taps **Yes, it's done** or **Check again** |
-| about 1:10 | Hold up the result | "Foundation and plinth paid" or "Second check requested. Nothing paid", with a Stellar Expert link |
-| 1:50 | On the laptop, start the video on "sixty seconds" | Video plays to 3:00 |
+| 0:00 | Point at the code on the board. The judge writes it and holds it up | Nothing on a screen |
+| 0:46 | Hand the judge the phone | They tap **Yes, it's done** or **Check again** |
+| about 1:05 | Take the phone back, glance, say the result line, turn the screen to them | "Foundation and plinth paid" or "Second check requested. Nothing paid", with a Stellar Expert link, within about ten seconds |
+| 1:50 | Phone face down on the table. Press space on the laptop on "sixty seconds" | Video plays to 3:00 |
 
-### What I measured on the live site (15 Nov)
-- **Start over:** about 95 seconds.
-- **Each step** (lock money, deposit, start, approve, parent's answer): 6 to 13 seconds.
-- **A five-second clip showing the code:** upload and AI check together took 15 seconds. The AI answered "Footage clear. Code visible. Work unclear", with the note that the code card is clearly shown but no construction work is visible. That is a good line to read out: the AI saw the code and still left the decision to a person.
-- **A 33-second clip:** the upload took 23 seconds and the AI check did not finish ("AI review could not finish"). Keep the clip to five seconds.
-- **Parent says yes:** paid in one transaction, with a certificate.
+### What I measured on the live site
+- **Start over:** about 95 seconds. **Each step:** 6 to 13 seconds.
+- **Parent says yes:** paid in one transaction, with a certificate. **Check again:** "Second check requested. Nothing paid".
+- With the sample clip, the engineer's screen says "AI review could not finish". The judges never see that screen in this version.
 
-Not measured: a clip from a real phone camera. My test clip was a clean generated image of the code. Handwriting and a larger phone file may be slower or read as "code unclear". Rehearse with a real phone, and time how long "Video sent" takes, because the Decision beat at 0:46 depends on it.
+Not measured: the venue's Wi-Fi, and how long your phone's browser keeps the page alive in your pocket. Check the screen once, 30 seconds before you start.
 
 ---
 
 ## 7. If something goes wrong
 
-Youdis gives a thumbs up when the clip is on the engineer's screen. All three versions use the same script.
+All three versions use the same script.
 
 | Version | When | What changes |
 |---|---|---|
-| **A. Full live** (the plan) | The clip uploaded by 0:46 | As scripted |
-| **B. Late or sample clip** | The upload is slow or failed | Ved does Business first. Meanwhile Youdis waits, or taps **No clip handy? Send a sample**. Ved then says: "The connection dropped your clip, so this is a sample one. The rest is live." The decision still happens |
-| **C. No live** | The site or Wi-Fi is down | Ved says: "The venue's network has dropped, so the video will show you what you would have seen." Skip the Decision and the result line. Everything else stays |
+| **A. Full live** (the plan) | The phone is on the parent's screen and the network is up | As scripted |
+| **B. Slow result** | The judge has tapped but no result by 1:25 | Go on to Business with the phone in your hand. When it lands, say "and there's the payment" or "and nothing moved" |
+| **C. No live** | The site or network is down | Say: "The venue's network has dropped, so the video will show you this exact moment." The judge still answers aloud with the paddle. Skip the result line. Everything else stays |
 
 Other cases:
-- **A judge won't be filmed:** don't film them. Never ask twice.
-- **Nobody volunteers to decide:** Krish decides, as "the parent".
-- **The AI says "code not visible":** "The AI is only a helper, and the engineer decides. That is the point."
-- **The approval is slow:** keep talking. Youdis hands over the tablet when "Approved" shows.
+- **Nobody wants to hold the paper or the phone:** hold up the paper yourself, then tap the phone yourself and say which you chose and why.
+- **The phone has locked or reloaded:** do Business first, reopen `/demo`, press **Go as Amma**, then come back.
+- **The judge taps the wrong thing or hesitates:** "Either answer is fine. That is the point: it is her call."
 - **Someone writes the wrong code:** "And an engineer would send that back, because the code doesn't match."
-- **You are past 1:58:** stop mid-sentence and start the video. The video is required, and it must fit in the three minutes.
+- **You are past 1:58:** stop mid-sentence and press play. The video is required, and it must fit in the three minutes.
 
-After the showcase, delete the judges' clips from the backend's uploads folder on Railway the same day. That is what we promise them.
+After the pitch, press **Start over from step 1** again before the next group of judges, and redo the set-up.
 
 ---
 
@@ -320,7 +324,7 @@ Props: five LOCKED / PAID tags on Velcro, YES and CHECK AGAIN paddles, the ₹3.
 ### The table, after the talk
 | Station | What the judge does |
 |---|---|
-| Guided tour | Plays every role on a tablet at `/demo`. The QR on the board opens it |
+| Guided tour | Plays every role on your phone or their own at `/demo`. The QR on the board opens it |
 | Try to break it | Picks one of four forbidden payments; `sh scripts/attack.sh all` shows the contract refusing each |
 | Price your own build | `/price`: fee, visits and transfer cost added up, and the break-even |
 | Fool the AI check | Plays the builder with an old clip or no code, and sees what the AI check says. A person still decides |
@@ -356,7 +360,6 @@ Run `sh scripts/attack.sh prepare` before judges arrive. It uses the same Testne
 | What can your admin do? | Open stages, assign engineers, settle a disputed claim and split the refund of a stopped build. It can't approve a stage, pay itself or change a payee |
 | What if the engineer lies? | The contract can't tell. It limits who can sign, the parent can demand a second engineer, and every approval is public |
 | Is the AI deciding? | No. It tells the engineer whether the footage is clear and the code is visible. A person decides |
-| What happens to our clip? | It stays in our demo, only its fingerprint is on Testnet, and we delete the clip today |
 | Can you hold real money? | Not yet. The pilot is noncustodial, and a licensed partner comes before we hold anything |
 | What breaks at scale? | One server signs transactions one at a time; history comes from our own log, not a chain indexer; stored data needs a keep-alive job. All are in `docs/technical-limits.md` |
 | Is it tested? | 50 contract tests, 52 app tests, and a full live run on Testnet on 15 Nov: both the paid path and the refused path |
@@ -376,7 +379,7 @@ If you don't know: "We don't know yet. Here is how we'd find out."
 ### Before judges arrive
 - Start over, then set up the state (section 6). Code written in the box.
 - Video paused on its first frame. Volume off.
-- Tablet signed in as the builder. Hotspot ready. Do-not-disturb on.
+- Phone parked on the parent's screen, auto-lock off, do-not-disturb on. Mobile data or a hotspot ready.
 - Paper, markers, paddles, envelope, slip, tags.
 - `attack.sh prepare` done. Railway set to one replica.
 - Devpost has the video link, the live URL and the contract ID.
@@ -388,4 +391,4 @@ If you don't know: "We don't know yet. Here is how we'd find out."
 
 ### What is and isn't verified
 - **Verified live on Testnet (15 Nov):** the full reject path, the full paid path with certificate, the deposit step, a five-second clip with the AI check, the parent's Yes paying in one transaction, dirham and dollar display, the live USDC rate.
-- **Not verified:** a clip from a real phone camera through the consent box; the AI check on handwriting; this choreography under stage timing; the venue's Wi-Fi.
+- **Not verified:** the solo run-through under real timing; the phone staying on the parent's screen in your pocket; the venue's Wi-Fi.
