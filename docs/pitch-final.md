@@ -372,9 +372,9 @@ If you don't know: "We don't know yet. Here is how we'd find out."
 
 ### Tonight
 1. **Words only**, three times with a stopwatch. Target 1:56 for the speech.
-2. **Full run with the team**, twice, using a real phone for the clip and a friend as the judge. Time how long "Video sent" takes.
+2. **Full run alone**, twice, with the real phone, the laptop and a friend as the judge. Time from handing over the phone to the result showing.
 3. **Failure run**, once: turn the Wi-Fi off at 0:30 and do Version C.
-4. **Go or no-go for the live decision:** if "Video sent" takes longer than 30 seconds in both full runs, make Version B your plan (Business first, then the decision).
+4. **Go or no-go for the live decision:** if the result takes longer than 25 seconds in both full runs, make Version B your plan (carry on to Business with the phone in your hand).
 
 ### Before judges arrive
 - Start over, then set up the state (section 6). Code written in the box.
