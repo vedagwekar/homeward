@@ -8,7 +8,7 @@ One presenter, three minutes: you talk for two, then the 60-second video plays. 
 
 ## 1. The speech
 
-About 270 words. Aim to finish at 1:55. *Italics are what your hands do.* The board has no cue numbers on it, so each cue names the piece and where it is.
+About 320 words, which is tight for two minutes. Time it once; if you pass 2:00, use the cut list below. *Italics are what your hands do.* The board has no cue numbers on it, so each cue names the piece and where it is.
 
 **0:00 · The code** *(point at the **Today's code** box, centre panel, top left; a judge has paper and a marker)*
 
@@ -24,7 +24,8 @@ About 270 words. Aim to finish at 1:55. *Italics are what your hands do.* The bo
 
 **0:35 · How it works** *(centre: run a finger along **Lock, Film, Check, Yes, Pay**, then rest your hand on the house)*
 
-> "Homeward flips the order. The family locks the money, stage by stage. The builder films the work with that code. An engineer with no stake checks it. And the parent, standing in the house, has the last word."
+> "Homeward flips the order. The family locks the money, stage by stage. The builder films the work with that code. An engineer with no stake checks it. And the parent, standing in the house, has the last word.
+> Most builders are honest. This lets them prove it, and get paid the moment the checks pass."
 
 **0:50 · You decide** *(hand the judge your phone; point at the **Amma decides** phone screen, left of the house)*
 
@@ -41,11 +42,12 @@ About 270 words. Aim to finish at 1:55. *Italics are what your hands do.* The bo
 > **If they said yes:** "And there: one transaction just paid the builder and his workers."
 > **If they said check again:** "And nothing moved. It can't, until a second engineer agrees."
 
-> "This is a testnet demo. Our server signs for each role, and the bank side is simulated. That is on the board."
+> "And nobody here touches crypto. Anil pays from his bank, the builder gets rupees.
+> This is a testnet demo. Our server signs for each role, and that bank side is simulated. That is on the board."
 
 **1:30 · What it costs** *(right panel, top: touch the red **₹22,500**, then the pink **8 engineers** box)*
 
-> "What does this cost Anil? One and a half percent. On a fifteen lakh build that is twenty-two thousand five hundred rupees, and it pays the engineer. Eight Kerala engineers quoted us five hundred to twelve hundred rupees a review.
+> "What does this cost Anil? One and a half percent. On a fifteen lakh build that is twenty-two thousand five hundred rupees, and it pays the engineer. Eight Kerala engineers quoted us five hundred to twelve hundred rupees a review. That is cheap because it's a short video check from their desk, not a full site inspection.
 > One unchecked stage costs three lakh seventy-five thousand.
 > What we haven't done yet is charge a real family. Ten families are next."
 
@@ -55,7 +57,7 @@ About 270 words. Aim to finish at 1:55. *Italics are what your hands do.* The bo
 
 **2:00 to 3:00 · The video.** Say nothing. Stand at the board and touch the layer of the house the video is on.
 
-**If you are running late,** cut in this order: the testnet line (the board says it), then "One unchecked stage costs…", then "Eight Kerala engineers quoted us…". Never cut "What we haven't done yet is charge a real family." At 1:58, stop wherever you are and press play.
+**If you are running late,** cut in this order: "This is a testnet demo…" (the board says it), then "and get paid the moment the checks pass", then "One unchecked stage costs…", then "That is cheap because…", then "Eight Kerala engineers quoted us…". Never cut "What we haven't done yet is charge a real family." At 1:58, stop wherever you are and press play.
 
 ### Your path across the board
 You move once from left to right, which is how the board reads.
@@ -122,6 +124,84 @@ If you learn nothing else, learn this section. A judge can ask about any of it.
 - Collected **8 price quotes** from Kerala engineers.
 - Run the whole story on Testnet: paid path and locked path. The video is that recording.
 
+### Study guide: business
+
+Read this twice. You don't recite it; you answer from it.
+
+**Who pays and why**
+- The customer is the family abroad (Anil and Meera). The parent (Amma) lives in the house and has the last word. The builder and engineer are paid through it.
+- Their problem: they send money in seconds but can't see the work. Today they rely on a relative, photos on WhatsApp, or the builder's word.
+- What they buy: the builder isn't paid for a stage until an engineer has checked it and the parent has said yes.
+
+**The money**
+- Fee: **1.5%** of what the family locks, charged when they fund. On ₹15 lakh that is **₹22,500**.
+- That fee pays for **six video reviews** at ₹500 to ₹1,200 each (eight Kerala engineers' quotes).
+- Site visits for the stages concrete hides are extra: our estimate is ₹2,000 to ₹3,000 plus travel each, about **₹9,000** on this build. Family's total: **₹1,531,500**.
+- On a ₹15 lakh build the fee barely covers its costs, about ₹500 left. So we start with bigger builds.
+- Break-even: about **200 builds a year** on ₹30 lakh builds with a small team. Only the review prices are quotes. Every other input is our assumption. Say so.
+
+**The market**
+- **₹342,690,000,000** was sent home to Kerala in 2023 by the count on our board. It equals **23.2%** of Kerala's net state income. Say "equals", not "is".
+- House building and renovation is the largest listed use of that money.
+- We estimate 1,700 to 20,600 Kerala builds a year could fit us; our base figure is **6,850**. 200 builds is about **3%** of that. It is an estimate, and the pilot replaces it.
+
+**Who else does this**
+- RECONPRO and NRI Land Check: they send engineers, but have no control over the payment.
+- Brick & Bolt: a managed builder. You hire them instead of your own builder.
+- Bank escrow: holds money, doesn't check a wall. The Telangana case: paid out without proper checks, ₹829,000 refund ordered.
+- Our difference in one line: **the check and the payment are the same step.**
+
+**What is unproven (own it)**
+- No family has paid the fee. No builder has been asked.
+- Engineers liked it, but they would gain clients, so that isn't proof families will pay.
+- Next: ten families, paying from their own bank, with us holding no money. A licensed partner comes before we hold anything.
+
+### Study guide: tech
+
+**One stage, start to finish** (be able to say this without notes)
+1. The family **locks** money in the contract. The 1.5% fee goes to Homeward at that moment; the rest stays in the contract for that build.
+2. The stage **opens**. The supplier is paid for materials straight away, and a new code is made for that stage.
+3. The builder **films** the work showing the code and sends the video.
+4. The assigned engineer **approves or rejects**. If the stage needs it, the parent says yes too.
+5. The contract **pays** the builder and the workers in one transaction and records a **certificate**.
+6. At any point before payment, the parent or family can tap **check again**. Then a second engineer must also approve. If they reject, the money stays locked.
+7. If things go badly wrong, the family or parent can **freeze** the build. Nothing pays while frozen.
+
+**The three parts**
+- **Contract:** Rust, on Soroban, Stellar's smart-contract platform. It holds the money and enforces every rule. 50 tests.
+- **Server:** Node and Express. It signs transactions for each demo role, stores the videos, and keeps its own log of events.
+- **App:** Next.js. It only talks to our server. No keys in the browser.
+
+**Words you might be asked about**
+- **Testnet:** Stellar's practice network. Real transactions, pretend money.
+- **Stablecoin (USDC):** a token worth one US dollar. We use a test version.
+- **Fingerprint (hash):** a short code computed from a file. Change one frame of the video and the fingerprint changes. Only the fingerprint goes on-chain; the video stays on our server.
+- **One transaction:** the payments to the builder and workers either all happen or none do.
+- **Anchor:** a licensed company that turns bank money into stablecoin and back. That is how dollars go in and rupees come out. Simulated in our demo.
+
+**What the contract guarantees**
+- Only the right person can do each action: the assigned engineer approves, the parent says yes, the builder sends proof.
+- Who gets paid is fixed when the build is created and can't be changed.
+- There is no function that sends a family's money to Homeward.
+- It can never pay out more than was locked.
+- Anyone who pays, builds or supplies on a build can't be its engineer.
+
+**What it does not guarantee (say it plainly)**
+- That the engineer is right. It proves who approved and when, not that the concrete is good.
+- That our server is honest: in the demo it holds every role's key. In a real product each person signs for themselves.
+- A fair dispute: today our admin account settles a frozen build. That should be an independent party.
+- The AI video check is a helper. A person decides.
+
+**What breaks if this grows**
+- One server signs transactions one at a time.
+- History comes from our own log, not an independent one.
+- Stored contract data needs a keep-alive job, or it expires.
+
+**Why Stellar and not a normal app**
+- A normal app records a decision and we could quietly change it. The contract enforces it and anyone can read it.
+- Payments are cheap and take seconds, in a dollar stablecoin.
+- Stellar already has anchors for moving bank money in and out.
+
 ### Never say
 "Validated", "secure", "decentralized", "fraud-proof", "the AI verifies the work", or "twenty people".
 
@@ -137,6 +217,21 @@ If you learn nothing else, learn this section. A judge can ask about any of it.
 | **Who are the engineers?** | "Independent licensed engineers we assign. Anyone who pays, builds or supplies on a build can't be its engineer; the contract refuses it. The parent can demand a second one." |
 | **Will builders accept this?** | "We don't know yet. We haven't asked builders. What they get is materials paid up front and one payment the moment the checks pass." |
 | **Can you hold real money?** | "Not today. The pilot holds none, and a licensed partner comes before we do." |
+
+### Crypto questions
+
+The short version of every answer: **nobody in a Homeward build ever touches crypto. Dollars go in, rupees come out.**
+
+| Question | Answer |
+|---|---|
+| **How do you get Amma, Anil, the builder and the engineer onto crypto?** | "We don't. Anil pays from his bank. The builder and the engineer are paid in rupees to their bank. Amma taps yes or check again. A licensed payment partner does the conversion at each end. In this demo that bank side is simulated, and it's labelled." |
+| **Do they need a wallet?** | "Not one they have to think about. Today our server signs for each role. In the real product each person signs with their phone's fingerprint or face unlock, with no seed phrase to lose. That is on our roadmap, not built." |
+| **Are builders fine being paid in crypto?** | "They never are. They get rupees in their bank. What changes for them is when: materials up front, and the rest the moment the checks pass. We haven't asked builders yet." |
+| **Crypto has a bad name. How do you sell this?** | "We don't sell crypto. Look at the app: it says locked, paid, check again. The family is buying one thing, that the builder isn't paid before the work is checked. Stellar is how we keep that promise without them having to trust us." |
+| **What if the price moves during the build?** | "The money is held in a dollar stablecoin, so it doesn't swing like Bitcoin. What can move is the dollar to rupee rate over a six-month build. We haven't solved that yet. The simple answer is to convert each stage on the day it's paid." |
+| **Is this legal in India?** | "That is exactly why a licensed partner comes before real money. The pilot holds none." |
+| **Why would an engineer do this for ₹500 to ₹1,200?** | "Those are their own quotes. It's a short video review against a checklist, from their desk, not a full structural sign-off. The stages concrete will hide get a paid site visit instead." |
+| **Are you saying builders are crooks?** | "No. Most builds run on trust and most builders earn it. Homeward lets a good builder prove it, and get paid faster. The check matters most because it happens before the money moves, while a problem can still be fixed." |
 
 If you don't know: "We don't know yet. Here is how we'd find out."
 
