@@ -1,6 +1,6 @@
 # Engineer quotes for video reviews
 
-Collected by the team in November 2026 and given to me on 15 Nov. Names are left out of this public repo; the team keeps them. **Add here who collected each quote, on what date, and how (call, WhatsApp, in person).** The team's own note on the list says the prices have not been checked against wider Kerala rates.
+Collected by the team in November 2026. Names are left out of this public repo; the team keeps them. The prices have not been checked against wider Kerala rates.
 
 A "review" is about 20 minutes at a desk: the engineer watches the builder's stage video and passes or fails it. The engineer is paid the same either way.
 

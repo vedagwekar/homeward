@@ -18,7 +18,8 @@ Built for the Blockchain Innovation Challenge powered by Stellar (UWaterloo Velo
 
 - Live app: https://homeward-ecru.vercel.app
 - 60-second demo video: [docs/showcase/video/homeward-demo.mp4](docs/showcase/video/homeward-demo.mp4) ([the 12 Testnet transactions in it](docs/showcase/video/README.md))
-- One-pager: [docs/homeward-one-pager-v1.pdf](docs/homeward-one-pager-v1.pdf) · Demo limits: [docs/technical-limits.md](docs/technical-limits.md)
+- Guided tour of the live app, playing each role: https://homeward-ecru.vercel.app/demo
+- One-pager: [docs/homeward-one-pager-v1.pdf](docs/homeward-one-pager-v1.pdf) · Showcase board: [docs/showcase/homeward-board.jpg](docs/showcase/homeward-board.jpg) · Demo limits: [docs/technical-limits.md](docs/technical-limits.md)
 - Contract on Stellar Testnet: `CC2NYVUTHJWBRTDG7J4O6VB7TINL5MTNOTTXOMVMHKSCUYZR4W3M6QF2`
   ([Stellar Expert](https://stellar.expert/explorer/testnet/contract/CC2NYVUTHJWBRTDG7J4O6VB7TINL5MTNOTTXOMVMHKSCUYZR4W3M6QF2))
 - First version of the contract, before the builder's deposit: `CC2T4LZMG2UX7TCYX63MSCWSRYZO3XWNP3IACH47WQVM7NSI7XZP3JNO`
@@ -28,7 +29,9 @@ Built for the Blockchain Innovation Challenge powered by Stellar (UWaterloo Velo
 
 **Real on Stellar Testnet:** creating a project, funding, opening stages, supplier payment, proof hashes, engineer and parent approvals, the second check, split payouts, certificates, the builder's deposit and held-back payments, reporting a builder who stopped, freezing and refunds. `scripts/demo.sh` runs the whole story on Testnet, and `scripts/security.sh` runs the deposit paths.
 
-**Simulated:** Interac and UAE bank transfers, rupee payouts, SMS, KYC, engineer licences, site photos and the site camera. The web app runs on demo data in the browser and is being connected to the backend API.
+**Simulated:** Interac and UAE bank transfers, rupee payouts, SMS, KYC, engineer licences, site photos and the site camera. In this demo our server signs for every role, and our admin account can settle a frozen build; [docs/technical-limits.md](docs/technical-limits.md) lists every limit.
+
+The hosted app is connected to the backend and runs on Testnet. Run the web app locally without `NEXT_PUBLIC_API_URL` and it uses demo data in the browser.
 
 ## Repo layout
 
@@ -38,6 +41,8 @@ Built for the Blockchain Innovation Challenge powered by Stellar (UWaterloo Velo
 | `scripts` | Testnet account setup and the end-to-end demo |
 | `backend` | API the web app calls; signs on the server so keys never reach the browser |
 | `web` | Next.js app: family, builder, engineer and parent screens |
+| `packages/homeward-client` | TypeScript bindings generated from the contract |
+| `docs` | Demo video and its transaction list, one-pager, engineer price quotes, demo limits |
 
 ## Run it
 
@@ -54,7 +59,7 @@ npm test        # logic tests
 
 ```bash
 cd contracts/homeward
-cargo test
+cargo test                # 50 tests
 stellar contract build
 ```
 
@@ -68,4 +73,4 @@ Never commit a real `.env`.
 
 ## Team
 
-Ved Agwekar (technical lead, backend, presenter), Youdis (contract and backend), Krish Singh (web app, Devpost, video), Rivan (product, research, pitch).
+Ved Agwekar (technical lead, backend, presenter), Youdis Acharya (contract and backend), Krishneet Singh (web app, Devpost, video), Rivan Dutta (product, research, pitch).
