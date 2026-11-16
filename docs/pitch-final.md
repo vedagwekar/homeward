@@ -78,22 +78,22 @@ Krish puts paper and a marker in front of each judge and asks:
 
 > "May we film you holding up a piece of paper for five seconds during the pitch? Hands and paper only. It goes to our demo and we delete it today."
 
-Only people who say yes are filmed. The laptop faces the judges, showing the builder's page with **today's code** in large type. The same code is on the card in the board's "Today's code" slot.
+Only people who say yes are filmed. The laptop faces the judges, showing the builder's page with **today's code** in large type. The same code is written in the board's "Today's code" box.
 
 ### The three minutes
 
 | Time | Ved says and does | Youdis does (tablet) | Board piece |
 |---|---|---|---|
 | 0:00 to 0:15 | **Hook.** Asks them to write the code and hold it up | Films 4 to 5 seconds, ticks the consent box, taps **Send video** | ① Today's code |
-| 0:15 to 0:33 | **The case** | Waits for "Video sent" (15 to 25 seconds) | ② When money goes before the check |
+| 0:15 to 0:33 | **The case** | Waits for "Video sent" (15 to 25 seconds) | ② The Wayanad case |
 | 0:33 to 0:46 | **How a stage gets paid** | Demo role bar: **Engineer**. The clip and AI check appear. Thumbs up to Ved | ③ How each stage gets paid |
 | 0:46 to 1:00 | **Decision.** Asks one judge: Yes, or check again? | Shows the tablet to the judges, ticks the boxes, taps **Approve**. Then role bar: **Parent**, and hands the tablet to the judge | ④ Amma decides |
 | 1:00 to 1:25 | **Stellar and limits**, then the result line | The judge taps their answer. Youdis holds up the result | ⑤ Live on Stellar Testnet |
 | 1:25 to 1:50 | **Business.** Envelope and slip | Taps **View on Stellar Expert**, ready for questions | ⑥ What Anil and Meera pay |
 | 1:50 to 2:00 | **Close and handoff** | On the laptop, starts the video on "sixty seconds" | ⑦ Try to break it |
-| 2:00 to 3:00 | **Silent.** Stands beside the screen | Nothing | The video |
+| 2:00 to 3:00 | **Silent.** Stands at the board and touches the layer of the house the video is on | Nothing | The house, layer by layer |
 
-Krish hands the YES and CHECK AGAIN paddles to the judge at 0:46. Rivan stands at the table, ready for the stations. The circled numbers are printed on the board map (`docs/showcase/homeward-board.pdf`).
+Krish hands the YES and CHECK AGAIN paddles to the judge at 0:46. Rivan stands at the table, ready for the stations. The circled numbers are on the board map (`docs/showcase/homeward-board.pdf`).
 
 ---
 
@@ -137,7 +137,7 @@ About 245 spoken words in two minutes. *Italics are directions.* The video must 
 
 > "Sending money home takes seconds. Homeward makes sure it builds what it paid for. Here is a whole build, in sixty seconds."
 
-**2:00. The video.** *Silent. Stand beside the screen. Its last frame says "Come play any role at our table."*
+**2:00. The video.** *It is silent, with subtitles. Say nothing. Stand at the board and touch the layer of the house the video is on (table in section 8). Its last subtitle is "Play any role yourself."*
 
 **If Youdis hasn't given a thumbs up by 0:46:** do the Business beat first, then come back to the Decision and Stellar beats.
 
@@ -159,7 +159,7 @@ About 245 spoken words in two minutes. *Italics are directions.* The video must 
 2. Choose **Amma's house extension**. Press **Go as…** three times and do each step: Anil locks the money, the builder puts in the deposit, the builder starts Foundation.
 3. Stop on the **builder's page**. It shows "Today's code", for example HW-5501-9380. Check the file picker opens the camera.
 4. On the laptop, open the same site, choose Amma's house on `/demo`, press **Go as** the builder, and zoom until the code is readable from two metres.
-5. Write the code on the card and tape it into the "Today's code" slot on the board.
+5. Write the code in the "Today's code" box on the board (on a sticky strip, so it can change).
 6. Test the hotspot. Put both devices on do-not-disturb.
 
 ### Youdis's cue sheet (all on the tablet)
@@ -208,44 +208,114 @@ After the showcase, delete the judges' clips from the backend's uploads folder o
 ## 8. The video, the board and the table
 
 ### The 60-second video
-It plays last, with no one talking, so its captions carry the story and the tech. Record it from the live app by following `/demo` with a screen recorder. It must show the real prototype. Trim waits so it runs exactly 60 seconds.
+**Made: `docs/showcase/video/homeward-demo-60s.mp4`.** It is a screen recording of the live app on Stellar Testnet with the waits cut out, built-in subtitles and no sound. It is written to stand alone, because on Devpost it is the first thing people see. `docs/showcase/video/README.md` lists the 12 real transactions in it.
 
-| Seconds | On screen | Caption |
-|---|---|---|
-| 0 to 6 | Anil locks money in dollars; Meera adds hers in dirhams | "Two siblings lock the money in a Soroban contract on Stellar Testnet." |
-| 6 to 12 | Builder puts in the deposit and starts the stage; supplier paid | "The stage opens. The supplier is paid for materials." |
-| 12 to 19 | Builder sends a video showing today's code | "The builder films today's code. Only the video's fingerprint goes on-chain." |
-| 19 to 28 | Engineer approves, the parent says yes; the certificate appears | "One transaction pays the builder and the workers." |
-| 28 to 36 | The roof stage: builder sends a clip; engineer approves | "The roof slab. The parent has the last word." |
-| 36 to 43 | The parent's screen in Malayalam: she taps Check again | "Amma taps Check again." |
-| 43 to 51 | Second engineer rejects | "The second engineer says no. The money stays locked." |
-| 51 to 56 | A Stellar Expert transaction page | "Every step is a public Stellar transaction." |
-| 56 to 60 | End card | "homeward. Come play any role at our table." |
+**Format on the day: speak for two minutes, then play it.** Do not talk over it. The subtitles carry the story, so it works in a loud hall with no speaker.
+
+| Seconds | On screen | Subtitle | Touch on the board |
+|---|---|---|---|
+| 0 to 4 | ₹342,690,000,000 sent home to Kerala in 2023 | "Families abroad send billions home to Kerala to build and renovate houses." | The bigger picture, left panel |
+| 4 to 9 | 13,500 km; the Wayanad case, ₹3,452,000 | "They can't check the work. Money goes out before anyone independent has looked." | ② The Wayanad case |
+| 9 to 12 | Title card | "Homeward locks the money by stage, and releases it only after the checks." | The title |
+| 12 to 16 | Live app: Anil locks ₹3,00,000 | "Anil locks the money for the first stage. It sits in a smart contract, not with the builder." | Layer 1, the plinth |
+| 16 to 20 | Builder's deposit, then the stage starts | "The builder puts in his own deposit and starts the stage. The supplier is paid for materials at once." | Layer 1 |
+| 20 to 24 | Today's code; the clip is sent | "The builder films the work showing today's code. Only the video's fingerprint goes on-chain." | ① Today's code |
+| 24 to 29 | The engineer ticks and approves | "An independent engineer ticks what they saw and approves. Same fee for yes or no." | The engineer's screen beside the house |
+| 29 to 34 | Amma taps Yes; "Foundation and plinth paid" | "Amma says yes. One transaction pays the builder and the workers." | The PAID tag on Foundation |
+| 34 to 36 | Walls: a new code | "The next stage runs the same way, with a new code." | Layer 2, the wall |
+| 36 to 43 | Engineer approves; Amma taps Check again | "The engineer approves the walls, but Amma isn't sure. She taps Check again, and nothing is paid." | ④ Amma's screen |
+| 43 to 47 | Second engineer rejects | "A second engineer says no. The contract won't pay. The money stays locked." | Layer 2 |
+| 47 to 56 | How it's built: Next.js app, Node and Express API, Soroban contract in Rust, Stellar Testnet; 50 tests; demo limits | "A Rust smart contract on Stellar holds the money and enforces the rules. The app and server only ask it to act." | ⑤ Live on Stellar Testnet |
+| 56 to 60 | End card with the site, contract ID and repo | "Every step you saw is a public transaction. Play any role yourself." | ⑦ Try to break it |
+
+In this recording the money stays locked on the **walls**, not the roof slab, because that is the second stage of a real run. If a judge notices that the board's tags say the walls are PAID and the roof slab LOCKED, say the board shows a later point in the same build.
+
+During the video you say nothing. Stand at the board, not at the screen, and put a hand on the piece the video is on.
 
 Upload it to YouTube (unlisted) or Loom and put the link on Devpost, with the live URL and the contract ID.
 
 ### The board
-It is a scrapbook board: 27 separate pieces you print on letter paper, cut out and paste on. Nothing has to be printed at poster size.
+A clean white board with gold double rules and a lot of empty space. The gold-on-cream is the border of a Kerala kasavu cloth. The real photos of a Kerala house carry the \"house\" idea, so the rest of the paper can stay plain.
 
-- **`docs/showcase/homeward-cutouts.pdf`:** 12 letter pages. Print at 100% (not "fit to page"), cut on the dashed lines. Each piece is labelled with its panel and size.
-- **`docs/showcase/homeward-board.pdf`:** the map. It shows where every piece goes on the 38 × 27 in board, with the fold lines. Pieces are tilted a little on purpose.
-- **Make it look hand-made:** stick pieces on with washi tape or glue, mount the three app screens like photos, and add real things on top: the code card, the five LOCKED / PAID tags, a string from Anil to Amma on the route piece.
+**Files, in `docs/showcase/`:**
+- **`homeward-board.jpg` and `homeward-board.pdf`:** the whole board at 38 × 27 in. The dashed lines are the folds.
+- **`pieces/`:** the 16 blocks as separate images. `pieces/cutouts/` has the seven house photo cutouts and `pieces/app/` has the app snippets, all on see-through backgrounds. Drop each onto a slide, set the width from the table, print at 100% and paste it on. Side-panel blocks are 8.1 in wide and fit letter paper. The centre blocks are 17.6 in wide: print them on tabloid paper in two halves, or at a print shop.
+- **`board.html`:** the source.
 
-| Circle | Piece | You touch it at |
+**What is on it, and why it is less than before.** Each panel answers one question, top to bottom.
+
+| Panel | Blocks | Question it answers |
 |---|---|---|
-| ① | Today's code (centre, top left) | 0:00 |
-| ② | When money goes before the check (left) | 0:15 |
+| Left: the problem | 13,500 km route · ② the Wayanad case and the Telangana refund · the father's quote · ₹342,690,000,000 sent home | Why does this need to exist? |
+| Centre: how it works | Title · ① today's code · ③ five steps · the house in the middle, taken apart into its five stages, with ④ the app screens on its left, the stage prices on its right and where the money goes under it · ⑤ live on Stellar Testnet | What does it do, and is it real? |
+| Right: the business | ⑥ what Anil and Meera pay · eight engineers' quotes · 200 builds to break even · why not escrow · what isn't real yet · ⑦ try to break it | Does it pay, and what's unproven? |
+
+Cut from the earlier boards: the builder's deposit box, the "money doesn't stop at the house" chain, the per-stage bars, the "Fool our AI check" box and the second set of QR codes. They are still in the app and in the Q&A (section 9).
+
+**A real Kerala house, taken apart.** The centre shows five photo cutouts stacked like a house, one per stage. They are real photos from Wikimedia Commons, cropped into the shape of each layer.
+
+| Stage | Cutout in `pieces/cutouts/` | What the photo is |
+|---|---|---|
+| 5 · Handover | `cut-5-brass-door-lock` | A manichitrathazhu, the brass lock on a traditional Kerala door (Kerala Folklore Museum, Kochi) |
+| 4 · Finishing | `cut-4-carved-gable` and `cut-4-clay-tile-roof` | A carved wooden gable in Kerala, and Mangalore clay tiles |
+| 3 · Roof slab | `cut-3-slab-steel` | Slab steel tied and ready for a pour. This one is not from India; it is the clearest free photo of the steel an engineer checks |
+| 2 · Walls | `cut-2-laterite-wall` | A laterite wall in Kottayam, with a doorway cut out |
+| 1 · Foundation | `cut-1-laterite-plinth` | Laterite cut in a Kerala quarry, the stone under most Kerala houses |
+| Left panel | `cut-whole-house` | A family's nalukettu house in Kerala, whole |
+
+**App snippets, in `pieces/app/`.** These are from the working app, for the sides of the house or anywhere else you want one.
+
+| File | Size on the board (in) | What it shows |
+|---|---|---|
+| `app-amma-decides` | 3.6 × 4.8 | The parent's Yes / Check again screen, in a phone frame with its caption |
+| `app-engineer-checks` | 3.6 × 4.8 | The engineer's proof and checklist |
+| `app-anil-sees-every-rupee` | 3.6 × 2.4 | The locked money and the paid / in progress / locked bar |
+| `full-screen-amma`, `full-screen-engineer`, `full-screen-anil` | any | The three full screenshots, uncropped, if you want them larger |
+
+How to use them on the trifold:
+1. Print the block `08-centre-house` as the base. It is the middle of the board: 17.6 × 12.8 in, so print it in four letter pages or at a print shop.
+2. Print the cutouts again on card or photo paper, at 100% or up to 150%, and cut them out along the photo edge. They have see-through backgrounds, so they drop straight onto a slide.
+3. Stick each one over its printed twin with foam tape, the plinth flat and each layer above it one tape thicker. The house then stands off the board in steps, and the layers read as separate.
+4. If a judge asks what something is, the credit line under the stack and `trifold-assets/photos/CREDITS.md` say where each photo came from. Say "a Kerala house", not "Amma's house": the photos are of real buildings, and Amma is our demo family.
+
+Optional, if you have time: tape a real brass key beside the lock cutout and hold up a short piece of rebar at "for stages concrete will hide, the engineer visits the site".
+
+**The blocks.**
+
+| File in `pieces/` | Size (in) |
+|---|---|
+| `01-left-route` | 8.1 × 6.3 |
+| `02-left-wayanad-case` ② | 8.1 × 6.0 |
+| `02b-left-real-house` | 8.1 × 4.7 |
+| `03-left-quote` | 8.1 × 2.3 |
+| `04-left-money-sent-home` | 8.1 × 4.3 |
+| `05-centre-title` | 17.6 × 3.6 |
+| `06-centre-todays-code` ① | 4.6 × 2.8 |
+| `07-centre-how-a-stage-gets-paid` ③ | 12.4 × 2.8 |
+| `08-centre-house` ④ | 17.6 × 12.8 |
+| `10-centre-stellar` ⑤ | 17.6 × 2.7 |
+| `11-right-what-they-pay` ⑥ | 8.1 × 5.8 |
+| `12-right-engineer-quotes` | 8.1 × 1.9 |
+| `13-right-break-even` | 8.1 × 5.4 |
+| `14-right-why-not-escrow` | 8.1 × 4.1 |
+| `15-right-not-real-yet` | 8.1 × 1.4 |
+| `16-right-try-to-break-it` ⑦ | 8.1 × 2.4 |
+
+**Where your hand goes during the talk:**
+
+| Circle | Block | You touch it at |
+|---|---|---|
+| ① | Today's code (centre, top left). Write the code in the box before the pitch | 0:00 |
+| ② | The Wayanad case, ₹3,452,000 (left) | 0:15 |
 | ③ | How each stage gets paid (centre) | 0:33 |
-| ④ | Amma decides (centre, the first photo) | 0:46 |
-| ⑤ | Live on Stellar Testnet (centre, bottom right) | 1:00 |
-| ⑥ | What Anil and Meera pay (right) | 1:25 |
-| ⑦ | Try to break it (right, top) | 1:50 |
+| ④ | Amma decides: the app screen to the left of the house | 0:46 |
+| ⑤ | Live on Stellar Testnet (centre, bottom) | 1:00 |
+| ⑥ | What Anil and Meera pay (right, top). Point at the slab steel on "the engineer visits the site" | 1:25 |
+| ⑦ | Try to break it (right, bottom) | 1:50 |
 
-The other pieces are for reading at the table: the 13,500 km route, the father's quote, the ₹342,690,000,000 sent home, the five stage cards, where every rupee goes, the builder's deposit, the break-even, the comparison table and "What isn't real yet".
+Numbers to keep straight: break-even is **200 builds a year**, because the fee pays for the engineers' reviews. The 23.2% compares money sent home with Kerala's net state income (NSDP); the board says "equals", not "is".
 
-Numbers on the board that came from the earlier drafts and changed: break-even is **200 builds a year**, not 99, because the fee now pays for the engineers' reviews. The 23.2% is a share of Kerala's net state income (NSDP), as the survey states it.
-
-Props: the code card, five LOCKED / PAID tags on Velcro, YES and CHECK AGAIN paddles, the ₹3.75 lakh envelope and ₹22,500 slip.
+Props: five LOCKED / PAID tags on Velcro, YES and CHECK AGAIN paddles, the ₹3.75 lakh envelope and ₹22,500 slip.
 
 ### The table, after the talk
 | Station | What the judge does |
@@ -304,7 +374,7 @@ If you don't know: "We don't know yet. Here is how we'd find out."
 4. **Go or no-go for the live decision:** if "Video sent" takes longer than 30 seconds in both full runs, make Version B your plan (Business first, then the decision).
 
 ### Before judges arrive
-- Start over, then set up the state (section 6). Code card in the slot.
+- Start over, then set up the state (section 6). Code written in the box.
 - Video paused on its first frame. Volume off.
 - Tablet signed in as the builder. Hotspot ready. Do-not-disturb on.
 - Paper, markers, paddles, envelope, slip, tags.
