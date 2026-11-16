@@ -23,7 +23,7 @@ The builder's clip in the recording is the app's built-in sample file, so the AI
 
 ## Script and subtitles
 
-The subtitles in the video are this script, word for word. Each line is on screen from its time until the next one, so if you record a voice over it, start each line when its subtitle appears. It is about 130 words.
+The subtitles in the video are this script, word for word. Each line is on screen from its time until the next one, so if you record a voice over it, start each line when its subtitle appears. It is about 140 words.
 
 | Time | Subtitle and voiceover line |
 |---|---|
@@ -32,11 +32,12 @@ The subtitles in the video are this script, word for word. Each line is on scree
 | 0:08 | Pay for your parents' house, one checked stage at a time. |
 | 0:12 | Anil locks the money for the first stage. |
 | 0:15 | The builder adds a deposit. The supplier is paid first. |
-| 0:20 | He films the work, showing today's code. |
-| 0:24 | An independent engineer checks it and approves. |
-| 0:28 | Amma says yes. One transaction pays the builder and workers. |
-| 0:33 | Next stage: the walls. |
-| 0:36 | This time Amma isn't sure. She taps Check again, and nothing is paid. |
-| 0:42 | A second engineer says no. The money stays locked. |
-| 0:47 | A Rust smart contract on Stellar holds the money and enforces every rule. Our app only asks it to act. |
-| 0:55 | Every step was a real transaction. Try it yourself. |
+| 0:19 | He films the work, showing today's code. |
+| 0:23 | An independent engineer checks it and approves. |
+| 0:26 | Amma says yes. One transaction pays the builder and workers. |
+| 0:31 | Next stage: the walls. |
+| 0:33 | This time Amma isn't sure. She taps Check again, and nothing is paid. |
+| 0:40 | A second engineer says no. The money stays locked. |
+| 0:44 | A Rust smart contract on Stellar holds the money and enforces every rule. |
+| 0:50 | The app is Next.js, the server is Node, and fifty tests check the contract. |
+| 0:56 | Every step was a real transaction. Try it yourself. |
