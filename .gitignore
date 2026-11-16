@@ -22,3 +22,16 @@ CLAUDE.md
 packages/homeward-client/dist/
 
 scripts/.attack-build.json
+
+# Internal working docs (pitch, research, board print files) stay on local machines only
+docs/*
+!docs/technical-limits.md
+!docs/engineer-quotes.md
+!docs/homeward-one-pager-v1.pdf
+!docs/showcase/
+docs/showcase/*
+!docs/showcase/homeward-board.jpg
+!docs/showcase/video/
+docs/showcase/video/*
+!docs/showcase/video/homeward-demo-v2.mp4
+!docs/showcase/video/README.md
